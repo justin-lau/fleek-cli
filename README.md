@@ -1,28 +1,25 @@
-# ⚡️Fleek-Platform CLI
+# ⚡️Fleek-Platform CLI ⚡️
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Fleek CLI provides a unified command line interface to Fleek Services.
 
-## Table of content
+## Overview
 
 * [🤖 Install](#install)
 * [👷‍♀️Development](#development)
-* [🌴 Environments](#environments)
-* [📖 Docs](#-documentation)
-* [⏱️ Changelog](./CHANGELOG.md)
+* [📖 Docs](https://fleek.xyz/docs)
 * [🙏 Contributing](#contributing)
   - [Branching strategy](#branching-strategy)
   - [Contributing](#conventional-commits)
+* [⏱️ Changelog](./CHANGELOG.md)
 
 ## Requirements
 
 - Nodejs as runtime
 - NPM, Yarn to install the CLI as a client, or PNPM for development
 - Familiarity with text-based user interfaces, command-line interface (CLI)
-
-Learn how to install Nodejs in your operating system by following the instructions [here](https://nodejs.org/en/download/package-manager/) and PNPM [here](https://pnpm.io/installation).
 
 ## Install
 

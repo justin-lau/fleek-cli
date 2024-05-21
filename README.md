@@ -1,15 +1,20 @@
 # ⚡️Fleek-Platform CLI
 
-Fleek CLI provides a unified command line interface to Fleek Services.
-
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+Fleek CLI provides a unified command line interface to Fleek Services.
+
+## Table of content
+
 * [🤖 Install](#install)
 * [👷‍♀️Development](#development)
-* [🌴 Environments 🆕](#environments)
+* [🌴 Environments](#environments)
 * [📖 Docs](#-documentation)
 * [⏱️ Changelog](./CHANGELOG.md)
+* [🙏 Contributing](#contributing)
+  - [Branching strategy](#branching-strategy)
+  - [Contributing](#conventional-commits)
 
 ## Requirements
 
@@ -104,13 +109,17 @@ This section guides you through the process of contributing to our open-source p
 5. Push to the branch: `git push origin feat/my-new-feature`
 6. Create new Pull Request following the corresponding template guidelines
 
-## Branching strategy
+### Branching strategy
 
 The develop branch serves as the main integration branch for features, enhancements, and fixes. It is always in a deployable state and represents the latest development version of the application.
 
-Feature branches are created from the develop branch and are used to develop new features or enhancements. They should be named according to the type of work being done and the scope of the feature and in accordance with conventional commits [here](https://www.conventionalcommits.org/en/v1.0.0/).
+Feature branches are created from the develop branch and are used to develop new features or enhancements. They should be named according to the type of work being done and the scope of the feature and in accordance with conventional commits [here](#conventional-commits).
 
-Here's an example:
+### Conventional commits
+
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0) are a simple way to write commit messages that both people and computers can understand. It help us keep track fo changes ina a consistent manner, making it easier to see what was added, changed, or fixed in each commit or update.
+
+Here's a list of different conventional commits messages that you should follow:
 
 ```txt
 test: 💍 Adding missing tests

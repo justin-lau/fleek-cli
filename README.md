@@ -40,6 +40,21 @@ Once cloned, you'll have to set up the local development environment, e.g. to ha
 
 For runtime we utilize [Nodejs](https://nodejs.org/en/download) and [PNPM](https://pnpm.io/installation) as the package manager.
 
+Create a new file named .env in the root directory of your project. This file will store environment variables needed for local development.
+
+```sh
+touch .env
+```
+
+Open the .env file in a text editor and add the following:
+
+```sh
+UI__APP_URL=https://app.fleek.xyz
+SDK__GRAPHQL_API_URL=https://graphql.service.fleek.xyz/graphql
+```
+
+💡 The variables above point to our production environment, the same you interact with as an end-user.
+
 Next, install the project dependencies:
 
 ```sh

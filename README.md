@@ -117,7 +117,7 @@ Feature branches are created from the develop branch and are used to develop new
 
 ### Conventional commits
 
-[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0) are a simple way to write commit messages that both people and computers can understand. It help us keep track fo changes ina a consistent manner, making it easier to see what was added, changed, or fixed in each commit or update.
+We prefer to commit our work following [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0) conventions. Conventional Commits are a simple way to write commit messages that both people and computers can understand. It help us keep track fo changes in a consistent manner, making it easier to see what was added, changed, or fixed in each commit or update.
 
 The commit messages are formatted as **[type]/[scope]**
 The **type** is a short descriptor indicating the nature of the work (e.g., feat, fix, docs, style, refactor, test, chore). This follows the conventional commit types.

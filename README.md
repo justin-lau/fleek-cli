@@ -1,52 +1,97 @@
 # ⚡️Fleek-Platform CLI
 
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
-
 Fleek CLI provides a unified command line interface to Fleek Services.
 
-## Details
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-blue.svg)](https://conventionalcommits.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-### Stack
+* [🤖 Install](#install)
+* [👷‍♀️Development](#development)
+* [🌴 Environments 🆕](#environments)
+* [📖 Docs](#-documentation)
+* [⏱️ Changelog](./CHANGELOG.md)
 
-- [NodeJS](https://nodejs.org) as runtime environment.
-- [Commander.js](https://github.com/tj/commander.js) as CLI creation tool.
-- [ESLint](https://eslint.org/) with [Prettier](https://prettier.io/) for linting.
-- [Esbuild](https://esbuild.github.io/) for files bundling.
+## Requirements
+
+- Nodejs as runtime
+- NPM, Yarn to install the CLI as a client, or PNPM for development
+- Familiarity with text-based user interfaces, command-line interface (CLI)
+
+Learn how to install Nodejs in your operating system by following the instructions [here](https://nodejs.org/en/download/package-manager/) and PNPM [here](https://pnpm.io/installation).
+
+## Install
+
+To install and use the CLI as a client or end-user, open your terminal and follow these simple steps. First, ensure you have Node.js installed on your system. If not, download and install it [here](https://nodejs.org/en/download). Next, run the following command to globally install our CLI tool:
+
+```sh
+# Install globally (recommended)
+npm i -g @fleek-platform/cli
+```
+
+For a quick start, learn the [basic commands](#basic-commands), or alternatively visit our [documentation](https://fleek.xyz/docs)
+
+## Development
+
+For developers looking to contribute to the CLI tool itself, [clone](https://github.com/fleekxyz/cli) the repository and follow the [contribution guide](#contributing).
+
+Once cloned, you'll have to set up the local development environment, e.g. to have access to the source-code, iterate, run tests and much more.
+
+For runtime we utilize [Nodejs](https://nodejs.org/en/download) and [PNPM](https://pnpm.io/installation) as the package manager.
+
+Next, install the project dependencies:
+
+```sh
+pnpm i
+```
+
+Next, prepare your local changes and execute the commands to compute it.
+
+In order to succeed, you're required to have the ability to execute commands in the binary, so we'll link the local package globally in your local system, as follows:
+
+```sh
+pnpm link -g
+```
+
+Everytime you prepare and save a change, you have to rebuild the binary:
+
+```sh
+pnpm build
+```
+
+You can call the global binary named `fleek`.
+
+```sh
+fleek
+```
+
+Learn the Fleek-platform CLI basic commands [here](#basic-commands). For extended documentation visit our [documentation site](https://fleek.xyz/docs).
 
 ## Basic commands
 
 The Fleek CLI command has the following structure:
 
 ```bash
-$ fleek <service> <command> [options and parameters]
+fleek <service> <command> [options and parameters]
 ```
 
 To view all available services and commands use:
 
 ```bash
-$ fleek help
+fleek help
 ```
 
 To see all available commands for a service, use the help documentation as any one of the followings:
 
 ```bash
-$ fleek <service> help
-$ fleek <service> <command> help
+fleek <service> help
+fleek <service> <command> help
 ```
 
 To get the version of the Fleek CLI:
 
 ```bash
-$ fleek --version
+fleek --version
 ```
-
-## Development
-
-1. Install NodeJS from [the official website](https://nodejs.org) or using [nvm](https://github.com/creationix/nvm).
-2. Install [pnpm](https://pnpm.io/installation) dependency manager.
-3. Install dependencies usign `pnpm i` from root path.
-4. Prepare your changes.
-5. `pnpm link -g`, `pnpm build`, `fleek -v` and happy testing!
 
 ## Contributing
 

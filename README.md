@@ -43,10 +43,10 @@ For runtime we utilize [Nodejs](https://nodejs.org/en/download) and [PNPM](https
 Create a new file named .env in the root directory of your project. This file will store environment variables needed for local development.
 
 ```sh
-touch .env
+touch .env.production.local
 ```
 
-Open the .env file in a text editor and add the following:
+Open the .env.production.local file in a text editor and add the following:
 
 ```sh
 UI__APP_URL=https://app.fleek.xyz

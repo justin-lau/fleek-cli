@@ -103,10 +103,10 @@ fleek --version
 This section guides you through the process of contributing to our open-source project. From creating a feature branch to submitting a pull request, get started by:
 
 1. Fork the project [here](https://github.com/fleekxyz/cli)
-2. Create your feature branch using our [branching strategy](#branching-strategy): `git checkout -b feat/my-new-feature`
+2. Create your feature branch using our [branching strategy](#branching-strategy), e.g. `git checkout -b feat/my-new-feature`
 3. Run the tests: `pnpm test`
-4. Commit your changes: `git commit -m 'chore: 🤖 my contribution description'`
-5. Push to the branch: `git push origin feat/my-new-feature`
+4. Commit your changes by following our [commit conventions](#conventional-commits), e.g. `git commit -m 'chore: 🤖 my contribution description'`
+5. Push to the branch, e.g. `git push origin feat/my-new-feature`
 6. Create new Pull Request following the corresponding template guidelines
 
 ### Branching strategy
@@ -119,7 +119,12 @@ Feature branches are created from the develop branch and are used to develop new
 
 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0) are a simple way to write commit messages that both people and computers can understand. It help us keep track fo changes ina a consistent manner, making it easier to see what was added, changed, or fixed in each commit or update.
 
-Here's a list of different conventional commits messages that you should follow:
+The commit messages are formatted as [type]/[scope]
+The **type** is a short descriptor indicating the nature of the work (e.g., feat, fix, docs, style, refactor, test, chore). This follows the conventional commit types.
+
+The **scope** is a more detailed description of the feature or fix. This could be the component or part of the codebase affected by the change.
+
+Here's an example of different conventional commits messages that you should follow:
 
 ```txt
 test: 💍 Adding missing tests

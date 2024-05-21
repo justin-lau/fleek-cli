@@ -1,0 +1,29 @@
+import { ProjectsNotFoundError } from '@fleekxyz/errors';
+import { FleekSdk, Project } from '@fleekxyz/sdk';
+
+import { selectPrompt } from '../../../prompts/selectPrompt';
+import { t } from '../../../utils/translation';
+
+type GetProjectOrPromptArgs = {
+  sdk: FleekSdk;
+  id?: string;
+};
+
+export const getProjectOrPrompt = async ({ sdk, id }: GetProjectOrPromptArgs): Promise<Project> => {
+  if (id) {
+    return await sdk.projects().get({ id });
+  }
+
+  const projects = await sdk.projects().list();
+
+  if (projects.length === 0) {
+    throw new ProjectsNotFoundError();
+  }
+
+  const projectId = await selectPrompt({
+    message: `${t('commonSelectXFromList', { subject: t('aProject') })}:`,
+    choices: projects.map((project) => ({ title: project.name, value: project.id })),
+  });
+
+  return projects.find((project) => project.id === projectId)!;
+};

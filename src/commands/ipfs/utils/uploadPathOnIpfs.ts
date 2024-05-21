@@ -1,0 +1,26 @@
+import { FleekSdk } from '@fleekxyz/sdk';
+import { promises as fs } from 'fs';
+import { basename } from 'path';
+
+type UploadPathOnIpfsArgs = {
+  sdk: FleekSdk;
+  path: string;
+};
+
+export const uploadPathOnIpfs = async ({ sdk, path }: UploadPathOnIpfsArgs) => {
+  const stat = await fs.stat(path);
+
+  if (stat.isDirectory()) {
+    const uploadResults = await sdk.ipfs().addFromPath(path, {
+      wrapWithDirectory: true,
+      // We must pass plain object instead of URLSearchParams because of ipfs-http-client bug
+      searchParams: { alias: basename(path) } as unknown as URLSearchParams,
+    });
+
+    return uploadResults.pop();
+  }
+
+  const content = await fs.readFile(path);
+
+  return sdk.ipfs().add({ path, content });
+};

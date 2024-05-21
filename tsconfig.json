@@ -10,7 +10,10 @@
     "sourceMap": true,
     "outDir": "dist",
     "useUnknownInCatchVariables": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@utils/*": ["./src/utils/*"]
+    }
   },
   "include": ["src/**/*", "global.d.ts", "locales/*.d.ts"],
   "exclude": ["dist", "**/node_modules", "**/*.test.ts"],

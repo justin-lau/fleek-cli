@@ -14,18 +14,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Setup node
-        uses: actions/setup-node@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
         with:
-          node-version: 18
-          cache: 'npm'
-          
+          version: 8
+          run_install: false
+                    
       - name: Install
-        run: npm ci
+        run: pnpm i
         
       - name: Build CLI
-        run: npm run build
+        run: pnpm build
 
       - name: Binary
         run: |

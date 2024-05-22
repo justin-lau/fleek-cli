@@ -2,11 +2,11 @@ lockfileVersion: 5.4
 
 specifiers:
   '@aws-sdk/client-lambda': ^3.449.0
-  '@fleek-platform/errors': ^2.1.0
-  '@fleek-platform/sdk': 2.1.0-rc.1
+  '@fleek-platform/errors': 2.1.0-stg.2
+  '@fleek-platform/sdk': 2.1.0-stg.1
   '@fleek-platform/utils-gateways': 0.0.2-stg.1
   '@fleek-platform/utils-github': 0.0.1-stg.1
-  '@fleek-platform/utils-ipfs': ^0.4.1
+  '@fleek-platform/utils-ipfs': 0.4.1-stg.6
   '@fleek-platform/utils-ipns': 0.1.1-stg.1
   '@fleek-platform/utils-validation': 2.0.0-stg.1
   '@tsconfig/node16': ^16.1.3
@@ -78,11 +78,11 @@ dependencies:
   update-notifier-cjs: 5.1.6
 
 devDependencies:
-  '@fleek-platform/errors': 2.1.0
-  '@fleek-platform/sdk': 2.1.0-rc.1
+  '@fleek-platform/errors': 2.1.0-stg.2
+  '@fleek-platform/sdk': 2.1.0-stg.1
   '@fleek-platform/utils-gateways': 0.0.2-stg.1
   '@fleek-platform/utils-github': 0.0.1-stg.1
-  '@fleek-platform/utils-ipfs': 0.4.1
+  '@fleek-platform/utils-ipfs': 0.4.1-stg.6
   '@fleek-platform/utils-ipns': 0.1.1-stg.1
   '@fleek-platform/utils-validation': 2.0.0-stg.1_typescript@4.9.3
   '@tsconfig/node16': 16.1.3
@@ -1126,8 +1126,14 @@ packages:
       nanoid: 3.3.7
     dev: true
 
-  /@fleek-platform/sdk/2.1.0-rc.1:
-    resolution: {integrity: sha512-aPLaDfEcGlwtS0zpjq20QarOy8cF3RAwNrDAJxZWGM2jClCAzWkLe72eUaAQk1R/NWTR7JQOU7E6uKQ/LFiI8Q==}
+  /@fleek-platform/errors/2.1.0-stg.2:
+    resolution: {integrity: sha512-4KnSIybuHiJQ3rSeo5kOkTZ6YguMgjvGbIUJrC66nIy090GdIrYTclNwy1CnMD0v6qS8SsVTbwvtpLWBNaDFhw==}
+    dependencies:
+      nanoid: 3.3.7
+    dev: true
+
+  /@fleek-platform/sdk/2.1.0-stg.1:
+    resolution: {integrity: sha512-lGad2x2L0gQ+ruR1epn7xdzmoRjU5/2l0OvwzJDLQ6DpTcOMNfvCYpInO+rf3V1gtabrQiliNigjXHBjrt753g==}
     engines: {node: '>=18.0.0'}
     dev: true
 
@@ -1143,8 +1149,8 @@ packages:
       yaml: 2.4.2
     dev: true
 
-  /@fleek-platform/utils-ipfs/0.4.1:
-    resolution: {integrity: sha512-C3kysX+VZ0YWQzQJ9EPhqDYDKEusuaWLWzlq5uaKin1LDjEAHCQqBDzi+K5M3r4XDsCljzkI0vpCg/+toOMtEA==}
+  /@fleek-platform/utils-ipfs/0.4.1-stg.6:
+    resolution: {integrity: sha512-m2zq6iY+7HaRADxtfUEIu9dEakbnmeTW9hFDAkpO+nRfZPT4ZDW0tvYZvMAftDf2w+HiKM7rW6yOgxW07QTDrA==}
     dependencies:
       cids: 1.1.9
     dev: true

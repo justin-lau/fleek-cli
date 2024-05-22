@@ -11,7 +11,6 @@ jobs:
     env:
       UI__APP_URL: https://staging.fleeksandbox.xyz
       SDK__GRAPHQL_API_URL: https://graphql.service.staging.fleeksandbox.xyz/graphql
-      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -45,6 +44,8 @@ jobs:
 
       - name: Install
         run: pnpm i
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         
       - name: Build CLI
         run: pnpm build

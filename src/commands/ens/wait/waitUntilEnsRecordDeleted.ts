@@ -3,7 +3,7 @@ import { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 
 type WaitUntilEnsRecordDeletedArgs = {
-  ensRecord: Pick<EnsRecord, 'id'>;
+  ensRecord: EnsRecord;
   sdk: FleekSdk;
 };
 

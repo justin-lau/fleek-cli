@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@fleek-platform/errors": "2.1.0-stg.2",
+    "@fleek-platform/tester": "2.0.2-stg.2",
     "@fleek-platform/sdk": "2.1.0-stg.1",
     "@fleek-platform/utils-gateways": "0.0.2-stg.1",
     "@fleek-platform/utils-github": "0.0.1-stg.1",

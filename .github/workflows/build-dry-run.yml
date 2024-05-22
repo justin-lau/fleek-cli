@@ -11,6 +11,7 @@ jobs:
     env:
       UI__APP_URL: https://staging.fleeksandbox.xyz
       SDK__GRAPHQL_API_URL: https://graphql.service.staging.fleeksandbox.xyz/graphql
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,24 +28,26 @@ jobs:
           version: 7
           run_install: false
 
-      # - name: Get pnpm store directory
-      #   shell: bash
-      #   run: |
-      #     echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      - name: Add .npmrc
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ env.NODE_AUTH_TOKEN }}" > .npmrc
 
-      # - uses: actions/cache@v4
-      #   name: Setup pnpm cache
-      #   with:
-      #     path: ${{ env.STORE_PATH }}
-      #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-pnpm-store-
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install
         run: pnpm i
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-              
+        
       - name: Build CLI
         run: pnpm build
 

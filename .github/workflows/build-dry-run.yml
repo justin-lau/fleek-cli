@@ -1,0 +1,37 @@
+name: 🔧 Build (dry-run)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      UI__APP_URL: https://staging.fleeksandbox.xyz
+      SDK__GRAPHQL_API_URL: https://graphql.service.staging.fleeksandbox.xyz/graphql
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          
+      - name: Install
+        run: npm ci
+        
+      - name: Build CLI
+        run: npm run build
+
+      - name: Binary
+        run: |
+          if ! ./bin/index.js > /dev/null 2>&1; then
+            echo "👹 Oops! The binary seem faulty..."
+            exit 1
+          fi
+
+          echo "🚑 Seems healthy!"

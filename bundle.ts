@@ -9,8 +9,6 @@ import type { Defined } from './src/defined';
 const external = [
   ...Object.keys(pkgJson.dependencies),
   "aws4",
-  "@fleek-platform/auth",
-  
 ];
 
 const define = parseEnvVarsAsKeyVal<Defined>({ defined });

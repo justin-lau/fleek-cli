@@ -16,7 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup .npmrc file to publish to npm
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -28,7 +27,7 @@ jobs:
           version: 7
           run_install: false
 
-      - name: Add .npmrc
+      - name: Update .npmrc with token
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ env.NODE_AUTH_TOKEN }}" > .npmrc
 

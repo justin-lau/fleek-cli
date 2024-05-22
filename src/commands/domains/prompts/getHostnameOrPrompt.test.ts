@@ -1,4 +1,4 @@
-import { DomainHostnameInvalidError } from '@fleekxyz/errors';
+import { DomainHostnameInvalidError } from '@fleek-platform/errors';
 import { describe, expect, it, vi } from 'vitest';
 
 import { getHostnameOrPrompt } from './getHostnameOrPrompt';

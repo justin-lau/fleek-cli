@@ -1,4 +1,4 @@
-import { EnsRecord } from '@fleekxyz/sdk';
+import { EnsRecord } from '@fleek-platform/sdk';
 
 import { output } from '../../cli';
 import { SdkGuardedFunction } from '../../guards/types';

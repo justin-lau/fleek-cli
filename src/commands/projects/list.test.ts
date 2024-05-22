@@ -1,4 +1,4 @@
-import { FleekSdk, PersonalAccessTokenService } from '@fleekxyz/sdk';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
 import { output } from '../../cli';
@@ -20,7 +20,7 @@ vi.mock('../../config', () => {
   return { config };
 });
 
-vi.mock('@fleekxyz/sdk', () => {
+vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const projects = {

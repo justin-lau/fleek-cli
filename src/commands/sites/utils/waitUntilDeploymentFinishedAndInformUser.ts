@@ -1,5 +1,5 @@
-import { FleekSdk } from '@fleekxyz/sdk';
-import { getFleekDefaultGatewayBySlug } from '@fleekxyz/utils-gateways';
+import { FleekSdk } from '@fleek-platform/sdk';
+import { getFleekDefaultGatewayBySlug } from '@fleek-platform/utils-gateways';
 
 import { Output } from '../../../output/Output';
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';

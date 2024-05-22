@@ -1,4 +1,4 @@
-import { FleekConfigMissingFileError } from '@fleekxyz/errors';
+import { FleekConfigMissingFileError } from '@fleek-platform/errors';
 import { constants, promises as fs } from 'fs';
 import { join as joinPath } from 'path';
 

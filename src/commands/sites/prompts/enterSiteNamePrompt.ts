@@ -1,4 +1,4 @@
-import { isSiteNameValid } from '@fleekxyz/utils-validation';
+import { isSiteNameValid } from '@fleek-platform/utils-validation';
 
 import { textPrompt } from '../../../prompts/textPrompt';
 import { t } from '../../../utils/translation';

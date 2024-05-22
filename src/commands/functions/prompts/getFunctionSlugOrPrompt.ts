@@ -1,5 +1,5 @@
-import { FleekFunctionSlugNotValidError } from '@fleekxyz/errors';
-import { isFunctionSlugValid } from '@fleekxyz/utils-validation';
+import { FleekFunctionSlugNotValidError } from '@fleek-platform/errors';
+import { isFunctionSlugValid } from '@fleek-platform/utils-validation';
 
 type GetFunctionSlugOrPromptArgs = {
   slug?: string;

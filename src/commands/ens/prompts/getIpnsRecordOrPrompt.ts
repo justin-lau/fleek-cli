@@ -1,4 +1,4 @@
-import { FleekSdk, IpnsRecord } from '@fleekxyz/sdk';
+import { FleekSdk, IpnsRecord } from '@fleek-platform/sdk';
 
 import { output } from '../../../cli';
 import { selectPrompt } from '../../../prompts/selectPrompt';

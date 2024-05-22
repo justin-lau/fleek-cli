@@ -1,5 +1,5 @@
-import { DomainsNotFoundError } from '@fleekxyz/errors';
-import { Domain, FleekSdk, PersonalAccessTokenService } from '@fleekxyz/sdk';
+import { DomainsNotFoundError } from '@fleek-platform/errors';
+import { Domain, FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
@@ -7,7 +7,7 @@ import { getDomainOrPrompt } from './getDomainOrPrompt';
 
 vi.mock('../../../prompts/selectPrompt', () => ({ selectPrompt: vi.fn().mockResolvedValue('secondDomainId') }));
 
-vi.mock('@fleekxyz/sdk', () => {
+vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const domains = {

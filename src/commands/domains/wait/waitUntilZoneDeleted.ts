@@ -1,4 +1,4 @@
-import { FleekSdk, Zone } from '@fleekxyz/sdk';
+import { FleekSdk, Zone } from '@fleek-platform/sdk';
 
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 

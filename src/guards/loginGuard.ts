@@ -1,4 +1,4 @@
-import { MissingExpectedDataError } from '@fleekxyz/errors';
+import { MissingExpectedDataError } from '@fleek-platform/errors';
 
 import { output } from '../cli';
 import { loginActionHandler } from '../commands/auth/login';

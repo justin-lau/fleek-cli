@@ -1,5 +1,5 @@
-import { EnsRecordNotFoundError } from '@fleekxyz/errors';
-import { EnsRecord, FleekSdk } from '@fleekxyz/sdk';
+import { EnsRecordNotFoundError } from '@fleek-platform/errors';
+import { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';

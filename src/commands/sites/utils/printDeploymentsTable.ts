@@ -1,4 +1,4 @@
-import { Deployment } from '@fleekxyz/sdk';
+import { Deployment } from '@fleek-platform/sdk';
 
 import { Output } from '../../../output/Output';
 import { t } from '../../../utils/translation';

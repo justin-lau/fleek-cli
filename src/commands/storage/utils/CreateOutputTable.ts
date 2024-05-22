@@ -1,5 +1,5 @@
-import { FleekSdk, StoragePin } from '@fleekxyz/sdk';
-import { getCfIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleekxyz/utils-ipfs';
+import { FleekSdk, StoragePin } from '@fleek-platform/sdk';
+import { getCfIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
 
 import { getAllActivePrivateGatewayDomains } from '../../gateways/utils/getAllPrivateGatewayDomains';
 

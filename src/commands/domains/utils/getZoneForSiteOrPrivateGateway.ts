@@ -1,4 +1,4 @@
-import { FleekSdk, PrivateGateway, Site, Zone } from '@fleekxyz/sdk';
+import { FleekSdk, PrivateGateway, Site, Zone } from '@fleek-platform/sdk';
 
 import { waitForZoneCreationResult } from '../wait/waitForZoneCreationResult';
 

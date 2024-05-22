@@ -1,4 +1,4 @@
-import { Client } from '@fleekxyz/sdk';
+import { Client } from '@fleek-platform/sdk';
 
 import { checkPeriodicallyUntil } from '../checkPeriodicallyUntil';
 

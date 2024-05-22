@@ -1,5 +1,5 @@
-import { UnauthenticatedError } from '@fleekxyz/errors';
-import { FleekSdk, PersonalAccessTokenService } from '@fleekxyz/sdk';
+import { UnauthenticatedError } from '@fleek-platform/errors';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 
 import { output } from '../cli';
 import { config } from '../config';

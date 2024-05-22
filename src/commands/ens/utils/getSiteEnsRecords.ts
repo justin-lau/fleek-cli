@@ -1,4 +1,4 @@
-import { EnsRecord, FleekSdk, Site } from '@fleekxyz/sdk';
+import { EnsRecord, FleekSdk, Site } from '@fleek-platform/sdk';
 
 type GetSiteEnsRecordsArgs = {
   sdk: FleekSdk;

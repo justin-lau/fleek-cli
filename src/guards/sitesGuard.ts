@@ -1,4 +1,4 @@
-import { FleekError } from '@fleekxyz/errors';
+import { FleekError } from '@fleek-platform/errors';
 
 import { output } from '../cli';
 import { initConfiguration } from '../commands/sites/utils/initCongifuration';

@@ -1,4 +1,4 @@
-import { ApplicationWhiteLabelDomain, ApplicationWhitelistDomain } from '@fleekxyz/sdk';
+import { ApplicationWhiteLabelDomain, ApplicationWhitelistDomain } from '@fleek-platform/sdk';
 
 type WhitelistDomain = Omit<ApplicationWhitelistDomain, 'createdAt' | 'updatedAt' | '__typename'>;
 type WhiteLabelDomain = Omit<ApplicationWhiteLabelDomain, 'createdAt' | 'updatedAt' | '__typename'>;

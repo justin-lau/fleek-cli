@@ -1,5 +1,5 @@
-import { ProjectsNotFoundError } from '@fleekxyz/errors';
-import { FleekSdk } from '@fleekxyz/sdk';
+import { ProjectsNotFoundError } from '@fleek-platform/errors';
+import { FleekSdk } from '@fleek-platform/sdk';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
 import { output } from '../../cli';
@@ -32,7 +32,7 @@ vi.mock('./create', () => ({
   createProjectActionHandler: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock('@fleekxyz/sdk', () => ({}));
+vi.mock('@fleek-platform/sdk', () => ({}));
 
 describe('Switch between projects', () => {
   it('should switch to project by given id', async () => {

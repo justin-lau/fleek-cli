@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module';
 
-import { FleekConfigInvalidContentError, FleekConfigMissingFileError } from '@fleekxyz/errors';
+import { FleekConfigInvalidContentError, FleekConfigMissingFileError } from '@fleek-platform/errors';
 import { promises as fs } from 'fs';
 import { extname as getExtension } from 'path';
 import { register as registerTSNodeCompiler } from 'ts-node';

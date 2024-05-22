@@ -1,5 +1,5 @@
-import { FleekFunctionFilePathNotValidError } from '@fleekxyz/errors';
-import { isFunctionFilePathValid } from '@fleekxyz/utils-validation';
+import { FleekFunctionFilePathNotValidError } from '@fleek-platform/errors';
+import { isFunctionFilePathValid } from '@fleek-platform/utils-validation';
 import { FileLike, filesFromPaths } from 'files-from-path';
 
 import { textPrompt } from '../../../prompts/textPrompt';

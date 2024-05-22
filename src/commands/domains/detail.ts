@@ -1,4 +1,4 @@
-import { DomainStatus } from '@fleekxyz/sdk';
+import { DomainStatus } from '@fleek-platform/sdk';
 
 import { output } from '../../cli';
 import { SdkGuardedFunction } from '../../guards/types';

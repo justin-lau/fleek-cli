@@ -1,5 +1,5 @@
-import { PrivateGatewayNameInvalidError } from '@fleekxyz/errors';
-import { isPrivateGatewayNameValid } from '@fleekxyz/utils-validation';
+import { PrivateGatewayNameInvalidError } from '@fleek-platform/errors';
+import { isPrivateGatewayNameValid } from '@fleek-platform/utils-validation';
 
 import { textPrompt } from '../../../prompts/textPrompt';
 import { t } from '../../../utils/translation';

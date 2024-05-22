@@ -1,5 +1,5 @@
-import { IpnsRecordsNotFoundError } from '@fleekxyz/errors';
-import { FleekSdk, IpnsRecord } from '@fleekxyz/sdk';
+import { IpnsRecordsNotFoundError } from '@fleek-platform/errors';
+import { FleekSdk, IpnsRecord } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';

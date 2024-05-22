@@ -1,5 +1,5 @@
-import { EnsNameInvalidError } from '@fleekxyz/errors';
-import { isEnsValid } from '@fleekxyz/utils-validation';
+import { EnsNameInvalidError } from '@fleek-platform/errors';
+import { isEnsValid } from '@fleek-platform/utils-validation';
 
 import { textPrompt } from '../../../prompts/textPrompt';
 import { t } from '../../../utils/translation';

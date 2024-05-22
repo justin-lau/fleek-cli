@@ -1,5 +1,5 @@
-import { FleekFunctionsNotFoundError } from '@fleekxyz/errors';
-import { FleekSdk, PersonalAccessTokenService } from '@fleekxyz/sdk';
+import { FleekFunctionsNotFoundError } from '@fleek-platform/errors';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
@@ -7,7 +7,7 @@ import { getFunctionOrPrompt } from './getFunctionOrPrompt';
 
 vi.mock('../../../prompts/selectPrompt', () => ({ selectPrompt: vi.fn().mockResolvedValue('secondFunctionId') }));
 
-vi.mock('@fleekxyz/sdk', () => {
+vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const functions = {

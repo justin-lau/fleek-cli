@@ -1,4 +1,4 @@
-import { FleekSdk, PersonalAccessTokenService } from '@fleekxyz/sdk';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
@@ -36,7 +36,7 @@ vi.mock('../../sites/prompts/getSiteOrPrompt', () => ({
   }),
 }));
 
-vi.mock('@fleekxyz/sdk', () => ({ FleekSdk: vi.fn(), PersonalAccessTokenService: vi.fn() }));
+vi.mock('@fleek-platform/sdk', () => ({ FleekSdk: vi.fn(), PersonalAccessTokenService: vi.fn() }));
 
 type TestContext = {
   fakeSdk: FleekSdk;

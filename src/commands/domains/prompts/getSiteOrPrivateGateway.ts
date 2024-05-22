@@ -1,4 +1,4 @@
-import { FleekSdk, PrivateGateway, Site } from '@fleekxyz/sdk';
+import { FleekSdk, PrivateGateway, Site } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';

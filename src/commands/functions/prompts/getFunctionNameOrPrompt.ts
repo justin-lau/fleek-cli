@@ -1,5 +1,5 @@
-import { FleekFunctionNameNotValidError } from '@fleekxyz/errors';
-import { isFunctionNameValid } from '@fleekxyz/utils-validation';
+import { FleekFunctionNameNotValidError } from '@fleek-platform/errors';
+import { isFunctionNameValid } from '@fleek-platform/utils-validation';
 
 import { enterFunctionNamePrompt } from './enterFunctionNamePrompt';
 

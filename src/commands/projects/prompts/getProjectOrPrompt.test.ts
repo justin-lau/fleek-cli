@@ -1,5 +1,5 @@
-import { ProjectsNotFoundError } from '@fleekxyz/errors';
-import { FleekSdk, PersonalAccessTokenService } from '@fleekxyz/sdk';
+import { ProjectsNotFoundError } from '@fleek-platform/errors';
+import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 import { describe, expect, it, Mock, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
@@ -7,7 +7,7 @@ import { getProjectOrPrompt } from './getProjectOrPrompt';
 
 vi.mock('../../../prompts/selectPrompt', () => ({ selectPrompt: vi.fn().mockResolvedValue('secondProjectId') }));
 
-vi.mock('@fleekxyz/sdk', () => {
+vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const projects = {

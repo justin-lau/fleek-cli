@@ -1,4 +1,4 @@
-import { getCfIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleekxyz/utils-ipfs';
+import { getCfIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
 import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
 import { existsSync, promises as fs } from 'fs';

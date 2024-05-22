@@ -1,4 +1,4 @@
-import { FleekSdk } from '@fleekxyz/sdk';
+import { FleekSdk } from '@fleek-platform/sdk';
 import { describe, expect, it, vi } from 'vitest';
 
 import { output as fakeOutput } from '../../cli';

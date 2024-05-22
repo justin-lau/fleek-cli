@@ -1,4 +1,4 @@
-import { EnvNotSetError } from '@fleekxyz/errors';
+import { EnvNotSetError } from '@fleek-platform/errors';
 
 // Replace global variables with specific values during build
 const DEFAULT_ESBUILD_DEFINED_PROCESS_ENV_PREFIX = 'process.env.';

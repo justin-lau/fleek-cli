@@ -1,4 +1,4 @@
-import { createClient } from '@fleekxyz/sdk';
+import { createClient } from '@fleek-platform/sdk';
 
 import { output } from '../../cli';
 import { getPersonalAccessTokenNameOrPrompt } from '../../utils/prompts/getPersonalAccessTokenNameOrPrompt';

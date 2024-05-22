@@ -1,4 +1,4 @@
-import { getIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleekxyz/utils-ipfs';
+import { getIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
 import fs from 'fs';
 
 import { output } from '../../cli';

@@ -11,13 +11,13 @@ export const saveConfiguration = async ({ config, format }: SaveConfigurationArg
   const prettyStringifiedConfig = JSON.stringify(config, undefined, 2);
 
   if (format === 'ts') {
-    const content = `import { FleekConfig } from '@fleekxyz/cli';\n\nexport default ${prettyStringifiedConfig} satisfies FleekConfig;`;
+    const content = `import { FleekConfig } from '@fleek-platform/cli';\n\nexport default ${prettyStringifiedConfig} satisfies FleekConfig;`;
 
     await fs.writeFile('fleek.config.ts', content);
   }
 
   if (format === 'js') {
-    const content = `/** @type {import('@fleekxyz/cli').FleekConfig} */\nmodule.exports = ${prettyStringifiedConfig};`;
+    const content = `/** @type {import('@fleek-platform/cli').FleekConfig} */\nmodule.exports = ${prettyStringifiedConfig};`;
 
     await fs.writeFile('fleek.config.js', content);
   }

@@ -1,5 +1,5 @@
-import { DomainsNotFoundError } from '@fleekxyz/errors';
-import { Domain, FleekSdk } from '@fleekxyz/sdk';
+import { DomainsNotFoundError } from '@fleek-platform/errors';
+import { Domain, FleekSdk } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';

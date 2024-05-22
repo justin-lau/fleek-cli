@@ -1,4 +1,4 @@
-import { FleekConfigInvalidContentError, FleekConfigMissingFileError, FleekError } from '@fleekxyz/errors';
+import { FleekConfigInvalidContentError, FleekConfigMissingFileError, FleekError } from '@fleek-platform/errors';
 
 import { output } from '../../cli';
 import { SdkGuardedFunction } from '../../guards/types';

@@ -36,10 +36,10 @@ export const deleteStorageAction: SdkGuardedFunction<DeleteActionArgs> = async (
   try {
     await processPromisesBatch(cidsToDelete, async (cid: string): Promise<undefined> => {
       const response = await sdk.storage().delete({ cid });
-      output.log(`${cid ? `cid: ${cid}` : ''}${name ? ` name: ${name}` : ''}`);
+      output.log(`${t('processing')}${cid ? ` cid: ${cid}` : ''}${name ? ` name: ${name}` : ''}`);
 
       if (response.status === 200) {
-        output.success(t('commonItemActionSuccess', { subject: `${t('storage')}`, action: t('deleted') }));
+        output.success(t('commonItemActionSuccess', { subject: cid ? `CID ${cid}` : `filename ${name}`, action: t('deleted') }));
       } else if (response.status === 500) {
         // 500 status should be caught and should not affect other deletes in case of multiple deletes
         output.error(

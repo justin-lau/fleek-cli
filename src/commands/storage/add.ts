@@ -61,7 +61,7 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
 
     output.printNewLine();
   } else {
-    output.success(hash);
+    output.success((t('storageUploadSuccessCid', { cid: hash })));
     output.printNewLine();
   }
 

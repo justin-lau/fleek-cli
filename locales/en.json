@@ -50,7 +50,7 @@
   "projectCreating": "Creating a new project",
   "projectCreatedAndSwitched": "The project \"{name}\" has been successfully created with the project ID \"{projectId}\", and you've automatically been switched to it.",
   "projectsSwitchNeedCreateFirst": "Let's start by creating one.",
-  "projectsSwitchSuccess": "You have switched to project \"{name}\".",
+  "projectsSwitchSuccess": "You have switched to project \"{name}\" successfully.",
   "enterProjectName": "Please enter the project name",
   "mustHaveXandYValidChars": "{name} must contain between {min} and {max} valid characters.",
   "providerNotSupported": "This provider is not yet supported.",

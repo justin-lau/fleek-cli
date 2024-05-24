@@ -48,7 +48,7 @@ describe('Switch between projects', () => {
       id: 'firstProjectId',
     });
     expect(config.projectId.set).toHaveBeenCalledWith('firstProjectId');
-    expect(output.success).toHaveBeenCalledWith('You have switched to project "first project" successfully.');
+    expect(output.success).toHaveBeenCalledWith('You have switched to project "first project".');
   });
 
   it('should let the user choose project and switch to that project', async () => {

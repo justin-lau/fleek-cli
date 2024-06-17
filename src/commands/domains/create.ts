@@ -34,8 +34,14 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
     output.spinner(t('creatingNewDomainGw'));
   }
 
+  // TODO: Investigate the diff with org repo
+  // const zone = await getZoneForSiteOrPrivateGateway(
+  //   site ? ({ site, sdk } as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as GetZoneForSiteOrPrivateGatewayArgs)
+  // );
+
+  // TODO: Check commented out above
   const zone = await getZoneForSiteOrPrivateGateway(
-    site ? ({ site, sdk } as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as GetZoneForSiteOrPrivateGatewayArgs)
+    site ? ({ site, sdk } as unknown as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as  unknown as GetZoneForSiteOrPrivateGatewayArgs)
   );
 
   if (zone === null) {

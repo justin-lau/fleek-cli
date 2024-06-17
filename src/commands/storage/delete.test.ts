@@ -136,8 +136,12 @@ describe('Delete storage files/folder for the given cid or name', () => {
     expect(fakeSdk.storage().delete).toHaveBeenCalledWith({
       cid: 'bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle',
     });
-    expect(output.log).toHaveBeenCalledWith(`Processing cid: bafkreidlixt2jjjsdxxdzgv3spe46mcwtpsmlxgumpsyaru6n6fn3jz2zy name: basic1Fail.car`);
-    expect(output.log).toHaveBeenCalledWith(`Processing cid: bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle name: basic1Fail.car`);
+    expect(output.log).toHaveBeenCalledWith(
+      `Processing cid: bafkreidlixt2jjjsdxxdzgv3spe46mcwtpsmlxgumpsyaru6n6fn3jz2zy name: basic1Fail.car`
+    );
+    expect(output.log).toHaveBeenCalledWith(
+      `Processing cid: bafkreiebwzjtd62ctklmmidldy2z2exinzr2mc72tzhkbe7ftjxm7cwnle name: basic1Fail.car`
+    );
     expect(output.success).toHaveBeenCalledTimes(1);
     expect(output.error).toHaveBeenCalledTimes(1);
   });

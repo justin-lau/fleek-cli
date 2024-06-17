@@ -7,24 +7,12 @@ import { basename } from 'path';
 import { output } from '../../cli';
 import { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
+import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
 
 type AddStorageActionArgs = {
   path: string;
-};
-
-const uploadOnProgress = (progressBar: cliProgress.SingleBar) => {
-  return ({ loadedSize, totalSize }: { loadedSize: number; totalSize: number }) => {
-    if (loadedSize === 0) {
-      progressBar.start(totalSize, loadedSize);
-    } else if (loadedSize === totalSize) {
-      progressBar.update(loadedSize);
-      progressBar.stop();
-    } else {
-      progressBar.update(loadedSize);
-    }
-  };
 };
 
 export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async ({ sdk, args }) => {
@@ -61,7 +49,7 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
 
     output.printNewLine();
   } else {
-    output.success((t('storageUploadSuccessCid', { cid: hash })));
+    output.success(t('storageUploadSuccessCid', { cid: hash }));
     output.printNewLine();
   }
 

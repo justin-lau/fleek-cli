@@ -61,7 +61,7 @@ describe('Switch between projects', () => {
 
     expect(getProjectOrPrompt).toHaveBeenCalledWith({ sdk: {} as FleekSdk });
     expect(config.projectId.set).toHaveBeenCalledWith('secondProjetId');
-    expect(output.success).toHaveBeenCalledWith('You have switched to project "second project" successfully.');
+    expect(output.success).toHaveBeenCalledWith('You have switched to project "second project".');
   });
 
   it('should run creating new project flow because of no project exist', async () => {

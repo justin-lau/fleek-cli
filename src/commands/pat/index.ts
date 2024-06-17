@@ -19,7 +19,7 @@ export default (program: Command) => {
     .command('create')
     .description(t('createNewPat'))
     .option('-n, --name <name>', t('patName'))
-    .action(() => {
+    .action(async (args) => {
       const uiAppUrl = getDefined('UI__APP_URL');
       const authApiUrl = getDefined('SDK__GRAPHQL_API_URL');
 
@@ -27,9 +27,10 @@ export default (program: Command) => {
         throw new MissingExpectedDataError();
       }
 
-      createPersonalAccessTokenActionHandler({
+      await createPersonalAccessTokenActionHandler({
         uiAppUrl,
         authApiUrl,
+        ...args,
       });
     });
 

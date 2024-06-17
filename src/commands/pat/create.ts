@@ -8,36 +8,35 @@ import { waitForPersonalAccessTokenFromVerificationSession } from '../../utils/t
 import { t } from '../../utils/translation';
 
 type CreatePersonalAccessTokenActionHandlerArgs = {
+  name?: string;
   uiAppUrl: string;
   authApiUrl: string;
 };
 
-type CreatePersonalAccessTokenOptions = {
-  name?: string;
+export const createPersonalAccessTokenActionHandler = async ({
+  uiAppUrl,
+  authApiUrl,
+  ...args
+}: CreatePersonalAccessTokenActionHandlerArgs) => {
+  const verificationSessionId = generateVerificationSessionId();
+
+  const name = await getPersonalAccessTokenNameOrPrompt({
+    name: args?.name,
+  });
+  output.printNewLine();
+  showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
+
+  const personalAccessToken = await waitForPersonalAccessTokenFromVerificationSession({
+    verificationSessionId,
+    client: createClient({ url: authApiUrl }),
+    name,
+  });
+
+  if (!personalAccessToken) {
+    output.error(t('patFetchTimeout'));
+
+    return;
+  }
+
+  output.success(t('newPatIs', { pat: output.textColor(personalAccessToken, 'redBright') }));
 };
-
-export const createPersonalAccessTokenActionHandler =
-  ({ uiAppUrl, authApiUrl }: CreatePersonalAccessTokenActionHandlerArgs) =>
-  async (options: CreatePersonalAccessTokenOptions) => {
-    const verificationSessionId = generateVerificationSessionId();
-
-    const name = await getPersonalAccessTokenNameOrPrompt({
-      name: options?.name,
-    });
-    output.printNewLine();
-    showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
-
-    const personalAccessToken = await waitForPersonalAccessTokenFromVerificationSession({
-      verificationSessionId,
-      client: createClient({ url: authApiUrl }),
-      name,
-    });
-
-    if (!personalAccessToken) {
-      output.error(t('patFetchTimeout'));
-
-      return;
-    }
-
-    output.success(t('newPatIs', { pat: output.textColor(personalAccessToken, 'redBright') }));
-  };

@@ -152,6 +152,7 @@ describe('Create domain for site', () => {
     expect(fakeOutput.success).toHaveBeenCalledWith(`Domain "gold.xyz" was verified.`);
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).not.toHaveBeenCalled();
+    expect(fakeOutput.log).toHaveBeenCalledWith('CNAME @ gold-fleek.bunnycdn.net');
   });
 
   it<TestContext>('Zone was created for site, domain was created and successfully verified', async (context) => {

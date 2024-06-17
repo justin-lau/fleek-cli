@@ -35,7 +35,7 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
   }
 
   const zone = await getZoneForSiteOrPrivateGateway(
-    site ? ({ site, sdk } as unknown as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as  unknown as GetZoneForSiteOrPrivateGatewayArgs)
+    site ? ({ site, sdk } as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as GetZoneForSiteOrPrivateGatewayArgs)
   );
 
   if (zone === null) {
@@ -78,7 +78,7 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
   output.log(`${t('updateDNSRecords', { hostname })}:`);
   for (const { type, value } of domain.dnsConfigs) {
     if (type === 'CNAME') {
-      output.log(`CNAME @ ${value}`);
+      output.log(`CNAME @ ${value.toLowerCase().replace('https://', '')}`);
     }
   }
 

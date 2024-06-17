@@ -47,29 +47,12 @@ export const detailDomainAction: SdkGuardedFunction<DetailDomainActionOptions> =
   output.log(`${t('configDomainAsTable')}:`);
 
   output.table(
-    domain.dnsConfigs.map((domain: {
-      type: string;
-      name: string;
-      value: string;
-    }) => ({
+    domain.dnsConfigs.map((domain) => ({
       Type: domain.type,
       Name: domain.name,
       Value: domain.value,
     }))
   );
-
-  // TODO: In sep repo the following's required, investigate
-  // output.table(
-  //   domain.dnsConfigs.map((domain: {
-  //     type: string;
-  //     name: string;
-  //     value: string;
-  //   }) => ({
-  //     Type: domain.type,
-  //     Name: domain.name,
-  //     Value: domain.value,
-  //   }))
-  // );
 };
 
 export const detailDomainActionHandler = withGuards(detailDomainAction, {

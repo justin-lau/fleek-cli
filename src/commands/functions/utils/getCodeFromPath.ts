@@ -1,4 +1,4 @@
-import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError } from '@fleek-platform/errors';
+import { FleekFunctionPathNotValidError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
 import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
@@ -112,7 +112,6 @@ const bundleCode = async (args: BundleCodeArgs) => {
 
     if (!noBundle) {
       showUnsupportedModules(unsupportedModulesUsed);
-      throw new FleekFunctionBundlingFailedError({});
     }
 
     const bundlingResponse: BundlingResponse = {

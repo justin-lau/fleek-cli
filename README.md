@@ -50,8 +50,8 @@ Open the .env.production file in a text editor and add the following:
 
 ```sh
 UI__APP_URL="https://app.fleek.xyz"
-SDK__GRAPHQL_API_URL="https://graphql.service.fleek.xyz/graphql
-SITE_SLUG_DOMAIN=on-fleek.app"
+SDK__GRAPHQL_API_URL="https://graphql.service.fleek.xyz/graphql"
+SITE_SLUG_DOMAIN="on-fleek.app"
 IPFS_GATEWAY_HOSTNAME="gateway-ipfs.fleek.xyz"
 SDK__AUTH_APPS_URL="https://auth-apps.service.fleek.xyz"
 SDK__IPFS__STORAGE_API_URL="https://storage-ipfs.service.fleek.xyz"

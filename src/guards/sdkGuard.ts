@@ -1,5 +1,6 @@
 import { UnauthenticatedError } from '@fleek-platform/errors';
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
+import { getDefined } from '../defined';
 
 import { output } from '../cli';
 import { config } from '../config';
@@ -17,7 +18,12 @@ export const getSdkClient = () => {
   }
 
   const accessTokenService = new PersonalAccessTokenService({ projectId, personalAccessToken });
-  const sdk = new FleekSdk({ accessTokenService });
+  const sdk = new FleekSdk({
+    accessTokenService,
+    graphqlServiceApiUrl: getDefined('SDK__GRAPHQL_API_URL'),
+    ipfsStorageApiUrl: getDefined('SDK__IPFS__STORAGE_API_URL'),
+    uploadProxyApiUrl: getDefined('SDK__UPLOAD_PROXY_API_URL'),
+  });
 
   return sdk;
 };

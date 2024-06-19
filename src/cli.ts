@@ -1,5 +1,3 @@
-import 'dotenv/config';
-
 import { Command } from 'commander';
 import cmdApplications from './commands/applications/index';
 import cmdAuth from './commands/auth/index';

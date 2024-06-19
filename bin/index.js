@@ -3,6 +3,8 @@
 'use strict';
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+require('dotenv/config');
+
 const semver = require('semver');
 
 // The `dist/bundle` is a temporary version

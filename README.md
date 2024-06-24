@@ -89,6 +89,16 @@ fleek
 
 Learn the Fleek-platform CLI basic commands [here](#basic-commands). For extended documentation visit our [documentation site](https://fleek.xyz/docs).
 
+### Changeset
+
+Manage the versioning of changelog entries.
+
+Declare an intent to release by executing the command and answering the wizard's questions:
+
+```sh
+pnpm changeset:add
+```
+
 ## Basic commands
 
 The Fleek CLI command has the following structure:

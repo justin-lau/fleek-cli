@@ -49,14 +49,13 @@ touch .env.production
 Open the .env.production file in a text editor and add the following:
 
 ```sh
-UI__APP_URL="https://app.fleek.xyz"
-SDK__GRAPHQL_API_URL="https://graphql.service.fleek.xyz/graphql"
-SITE_SLUG_DOMAIN="on-fleek.app"
 IPFS_GATEWAY_HOSTNAME="gateway-ipfs.fleek.xyz"
 SDK__AUTH_APPS_URL="https://auth-apps.service.fleek.xyz"
-SDK__IPFS__STORAGE_API_URL="https://storage-ipfs.service.fleek.xyz"
 SDK__GRAPHQL_API_URL="https://graphql.service.fleek.xyz/graphql"
+SDK__IPFS__STORAGE_API_URL="https://storage-ipfs.service.fleek.xyz"
 SDK__UPLOAD_PROXY_API_URL="https://uploads.service.fleek.xyz"
+SITE_SLUG_DOMAIN="on-fleek.app"
+UI__APP_URL="https://app.fleek.xyz"
 ```
 
 💡 The variables above point to our production environment, the same you interact with as an end-user.

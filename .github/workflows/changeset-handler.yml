@@ -29,9 +29,10 @@ jobs:
           pnpm changeset:version
           git status --short
 
-      - name: Update lock file
+      - name: Install dependencies
         run: |
-          pnpm install --lockfile-only
+          pnpm install \
+            --strict-peer-dependencies
 
       - name: Commit changes
         run: |

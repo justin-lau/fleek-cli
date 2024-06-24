@@ -9,9 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      UI__APP_URL: https://staging.fleeksandbox.xyz
-      SDK__GRAPHQL_API_URL: https://graphql.service.staging.fleeksandbox.xyz/graphql
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      IPFS_GATEWAY_HOSTNAME: "gateway-ipfs.staging.fleeksandbox.xyz"
+      SDK__AUTH_APPS_URL: "https://auth-apps.service.staging.fleeksandbox.xyz"
+      SDK__GRAPHQL_API_URL: "https://graphql.service.staging.fleeksandbox.xyz/graphql"
+      SDK__IPFS__STORAGE_API_URL: "https://storage-ipfs.service.staging.fleeksandbox.xyz"
+      SDK__UPLOAD_PROXY_API_URL: "https://uploads.service.staging.fleeksandbox.xyz"
+      SITE_SLUG_DOMAIN: "stg.on-fleek-test.app"
+      UI__APP_URL: "https://staging.fleeksandbox.xyz"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

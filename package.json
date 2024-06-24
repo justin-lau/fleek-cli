@@ -11,6 +11,7 @@
     "build:ci": "pnpm run build",
     "bundle": "ts-node -r dotenv/config bundle.ts",
     "changeset:add": "npx changeset",
+    "changeset:version": "pnpm exec changeset version",
     "clean": "pnpm \"/^clean:.*/\"",
     "clean:dist": "rm -rf dist",
     "clean:generated": "rm -rf generated",

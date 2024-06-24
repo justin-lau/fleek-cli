@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.8.8
+
+### Patch Changes
+
+- b256c95: Introduce the changeset commands
+
 ## 2.8.0
 
 ### Minor Changes

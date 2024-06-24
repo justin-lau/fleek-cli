@@ -1,4 +1,4 @@
-import { FleekFunctionPathNotValidError } from '@fleek-platform/errors';
+import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
 import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
@@ -12,12 +12,42 @@ import { EnvironmentVariables } from './parseEnvironmentVariables';
 import { asyncLocalStoragePolyfill } from './plugins/asyncLocalStoragePolyfill';
 import { moduleChecker } from './plugins/moduleChecker';
 
-type BundlingResponse = {
-  path: string;
-  unsupportedModules: string[];
+const supportedModulesAliases = {
+  buffer: 'node:buffer',
+  crypto: 'node:crypto',
+  domain: 'node:domain',
+  events: 'node:events',
+  http: 'node:http',
+  https: 'node:https',
+  path: 'node:path',
+  punycode: 'node:punycode',
+  stream: 'node:stream',
+  string_decoder: 'node:string_decoder',
+  url: 'node:url',
+  util: 'node:util',
+  zlib: 'node:zlib',
 };
 
-const showUnsupportedModules = (unsupportedModulesUsed: string[]) => {
+type BundlingResponse =
+  | {
+      path: string;
+      unsupportedModules: Set<string>;
+      success: true;
+    }
+  | {
+      path: string;
+      unsupportedModules: Set<string>;
+      success: false;
+      error: string;
+    };
+
+type ShowUnsupportedModulesArgs = {
+  unsupportedModulesUsed: Set<string>;
+};
+
+const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
+  const unsupportedModulesUsed = Array.from(args.unsupportedModulesUsed);
+
   if (unsupportedModulesUsed.length) {
     output.printNewLine();
     unsupportedModulesUsed.forEach((val) => {
@@ -47,7 +77,7 @@ const bundleCode = async (args: BundleCodeArgs) => {
 
   const tempDir = os.tmpdir();
   const outFile = tempDir + '/function.js';
-  const unsupportedModulesUsed: string[] = [];
+  const unsupportedModulesUsed = new Set<string>();
 
   const plugins: Plugin[] = [
     moduleChecker({ unsupportedModulesUsed }),
@@ -69,10 +99,12 @@ const bundleCode = async (args: BundleCodeArgs) => {
         globals: { Buffer: true },
         modules: {
           async_hooks: false,
-          buffer: true,
-          events: true,
-          string_decoder: true,
-          http: true,
+          assert: true,
+          dns: true,
+          http2: true,
+          net: true,
+          querystring: true,
+          tls: true,
         },
       }),
       asyncLocalStoragePolyfill()
@@ -84,6 +116,9 @@ const bundleCode = async (args: BundleCodeArgs) => {
     bundle: true,
     logLevel: 'silent',
     platform: 'neutral',
+    mainFields: ['module', 'main'],
+    external: [...Object.values(supportedModulesAliases)],
+    alias: supportedModulesAliases,
     outfile: outFile,
     minify: true,
     plugins,
@@ -107,16 +142,15 @@ const bundleCode = async (args: BundleCodeArgs) => {
     await build(buildOptions);
   } catch (e) {
     progressBar.stop();
-    // @ts-expect-error error object is unknown
-    output.debug(e.message);
 
-    if (!noBundle) {
-      showUnsupportedModules(unsupportedModulesUsed);
-    }
+    const errorMessage =
+      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
 
     const bundlingResponse: BundlingResponse = {
       path: filePath,
       unsupportedModules: unsupportedModulesUsed,
+      success: false,
+      error: errorMessage,
     };
 
     return bundlingResponse;
@@ -128,6 +162,7 @@ const bundleCode = async (args: BundleCodeArgs) => {
   const bundlingResponse: BundlingResponse = {
     path: noBundle ? filePath : outFile,
     unsupportedModules: unsupportedModulesUsed,
+    success: true,
   };
 
   return bundlingResponse;
@@ -155,7 +190,12 @@ export const getCodeFromPath = async (args: { path: string; noBundle: boolean; e
   }
 
   const bundlingResponse = await bundleCode({ filePath, noBundle, env });
-  showUnsupportedModules(bundlingResponse.unsupportedModules);
+
+  showUnsupportedModules({ unsupportedModulesUsed: bundlingResponse.unsupportedModules });
+
+  if (!bundlingResponse.success && !noBundle) {
+    throw new FleekFunctionBundlingFailedError({ error: bundlingResponse.error });
+  }
 
   return bundlingResponse.path;
 };

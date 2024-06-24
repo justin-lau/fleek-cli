@@ -74,7 +74,7 @@ jobs:
           if ! git commit \
             --allow-empty \
             --no-verify \
-            -m "chore: 🤖 updated package version"; then
+            -m "[skip ci] 🦖 updated package version"; then
             echo "👹 Oops! Failed to commit package version."
             exit 1
           fi

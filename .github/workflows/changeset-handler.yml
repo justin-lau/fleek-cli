@@ -70,11 +70,12 @@ jobs:
           fi
 
           echo "✅ Staged all changes!"
-          
+
+          pkgVersion=$(node -p "require('./package.json').version")
           if ! git commit \
             --allow-empty \
             --no-verify \
-            -m "[skip ci] 🦖 updated package version"; then
+            -m "[skip ci] 🦖 updated package version to $pkgVersion"; then
             echo "👹 Oops! Failed to commit package version."
             exit 1
           fi

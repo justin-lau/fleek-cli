@@ -1,0 +1,63 @@
+name: 🪡 Changeset
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  changeset_handler:
+    name: Changeset handler
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 7
+          run_install: false
+
+      - name: Set version
+        run: |
+          pnpm exec changeset version
+          git status --short
+
+      - name: Update lock file
+        run: |
+          pnpm install --lockfile-only
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if ! git add -A; then
+            echo "👹 Oops! Failed stage changes"
+            exit 1
+          fi
+
+          echo "✅ Staged all changes!"
+          
+          if ! git commit \
+            --allow-empty \
+            --no-verify \
+            -m "chore: 🤖 updated package version"; then
+            echo "👹 Oops! Failed to commit package version."
+            exit 1
+          fi
+
+          echo "✅ Committed package version!"
+
+          if ! git push; then
+            echo "👹 Oops! Failed to push changes."
+            exit 1
+          fi
+
+          echo "✅ Pushed changes to repository!"

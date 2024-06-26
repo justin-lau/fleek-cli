@@ -40,10 +40,15 @@ jobs:
         id: changeset-status
         shell: bash
         run: |
+          # Default skip state
+          skip=false
+          
           if ! pnpm changeset:status &>/dev/null; then
             echo "⚠️ Warning: No changesets found, should skip!"
-            echo "skip=true" >> "$GITHUB_OUTPUT"
+            skip=true
           fi
+
+          echo "skip=$skip" >> "$GITHUB_OUTPUT"
 
       - name: Get pnpm store directory
         if: ${{ steps.changeset-status.outputs.skip != 'true' }}

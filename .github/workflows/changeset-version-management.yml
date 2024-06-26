@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - test
 
 jobs:
   changeset_handler:
@@ -41,11 +42,11 @@ jobs:
         shell: bash
         run: |
           # Default skip state
-          skip=false
+          skip="false"
           
           if ! pnpm changeset:status &>/dev/null; then
             echo "⚠️ Warning: No changesets found, should skip!"
-            skip=true
+            skip="true"
           fi
 
           echo "skip=$skip" >> "$GITHUB_OUTPUT"

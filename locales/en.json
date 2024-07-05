@@ -308,6 +308,7 @@
   "noChangesDetected": "No changes detected. Skipping deployment",
   "typeFunctionCodePath": "Enter the path to the javascript file or folder containing the function code:",
   "bundlingCode": "Bundling code",
+  "transformingCode": "Transforming code",
   "uploadCodeToIpfs": "Uploading code to IPFS",
   "uploadToIpfsFailed": "Failed to upload to IPFS",
   "storageUploadSuccessCid": "The Storage IPFS CID is {cid}",
@@ -326,5 +327,7 @@
   "missingEnvVar": "Environment variable {key} is missing",
   "envFileParseError": "Failed to parse environment variables file at {path}",
   "envFilePathNotFound": "The environment variables file located at {path} could not be found.",
-  "unknownBundlingError": "Failed to bundle your function code."
+  "unknownTransformError": "We had trouble transforming your function code. Try again? If the issue persists, let us know to help us improve!",
+  "failedToApplyNodeImportProtocol": "The process attempted to automatically apply the \"node:\" protocol for importing native modules but encountered an issue. When importing Node.js native modules, always use the \"node:\" prefix. For instance, use \"node:buffer\" instead of \"buffer\". This provides clarity when built-in Node.js modules must be imported.",
+  "requireDeprecatedUseES6Syntax": "The use of 'require' is deprecated in this context. Please switch to using ES6 'import' syntax for module imports. For example, change 'require' to 'import <ModuleName> from '<ModulePath>';'. This adjustment is necessary to comply with modern JavaScript standards and improve compatibility with Fleek Functions runtime and environment."
 }

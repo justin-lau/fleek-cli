@@ -1,4 +1,5 @@
 import cliProgress from 'cli-progress';
+import fs from 'fs';
 
 import { output } from '../../cli';
 import { SdkGuardedFunction } from '../../guards/types';
@@ -24,7 +25,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
   const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
-  const bundledFilePath = await getCodeFromPath({ path: filePath, noBundle: args.noBundle ?? false, env });
+  const bundledFilePath = await getCodeFromPath({ filePath, bundle: !!!args.noBundle, env });
 
   output.printNewLine();
 
@@ -41,7 +42,15 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     uploadResult = await sdk.storage().uploadPrivateFile({ filePath: bundledFilePath, onUploadProgress: uploadOnProgress(progressBar) });
   } else {
     const fileLikeObject = await getFileLikeObject(bundledFilePath);
-    uploadResult = await sdk.storage().uploadFile({ file: fileLikeObject, options: { functionName: functionToDeploy.name }, onUploadProgress: uploadOnProgress(progressBar) });
+    uploadResult = await sdk.storage().uploadFile({
+      file: fileLikeObject,
+      options: { functionName: functionToDeploy.name },
+      onUploadProgress: uploadOnProgress(progressBar),
+    });
+  }
+
+  if (!output.debugEnabled) {
+    fs.rmSync(bundledFilePath);
   }
 
   if (!uploadResult.pin.cid) {

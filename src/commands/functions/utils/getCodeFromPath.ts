@@ -1,44 +1,25 @@
-import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError } from '@fleek-platform/errors';
+// TODO: These error messages should be revised
+// e.g. FleekFunctionPathNotValidError happens regardless of bundling
+import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
 import { build, BuildOptions, Plugin } from 'esbuild';
-import { nodeModulesPolyfillPlugin } from 'esbuild-plugins-node-modules-polyfill';
 import { filesFromPaths } from 'files-from-path';
 import * as fs from 'fs';
+import * as os from 'os';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
+import { asyncLocalStoragePolyfill } from '../plugins/asyncLocalStoragePolyfill';
+import { nodeProtocolImportSpecifier } from '../plugins/nodeProtocolImportSpecifier';
+import { moduleChecker } from '../plugins/unsupportedModuleStub';
 import { EnvironmentVariables } from './parseEnvironmentVariables';
-import { asyncLocalStoragePolyfill } from './plugins/asyncLocalStoragePolyfill';
-import { moduleChecker } from './plugins/moduleChecker';
 
-const supportedModulesAliases = {
-  buffer: 'node:buffer',
-  crypto: 'node:crypto',
-  domain: 'node:domain',
-  events: 'node:events',
-  http: 'node:http',
-  https: 'node:https',
-  path: 'node:path',
-  punycode: 'node:punycode',
-  stream: 'node:stream',
-  string_decoder: 'node:string_decoder',
-  url: 'node:url',
-  util: 'node:util',
-  zlib: 'node:zlib',
+type TranspileResponse = {
+  path: string;
+  unsupportedModules: Set<string>;
+  success: boolean;
+  error?: string;
 };
-
-type BundlingResponse =
-  | {
-      path: string;
-      unsupportedModules: Set<string>;
-      success: true;
-    }
-  | {
-      path: string;
-      unsupportedModules: Set<string>;
-      success: false;
-      error: string;
-    };
 
 type ShowUnsupportedModulesArgs = {
   unsupportedModulesUsed: Set<string>;
@@ -58,26 +39,37 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
   }
 };
 
-type BundleCodeArgs = {
+const buildEnvVars = (args: { env: EnvironmentVariables }) => {
+  Object.entries(args.env)
+    .map(([key, value]) => `${key}: "${value}"`)
+    .join(',');
+};
+
+type TranspileCodeArgs = {
   filePath: string;
-  noBundle: boolean;
+  bundle: boolean;
   env: EnvironmentVariables;
 };
 
-const bundleCode = async (args: BundleCodeArgs) => {
-  const { filePath, noBundle, env } = args;
-
+const transpileCode = async (args: TranspileCodeArgs) => {
+  const { filePath, bundle, env } = args;
   const progressBar = new cliProgress.SingleBar(
     {
-      format: t('uploadProgress', { action: t('bundlingCode') }),
+      format: t('uploadProgress', { action: t(bundle ? 'bundlingCode' : 'transformingCode') }),
     },
     cliProgress.Presets.shades_grey
   );
 
-  const tempDir = '.fleek';
+  let tempDir;
 
-  if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir);
+  if (!output.debugEnabled) {
+    tempDir = os.tmpdir();
+  } else {
+    tempDir = '.fleek';
+
+    if (!fs.existsSync(tempDir)) {
+      fs.mkdirSync(tempDir);
+    }
   }
 
   const outFile = tempDir + '/function.js';
@@ -89,90 +81,69 @@ const bundleCode = async (args: BundleCodeArgs) => {
       name: 'ProgressBar',
       setup: (build) => {
         build.onStart(() => {
-          if (!noBundle) {
-            progressBar.start(100, 10);
-          }
+          progressBar.start(100, 10);
         });
       },
     },
   ];
 
-  if (!noBundle) {
+  if (bundle) {
     plugins.push(
-      nodeModulesPolyfillPlugin({
-        globals: { Buffer: true },
-        modules: {
-          async_hooks: false,
-          assert: true,
-          dns: true,
-          http2: true,
-          net: true,
-          querystring: true,
-          tls: true,
-        },
-      }),
-      asyncLocalStoragePolyfill()
+      asyncLocalStoragePolyfill(),
+      nodeProtocolImportSpecifier({
+        // Handle the error gracefully
+        onError: () => output.error(t('failedToApplyNodeImportProtocol')),
+      })
     );
   }
 
   const buildOptions: BuildOptions = {
     entryPoints: [filePath],
-    bundle: true,
+    bundle,
     logLevel: 'silent',
     platform: 'browser',
     format: 'esm',
     target: 'esnext',
     treeShaking: true,
     mainFields: ['browser', 'module', 'main'],
-    external: [...Object.values(supportedModulesAliases)],
-    alias: supportedModulesAliases,
     outfile: outFile,
     minify: true,
     plugins,
   };
 
-  if (Object.keys(env).length) {
-    buildOptions.banner = {
-      js: `
-    globalThis.fleek = {
-      env: {
-        ${Object.entries(env)
-          .map(([key, value]) => `${key}: "${value}"`)
-          .join(',\n')}
-      }
-    }
-    `,
-    };
-  }
+  buildOptions.banner = {
+    js: `import { Buffer } from "node:buffer";
+globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
+  };
 
   try {
     await build(buildOptions);
+
+    progressBar.update(100);
+    progressBar.stop();
   } catch (e) {
     progressBar.stop();
 
     const errorMessage =
-      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownBundlingError');
+      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownTransformError');
 
-    const bundlingResponse: BundlingResponse = {
+    const transpileResponse: TranspileResponse = {
       path: filePath,
       unsupportedModules: unsupportedModulesUsed,
       success: false,
       error: errorMessage,
     };
 
-    return bundlingResponse;
+    return transpileResponse;
   }
 
-  progressBar.update(100);
-  progressBar.stop();
-
-  const bundlingResponse: BundlingResponse = {
-    path: noBundle ? filePath : outFile,
+  const transpileResponse: TranspileResponse = {
+    path: bundle ? outFile : filePath,
     unsupportedModules: unsupportedModulesUsed,
     success: true,
   };
 
-  return bundlingResponse;
+  return transpileResponse;
 };
 
 export const getFileLikeObject = async (path: string) => {
@@ -185,24 +156,44 @@ export const getFileLikeObject = async (path: string) => {
   return files[0];
 };
 
-export const getCodeFromPath = async (args: { path: string; noBundle: boolean; env: EnvironmentVariables }) => {
-  const { path, noBundle, env } = args;
+// TODO: Create a process to validate the user source code
+// using placeholder for the moment
+const checkUserSourceCodeSupport = async (filePath: string) => {
+  const reRequireSyntax = new RegExp(`require\\s*\\([^)]*\\)`, 'g');
+  const buffer = await fs.promises.readFile(filePath);
+  const contents = buffer.toString();
 
-  let filePath: string;
+  return reRequireSyntax.test(contents);
+};
 
-  if (fs.existsSync(path)) {
-    filePath = path;
-  } else {
-    throw new FleekFunctionPathNotValidError({ path });
+export const getCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables }) => {
+  const { filePath, bundle, env } = args;
+
+  if (!fs.existsSync(filePath)) {
+    throw new FleekFunctionPathNotValidError({ path: filePath });
   }
 
-  const bundlingResponse = await bundleCode({ filePath, noBundle, env });
+  const isUserSourceCodeSupported = await checkUserSourceCodeSupport(filePath);
 
-  showUnsupportedModules({ unsupportedModulesUsed: bundlingResponse.unsupportedModules });
-
-  if (!bundlingResponse.success && !noBundle) {
-    throw new FleekFunctionBundlingFailedError({ error: bundlingResponse.error });
+  if (isUserSourceCodeSupported) {
+    output.error(t('requireDeprecatedUseES6Syntax'));
   }
 
-  return bundlingResponse.path;
+  const transpileResponse = await transpileCode({
+    filePath,
+    bundle,
+    env,
+  });
+
+  showUnsupportedModules({ unsupportedModulesUsed: transpileResponse.unsupportedModules });
+
+  if (!transpileResponse.success) {
+    if (!transpileResponse.error) {
+      throw new UnknownError();
+    }
+
+    throw new FleekFunctionBundlingFailedError({ error: transpileResponse.error });
+  }
+
+  return transpileResponse.path;
 };

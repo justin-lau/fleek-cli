@@ -1,6 +1,6 @@
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
 
-import { Output } from '../../../output/Output';
+import type { Output } from '../../../output/Output';
 import { t } from '../../../utils/translation';
 import { directoryExists } from './directoryExists';
 

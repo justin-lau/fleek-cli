@@ -1,5 +1,5 @@
 import { ApplicationNameInvalidError } from '@fleek-platform/errors';
-import { Application } from '@fleek-platform/sdk';
+import type { Application } from '@fleek-platform/sdk';
 
 import { textPrompt } from '../../../prompts/textPrompt';
 import { t } from '../../../utils/translation';
@@ -10,7 +10,9 @@ type EnterApplicationNameOrPromptArgs = {
   application?: Pick<Application, 'name'>;
 };
 
-export const enterApplicationNameOrPrompt = async (args: EnterApplicationNameOrPromptArgs): Promise<string> => {
+export const enterApplicationNameOrPrompt = async (
+  args: EnterApplicationNameOrPromptArgs,
+): Promise<string> => {
   if (args.name && isNameValid({ name: args.name })) {
     return args.name;
   }
@@ -24,7 +26,12 @@ export const enterApplicationNameOrPrompt = async (args: EnterApplicationNameOrP
     validate: (name) =>
       isNameValid({ name })
         ? true
-        : t('invalidNameUseXofYAndRegex', { min: '3', max: '30', regFirst: 'a-zA-Z0-9._-~', regLast: 'a-zA-Z0-9' }),
+        : t('invalidNameUseXofYAndRegex', {
+            min: '3',
+            max: '30',
+            regFirst: 'a-zA-Z0-9._-~',
+            regLast: 'a-zA-Z0-9',
+          }),
     initial: args.application?.name,
   });
 };

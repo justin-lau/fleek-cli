@@ -1,5 +1,5 @@
 import { EnsRecordNotFoundError } from '@fleek-platform/errors';
-import { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
+import type { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -11,7 +11,12 @@ type GetEnsRecordOrPromptArgs = {
   choicesFilter?: (ens: EnsRecord) => boolean;
 };
 
-export const getEnsRecordOrPrompt = async ({ id, name, sdk, choicesFilter }: GetEnsRecordOrPromptArgs) => {
+export const getEnsRecordOrPrompt = async ({
+  id,
+  name,
+  sdk,
+  choicesFilter,
+}: GetEnsRecordOrPromptArgs) => {
   if (id) {
     return await sdk.ens().get({ id });
   }
@@ -22,7 +27,9 @@ export const getEnsRecordOrPrompt = async ({ id, name, sdk, choicesFilter }: Get
 
   const allEnsRecords = await sdk.ens().list();
 
-  const ensRecords = choicesFilter ? allEnsRecords.filter(choicesFilter) : allEnsRecords;
+  const ensRecords = choicesFilter
+    ? allEnsRecords.filter(choicesFilter)
+    : allEnsRecords;
 
   if (ensRecords.length === 0) {
     throw new EnsRecordNotFoundError({ ensRecord: {} });
@@ -33,5 +40,7 @@ export const getEnsRecordOrPrompt = async ({ id, name, sdk, choicesFilter }: Get
     choices: ensRecords.map((ens) => ({ title: ens.name, value: ens.id })),
   });
 
-  return ensRecords.find((ens) => ens.id === selectedEnsRecordId)!;
+  const record = ensRecords.find((ens) => ens.id === selectedEnsRecordId);
+
+  return record;
 };

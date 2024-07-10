@@ -6,12 +6,18 @@ type GetWhitelistDomainsOrPromptArgs = {
   whitelistDomainsToUpdate?: string[];
 };
 
-export const getWhitelistDomainsOrPrompt = async ({ whitelistDomains, whitelistDomainsToUpdate }: GetWhitelistDomainsOrPromptArgs) => {
+export const getWhitelistDomainsOrPrompt = async ({
+  whitelistDomains,
+  whitelistDomainsToUpdate,
+}: GetWhitelistDomainsOrPromptArgs) => {
   if (whitelistDomains) {
     return whitelistDomains;
   }
 
-  const list = await listPrompt({ message: t('typeWhitelistDomainsSepByComma'), initial: whitelistDomainsToUpdate });
+  const list = await listPrompt({
+    message: t('typeWhitelistDomainsSepByComma'),
+    initial: whitelistDomainsToUpdate,
+  });
 
   return list.filter((hostname) => hostname.length > 0);
 };

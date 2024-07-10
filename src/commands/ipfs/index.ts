@@ -1,10 +1,13 @@
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { t } from '../../utils/translation';
 import { addActionHandler } from './add';
 
 export default (program: Command) => {
-  const cmd = program.command('ipfs').option('-h, --help', t('printHelp')).description(t('ipfsDescription'));
+  const cmd = program
+    .command('ipfs')
+    .option('-h, --help', t('printHelp'))
+    .description(t('ipfsDescription'));
 
   cmd
     .command('add')

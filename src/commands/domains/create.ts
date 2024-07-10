@@ -1,11 +1,14 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { usePressAnyKey } from '../../utils/pressAnyKey';
 import { t } from '../../utils/translation';
 import { getHostnameOrPrompt } from './prompts/getHostnameOrPrompt';
 import { getSiteOrPrivateGateway } from './prompts/getSiteOrPrivateGateway';
-import { getZoneForSiteOrPrivateGateway, GetZoneForSiteOrPrivateGatewayArgs } from './utils/getZoneForSiteOrPrivateGateway';
+import {
+  type GetZoneForSiteOrPrivateGatewayArgs,
+  getZoneForSiteOrPrivateGateway,
+} from './utils/getZoneForSiteOrPrivateGateway';
 import { waitForDomainCreationResult } from './wait/waitForDomainCreationResult';
 import { waitForDomainVerificationResult } from './wait/waitForDomainVerificationResult';
 
@@ -17,7 +20,9 @@ export type CreateDomainActionArgs = {
   hostname?: string;
 };
 
-export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = async ({ sdk, args }) => {
+export const createDomainAction: SdkGuardedFunction<
+  CreateDomainActionArgs
+> = async ({ sdk, args }) => {
   const { site, privateGateway } = await getSiteOrPrivateGateway({
     sdk,
     privateGatewayId: args.privateGatewayId,
@@ -41,7 +46,12 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
 
   // TODO: Check commented out above
   const zone = await getZoneForSiteOrPrivateGateway(
-    site ? ({ site, sdk } as unknown as GetZoneForSiteOrPrivateGatewayArgs) : ({ privateGateway, sdk } as  unknown as GetZoneForSiteOrPrivateGatewayArgs)
+    site
+      ? ({ site, sdk } as unknown as GetZoneForSiteOrPrivateGatewayArgs)
+      : ({
+          privateGateway,
+          sdk,
+        } as unknown as GetZoneForSiteOrPrivateGatewayArgs),
   );
 
   if (zone === null) {
@@ -59,10 +69,14 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
   });
 
   if (domainCreationStatus === null) {
-    output.warn(t('warnSubjectProcessIsLong', { subject: t('dnsConfiguration') }));
+    output.warn(
+      t('warnSubjectProcessIsLong', { subject: t('dnsConfiguration') }),
+    );
     output.printNewLine();
 
-    output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('dnsConfiguration') })}:`);
+    output.log(
+      `${t('commonWaitAndCheckStatusViaCmd', { subject: t('dnsConfiguration') })}:`,
+    );
     output.log(output.textColor(`fleek domains detail ${hostname}`, 'cyan'));
 
     return;
@@ -76,7 +90,12 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
   }
 
   output.printNewLine();
-  output.success(t('commonItemActionSuccess', { subject: `${t('domain')} ${output.quoted(hostname)}`, action: t('created') }));
+  output.success(
+    t('commonItemActionSuccess', {
+      subject: `${t('domain')} ${output.quoted(hostname)}`,
+      action: t('created'),
+    }),
+  );
   output.printNewLine();
 
   const domain = await sdk.domains().getByHostname({ hostname: hostname });
@@ -93,7 +112,9 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
   const { waitForAnyKey } = usePressAnyKey();
 
   while (true) {
-    output.hint(t('commonPressAnyKeyOnceConfig', { subject: t('dnsSettings') }));
+    output.hint(
+      t('commonPressAnyKeyOnceConfig', { subject: t('dnsSettings') }),
+    );
     await waitForAnyKey();
     output.spinner(t('commonVerifyingSubject', { subject: t('dnsSettings') }));
 
@@ -105,10 +126,14 @@ export const createDomainAction: SdkGuardedFunction<CreateDomainActionArgs> = as
     });
 
     if (!verificationResultStatus) {
-      output.warn(t('warnSubjectProcessIsLong', { subject: t('dnsConfiguration') }));
+      output.warn(
+        t('warnSubjectProcessIsLong', { subject: t('dnsConfiguration') }),
+      );
       output.printNewLine();
 
-      output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('dnsConfiguration') })}:`);
+      output.log(
+        `${t('commonWaitAndCheckStatusViaCmd', { subject: t('dnsConfiguration') })}:`,
+      );
       output.log(output.textColor(`fleek domains detail ${hostname}`, 'cyan'));
 
       return;

@@ -8,7 +8,9 @@ type GetPrivateGatewayNameOrPromptArgs = {
   name?: string;
 };
 
-export const getPrivateGatewayNameOrPrompt = async ({ name }: GetPrivateGatewayNameOrPromptArgs) => {
+export const getPrivateGatewayNameOrPrompt = async ({
+  name,
+}: GetPrivateGatewayNameOrPromptArgs) => {
   if (name && isPrivateGatewayNameValid({ name })) {
     return name;
   }
@@ -19,6 +21,8 @@ export const getPrivateGatewayNameOrPrompt = async ({ name }: GetPrivateGatewayN
 
   return textPrompt({
     message: t('gatewayEnterName'),
-    validate: (partialName: string) => isPrivateGatewayNameValid({ name: partialName }) || t('gatewayNameIncorrectForm'),
+    validate: (partialName: string) =>
+      isPrivateGatewayNameValid({ name: partialName }) ||
+      t('gatewayNameIncorrectForm'),
   });
 };

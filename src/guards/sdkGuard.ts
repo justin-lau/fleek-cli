@@ -5,7 +5,7 @@ import { getDefined } from '../defined';
 import { output } from '../cli';
 import { config } from '../config';
 import { loginGuard } from './loginGuard';
-import { Action, SdkGuardedFunction } from './types';
+import type { Action, SdkGuardedFunction } from './types';
 
 type SdkGuardArgs<T> = SdkGuardedFunction<T>;
 
@@ -17,7 +17,10 @@ export const getSdkClient = () => {
     return;
   }
 
-  const accessTokenService = new PersonalAccessTokenService({ projectId, personalAccessToken });
+  const accessTokenService = new PersonalAccessTokenService({
+    projectId,
+    personalAccessToken,
+  });
   const sdk = new FleekSdk({
     accessTokenService,
     graphqlServiceApiUrl: getDefined('SDK__GRAPHQL_API_URL'),
@@ -40,9 +43,13 @@ export const sdkGuard = <T>(func: SdkGuardArgs<T>): Action<T> => {
 
     try {
       await func({ sdk, args });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      output.error(error?.toString());
+    } catch (error) {
+      if (error instanceof Error) {
+        output.error(error?.toString());
+        return;
+      }
+
+      output.error(`Unknown Error: ${JSON.stringify(error)}`);
     }
   };
 };

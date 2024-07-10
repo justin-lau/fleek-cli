@@ -1,7 +1,7 @@
+import { promises as fs } from 'node:fs';
 import chalk from 'chalk';
-import { promises as fs } from 'fs';
 
-import { Output } from '../../../output/Output';
+import type { Output } from '../../../output/Output';
 import { t } from '../../../utils/translation';
 
 type SaveDeploymentWorkflowYamlArgs = {
@@ -22,7 +22,11 @@ export const saveDeploymentWorkflowYaml = async ({
   try {
     await fs.writeFile(yamlPath, yamlContent);
     output.printNewLine();
-    output.success(t('githubActionWrkflSavedTo', { path: chalk.underline(chalk.cyan(yamlPath)) }));
+    output.success(
+      t('githubActionWrkflSavedTo', {
+        path: chalk.underline(chalk.cyan(yamlPath)),
+      }),
+    );
     output.printNewLine();
 
     output.chore(`${t('setSecretsInGithugRepoSettings')}:`);

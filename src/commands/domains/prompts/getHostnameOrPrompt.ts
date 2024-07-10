@@ -8,7 +8,9 @@ type GetHostnameOrPromptArgs = {
   hostname?: string;
 };
 
-export const getHostnameOrPrompt = async ({ hostname }: GetHostnameOrPromptArgs) => {
+export const getHostnameOrPrompt = async ({
+  hostname,
+}: GetHostnameOrPromptArgs) => {
   if (hostname && isHostnameValid({ hostname })) {
     return hostname;
   }
@@ -19,6 +21,8 @@ export const getHostnameOrPrompt = async ({ hostname }: GetHostnameOrPromptArgs)
 
   return textPrompt({
     message: `${t('enterDomainName')}:`,
-    validate: (partialHostname) => isHostnameValid({ hostname: partialHostname }) || t('hostnameIncorrectForm'),
+    validate: (partialHostname) =>
+      isHostnameValid({ hostname: partialHostname }) ||
+      t('hostnameIncorrectForm'),
   });
 };

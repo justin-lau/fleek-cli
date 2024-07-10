@@ -1,7 +1,7 @@
-import { EnsRecord } from '@fleek-platform/sdk';
+import type { EnsRecord } from '@fleek-platform/sdk';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getEnsRecordOrPrompt } from './prompts/getEnsRecordOrPrompt';
@@ -12,7 +12,9 @@ export type VerifyEnsActionArgs = {
   name?: string;
 };
 
-export const verifyEnsRecordAction: SdkGuardedFunction<VerifyEnsActionArgs> = async ({ sdk, args }) => {
+export const verifyEnsRecordAction: SdkGuardedFunction<
+  VerifyEnsActionArgs
+> = async ({ sdk, args }) => {
   const ensRecord = await getEnsRecordOrPrompt({
     id: args.id,
     name: args.name,
@@ -20,8 +22,16 @@ export const verifyEnsRecordAction: SdkGuardedFunction<VerifyEnsActionArgs> = as
     choicesFilter: (ens: EnsRecord) => ens.status !== 'ACTIVE',
   });
 
+  if (!ensRecord) {
+    output.error(t('noEnsRecordFoundUnexpectedly'));
+
+    return;
+  }
+
   if (ensRecord.status === 'ACTIVE') {
-    output.success(t('ensRecordNameAlreadyVerif', { ensRecordName: ensRecord.name }));
+    output.success(
+      t('ensRecordNameAlreadyVerif', { ensRecordName: ensRecord.name }),
+    );
     output.printNewLine();
 
     return;
@@ -37,17 +47,23 @@ export const verifyEnsRecordAction: SdkGuardedFunction<VerifyEnsActionArgs> = as
   });
 
   if (!verificationResultStatus) {
-    output.warn(t('warnSubjectProcessIsLong', { subject: t('processOfENSVerification') }));
+    output.warn(
+      t('warnSubjectProcessIsLong', { subject: t('processOfENSVerification') }),
+    );
     output.printNewLine();
 
-    output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('ensConf') })}:`);
+    output.log(
+      `${t('commonWaitAndCheckStatusViaCmd', { subject: t('ensConf') })}:`,
+    );
     output.log(output.textColor(`fleek ens detail ${ensRecord.name}`, 'cyan'));
 
     return;
   }
 
   if (verificationResultStatus === 'VERIFYING_FAILED') {
-    output.error(t('ensCouldNotVerifyCheckURL', { ensRecordName: ensRecord.name }));
+    output.error(
+      t('ensCouldNotVerifyCheckURL', { ensRecordName: ensRecord.name }),
+    );
     output.printNewLine();
 
     return;

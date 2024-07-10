@@ -1,18 +1,22 @@
+import * as fs from 'node:fs';
+import * as os from 'node:os';
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
-import { FleekFunctionBundlingFailedError, FleekFunctionPathNotValidError, UnknownError } from '@fleek-platform/errors';
+import {
+  FleekFunctionBundlingFailedError,
+  FleekFunctionPathNotValidError,
+  UnknownError,
+} from '@fleek-platform/errors';
 import cliProgress from 'cli-progress';
-import { build, BuildOptions, Plugin } from 'esbuild';
+import { type BuildOptions, type Plugin, build } from 'esbuild';
 import { filesFromPaths } from 'files-from-path';
-import * as fs from 'fs';
-import * as os from 'os';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
 import { asyncLocalStoragePolyfill } from '../plugins/asyncLocalStoragePolyfill';
 import { nodeProtocolImportSpecifier } from '../plugins/nodeProtocolImportSpecifier';
 import { moduleChecker } from '../plugins/unsupportedModuleStub';
-import { EnvironmentVariables } from './parseEnvironmentVariables';
+import type { EnvironmentVariables } from './parseEnvironmentVariables';
 
 type TranspileResponse = {
   path: string;
@@ -30,9 +34,10 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
 
   if (unsupportedModulesUsed.length) {
     output.printNewLine();
-    unsupportedModulesUsed.forEach((val) => {
-      output.mistake(t('unsupportedPackage', { packageName: val }));
-    });
+    for (const packageName of unsupportedModulesUsed) {
+      output.mistake(t('unsupportedPackage', { packageName }));
+    }
+
     output.log(t('showUnsupportedModulesDocLink'));
     output.link('https://fleek.xyz/docs');
     output.printNewLine();
@@ -55,12 +60,14 @@ const transpileCode = async (args: TranspileCodeArgs) => {
   const { filePath, bundle, env } = args;
   const progressBar = new cliProgress.SingleBar(
     {
-      format: t('uploadProgress', { action: t(bundle ? 'bundlingCode' : 'transformingCode') }),
+      format: t('uploadProgress', {
+        action: t(bundle ? 'bundlingCode' : 'transformingCode'),
+      }),
     },
-    cliProgress.Presets.shades_grey
+    cliProgress.Presets.shades_grey,
   );
 
-  let tempDir;
+  let tempDir: string;
 
   if (!output.debugEnabled) {
     tempDir = os.tmpdir();
@@ -72,7 +79,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
     }
   }
 
-  const outFile = tempDir + '/function.js';
+  const outFile = `${tempDir}/function.js`;
   const unsupportedModulesUsed = new Set<string>();
 
   const plugins: Plugin[] = [
@@ -93,7 +100,7 @@ const transpileCode = async (args: TranspileCodeArgs) => {
       nodeProtocolImportSpecifier({
         // Handle the error gracefully
         onError: () => output.error(t('failedToApplyNodeImportProtocol')),
-      })
+      }),
     );
   }
 
@@ -125,7 +132,12 @@ globalThis.fleek={env:{${buildEnvVars({ env })}}};`,
     progressBar.stop();
 
     const errorMessage =
-      e && typeof e === 'object' && 'message' in e && typeof e.message === 'string' ? e.message : t('unknownTransformError');
+      e &&
+      typeof e === 'object' &&
+      'message' in e &&
+      typeof e.message === 'string'
+        ? e.message
+        : t('unknownTransformError');
 
     const transpileResponse: TranspileResponse = {
       path: filePath,
@@ -159,14 +171,18 @@ export const getFileLikeObject = async (path: string) => {
 // TODO: Create a process to validate the user source code
 // using placeholder for the moment
 const checkUserSourceCodeSupport = async (filePath: string) => {
-  const reRequireSyntax = new RegExp(`require\\s*\\([^)]*\\)`, 'g');
+  const reRequireSyntax = /require\s*\([^)]*\)/g;
   const buffer = await fs.promises.readFile(filePath);
   const contents = buffer.toString();
 
   return reRequireSyntax.test(contents);
 };
 
-export const getCodeFromPath = async (args: { filePath: string; bundle: boolean; env: EnvironmentVariables }) => {
+export const getCodeFromPath = async (args: {
+  filePath: string;
+  bundle: boolean;
+  env: EnvironmentVariables;
+}) => {
   const { filePath, bundle, env } = args;
 
   if (!fs.existsSync(filePath)) {
@@ -185,14 +201,18 @@ export const getCodeFromPath = async (args: { filePath: string; bundle: boolean;
     env,
   });
 
-  showUnsupportedModules({ unsupportedModulesUsed: transpileResponse.unsupportedModules });
+  showUnsupportedModules({
+    unsupportedModulesUsed: transpileResponse.unsupportedModules,
+  });
 
   if (!transpileResponse.success) {
     if (!transpileResponse.error) {
       throw new UnknownError();
     }
 
-    throw new FleekFunctionBundlingFailedError({ error: transpileResponse.error });
+    throw new FleekFunctionBundlingFailedError({
+      error: transpileResponse.error,
+    });
   }
 
   return transpileResponse.path;

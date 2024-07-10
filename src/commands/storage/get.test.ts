@@ -1,5 +1,5 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
 import { t } from '../../utils/translation';
@@ -60,7 +60,10 @@ vi.mock('@fleek-platform/sdk', () => {
         },
       ];
 
-      const filtered = data.filter((item) => [options.filename, options.extension].join('.') === item.filename);
+      const filtered = data.filter(
+        (item) =>
+          [options.filename, options.extension].join('.') === item.filename,
+      );
 
       return Promise.resolve(filtered.length > 0 ? filtered : undefined);
     }),
@@ -75,10 +78,25 @@ vi.mock('@fleek-platform/sdk', () => {
     // See Domain schema/model or disucssion https://discord.com/channels/1045027913260617789/1045488371998412881/1214241772046258226
     listByZoneId: vi.fn((options: { zoneId: string }) => {
       const data = [
-        { hostname: 'cli-test.fleek.xyz', zoneId: 'clsba7n4z000008lb0loefpnn', status: 'ACTIVE' },
-        { hostname: 'cli-test-no-status.fleek.xyz', zoneId: 'clsba7n4z000008lb0loefpnn' },
-        { hostname: 'cli-test-storage.fleek.xyz', zoneId: 'clsba858j000108lb2euyfk6u', status: 'ACTIVE' },
-        { hostname: 'cli-test-inactive.fleek.xyz', zoneId: 'clsba858j000108lb2euyfk6u', status: 'INACTIVE' },
+        {
+          hostname: 'cli-test.fleek.xyz',
+          zoneId: 'clsba7n4z000008lb0loefpnn',
+          status: 'ACTIVE',
+        },
+        {
+          hostname: 'cli-test-no-status.fleek.xyz',
+          zoneId: 'clsba7n4z000008lb0loefpnn',
+        },
+        {
+          hostname: 'cli-test-storage.fleek.xyz',
+          zoneId: 'clsba858j000108lb2euyfk6u',
+          status: 'ACTIVE',
+        },
+        {
+          hostname: 'cli-test-inactive.fleek.xyz',
+          zoneId: 'clsba858j000108lb2euyfk6u',
+          status: 'INACTIVE',
+        },
       ];
 
       const found = data.find((item) => item.zoneId === options.zoneId);
@@ -96,7 +114,9 @@ vi.mock('@fleek-platform/sdk', () => {
 
 describe('Get storage files/folder for the given cid or name', () => {
   it('should show storage by cid with public gateway', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
     await expect(
@@ -105,7 +125,7 @@ describe('Get storage files/folder for the given cid or name', () => {
         args: {
           cid: 'bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru',
         },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(fakeSdk.storage().get).toHaveBeenCalledWith({
@@ -124,12 +144,19 @@ describe('Get storage files/folder for the given cid or name', () => {
   });
 
   it('should show storage by name with public gateway', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(getStorageAction({ sdk: fakeSdk, args: { name: 'basic.car' } })).resolves.toBeUndefined();
+    await expect(
+      getStorageAction({ sdk: fakeSdk, args: { name: 'basic.car' } }),
+    ).resolves.toBeUndefined();
 
-    expect(fakeSdk.storage().getByFilename).toHaveBeenCalledWith({ filename: 'basic', extension: 'car' });
+    expect(fakeSdk.storage().getByFilename).toHaveBeenCalledWith({
+      filename: 'basic',
+      extension: 'car',
+    });
     expect(output.log).not.toHaveBeenCalled();
     expect(output.table).toHaveBeenCalledWith([
       {
@@ -150,9 +177,10 @@ describe('Get storage files/folder for the given cid or name', () => {
   });
 
   it('should show storage get by cid with private gateway', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.privateGateways().list as Mock).mockResolvedValueOnce([
       { zone: { id: 'clsba7n4z000008lb0loefpnn' } },
       { zone: { id: 'clsba858j000108lb2euyfk6u' } },
@@ -164,7 +192,7 @@ describe('Get storage files/folder for the given cid or name', () => {
         args: {
           cid: 'bafybeifylyzjlrpec75l66kggycx65yuouyavweaaqxmf22jvbtnmmaqru',
         },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(fakeSdk.storage().get).toHaveBeenCalledWith({
@@ -192,17 +220,23 @@ describe('Get storage files/folder for the given cid or name', () => {
 
   // TODO: unexpected response
   it('should show storage get by name with private gateway', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.privateGateways().list as Mock).mockResolvedValueOnce([
       { zone: { id: 'clsba7n4z000008lb0loefpnn' } },
       { zone: { id: 'clsba858j000108lb2euyfk6u' } },
     ]);
 
-    await expect(getStorageAction({ sdk: fakeSdk, args: { name: 'basic.car' } })).resolves.toBeUndefined();
+    await expect(
+      getStorageAction({ sdk: fakeSdk, args: { name: 'basic.car' } }),
+    ).resolves.toBeUndefined();
 
-    expect(fakeSdk.storage().getByFilename).toHaveBeenCalledWith({ filename: 'basic', extension: 'car' });
+    expect(fakeSdk.storage().getByFilename).toHaveBeenCalledWith({
+      filename: 'basic',
+      extension: 'car',
+    });
     expect(output.log).not.toHaveBeenCalled();
     expect(output.table).toHaveBeenCalledWith([
       {
@@ -237,7 +271,9 @@ describe('Get storage files/folder for the given cid or name', () => {
   });
 
   it('should show message that no storage exist with valid cid', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
     await expect(
@@ -246,7 +282,7 @@ describe('Get storage files/folder for the given cid or name', () => {
         args: {
           cid: 'bafybeiapnja2op4y4ii6hgosm2vurtv75guhn77pkj7dr3k466bayk7oym',
         },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(fakeSdk.storage().get).toHaveBeenCalledWith({
@@ -254,7 +290,10 @@ describe('Get storage files/folder for the given cid or name', () => {
     });
     expect(fakeSdk.privateGateways().list).not.toHaveBeenCalled();
     expect(output.warn).toHaveBeenCalledWith(
-      t('storageGetNotFound', { type: 'cid', value: 'bafybeiapnja2op4y4ii6hgosm2vurtv75guhn77pkj7dr3k466bayk7oym' })
+      t('storageGetNotFound', {
+        type: 'cid',
+        value: 'bafybeiapnja2op4y4ii6hgosm2vurtv75guhn77pkj7dr3k466bayk7oym',
+      }),
     );
     expect(output.log).toHaveBeenCalledWith(t('storageAddSuggestion'));
     expect(output.log).toHaveBeenCalledWith('fleek storage add <file_path>');
@@ -262,14 +301,23 @@ describe('Get storage files/folder for the given cid or name', () => {
   });
 
   it('should show message that no storage exist with valid name', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(getStorageAction({ sdk: fakeSdk, args: { name: 'app.html' } })).resolves.toBeUndefined();
+    await expect(
+      getStorageAction({ sdk: fakeSdk, args: { name: 'app.html' } }),
+    ).resolves.toBeUndefined();
 
-    expect(fakeSdk.storage().getByFilename).toHaveBeenCalledWith({ filename: 'app', extension: 'html' });
+    expect(fakeSdk.storage().getByFilename).toHaveBeenCalledWith({
+      filename: 'app',
+      extension: 'html',
+    });
     expect(fakeSdk.privateGateways().list).not.toHaveBeenCalled();
-    expect(output.warn).toHaveBeenCalledWith(t('storageGetNotFound', { type: 'name', value: 'app.html' }));
+    expect(output.warn).toHaveBeenCalledWith(
+      t('storageGetNotFound', { type: 'name', value: 'app.html' }),
+    );
     expect(output.log).toHaveBeenCalledWith(t('storageAddSuggestion'));
     expect(output.log).toHaveBeenCalledWith('fleek storage add <file_path>');
     expect(output.table).not.toHaveBeenCalled();

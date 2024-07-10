@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getFunctionNameOrPrompt } from './prompts/getFunctionNameOrPrompt';
@@ -8,7 +8,10 @@ type CreateFunctionArgs = {
   name?: string;
 };
 
-const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({ args, sdk }) => {
+const createAction: SdkGuardedFunction<CreateFunctionArgs> = async ({
+  args,
+  sdk,
+}) => {
   const functionName = await getFunctionNameOrPrompt({ name: args.name });
 
   const newFunction = await sdk.functions().create({ name: functionName });

@@ -1,6 +1,6 @@
 import { DomainNotFoundError } from '@fleek-platform/errors';
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output as fakeOutput } from '../../cli';
 import { checkPeriodicallyUntil as fakeCheckPeriodicallyUntil } from '../../utils/checkPeriodicallyUntil';
@@ -14,9 +14,15 @@ vi.mock('./prompts/getDomainOrPrompt', () => ({
 }));
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => ({
-  checkPeriodicallyUntil: vi.fn().mockImplementation(async <T>({ conditionFn }: { conditionFn: () => Promise<T> }): Promise<T> => {
-    return conditionFn();
-  }),
+  checkPeriodicallyUntil: vi
+    .fn()
+    .mockImplementation(
+      async <T>({
+        conditionFn,
+      }: { conditionFn: () => Promise<T> }): Promise<T> => {
+        return conditionFn();
+      },
+    ),
 }));
 
 vi.mock('../../cli', () => {
@@ -35,7 +41,11 @@ vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const domains = {
-    get: vi.fn().mockRejectedValue(new DomainNotFoundError({ domain: { id: 'firstDomainId' } })),
+    get: vi
+      .fn()
+      .mockRejectedValue(
+        new DomainNotFoundError({ domain: { id: 'firstDomainId' } }),
+      ),
     deleteDomain: vi.fn().mockResolvedValue(undefined),
   };
 
@@ -51,7 +61,9 @@ describe('Delete domain', () => {
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(deleteDomainAction({ sdk: fakeSdk, args: { hostname: 'first.xyz' } })).resolves.toBeUndefined();
+    await expect(
+      deleteDomainAction({ sdk: fakeSdk, args: { hostname: 'first.xyz' } }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.domains().get).toHaveBeenCalledWith({
       domainId: 'firstDomainId',
@@ -61,7 +73,9 @@ describe('Delete domain', () => {
     });
     expect(fakeCheckPeriodicallyUntil).toHaveBeenCalledOnce();
 
-    expect(fakeOutput.success).toHaveBeenCalledWith(`The domain "first.xyz" has been successfully deleted.`);
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `The domain "first.xyz" has been successfully deleted.`,
+    );
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
 
@@ -70,13 +84,14 @@ describe('Delete domain', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.domains().get as Mock).mockResolvedValueOnce({
       id: 'firstDomainId',
       hostname: 'first.xyz',
     });
 
-    await expect(deleteDomainAction({ sdk: fakeSdk, args: { hostname: 'fleek.xyz' } })).resolves.toBeUndefined();
+    await expect(
+      deleteDomainAction({ sdk: fakeSdk, args: { hostname: 'fleek.xyz' } }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.domains().get).toHaveBeenCalledWith({
       domainId: 'firstDomainId',
@@ -86,6 +101,8 @@ describe('Delete domain', () => {
     });
 
     expect(fakeOutput.success).not.toHaveBeenCalled();
-    expect(fakeOutput.error).toHaveBeenCalledWith(`Unable to delete domain "first.xyz".`);
+    expect(fakeOutput.error).toHaveBeenCalledWith(
+      `Unable to delete domain "first.xyz".`,
+    );
   });
 });

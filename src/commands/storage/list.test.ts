@@ -1,5 +1,5 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
 import { t } from '../../utils/translation';
@@ -42,10 +42,25 @@ vi.mock('@fleek-platform/sdk', () => {
   const domains = {
     listByZoneId: vi.fn((options: { zoneId: string }) => {
       const data = [
-        { hostname: 'cli-test.fleek.xyz', zoneId: 'clsba7n4z000008lb0loefpnn', status: 'ACTIVE' },
-        { hostname: 'cli-test-no-status.fleek.xyz', zoneId: 'clsba7n4z000008lb0loefpnn' },
-        { hostname: 'cli-test-storage.fleek.xyz', zoneId: 'clsba858j000108lb2euyfk6u', status: 'ACTIVE' },
-        { hostname: 'cli-test-inactive.fleek.xyz', zoneId: 'clsba858j000108lb2euyfk6u', status: 'INACTIVE' },
+        {
+          hostname: 'cli-test.fleek.xyz',
+          zoneId: 'clsba7n4z000008lb0loefpnn',
+          status: 'ACTIVE',
+        },
+        {
+          hostname: 'cli-test-no-status.fleek.xyz',
+          zoneId: 'clsba7n4z000008lb0loefpnn',
+        },
+        {
+          hostname: 'cli-test-storage.fleek.xyz',
+          zoneId: 'clsba858j000108lb2euyfk6u',
+          status: 'ACTIVE',
+        },
+        {
+          hostname: 'cli-test-inactive.fleek.xyz',
+          zoneId: 'clsba858j000108lb2euyfk6u',
+          status: 'INACTIVE',
+        },
       ];
 
       const found = data.find((item) => item.zoneId === options.zoneId);
@@ -63,10 +78,14 @@ vi.mock('@fleek-platform/sdk', () => {
 
 describe('List storage files/folder for the selected project', () => {
   it('should show storage list with public gateway', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(listStorageAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      listStorageAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.storage().list).toHaveBeenCalledWith();
     expect(output.log).not.toHaveBeenCalled();
@@ -89,15 +108,18 @@ describe('List storage files/folder for the selected project', () => {
   });
 
   it('should show storage list with private gateway', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.privateGateways().list as Mock).mockResolvedValueOnce([
       { zone: { id: 'clsba7n4z000008lb0loefpnn' } },
       { zone: { id: 'clsba858j000108lb2euyfk6u' } },
     ]);
 
-    await expect(listStorageAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      listStorageAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.storage().list).toHaveBeenCalledWith();
     expect(output.log).not.toHaveBeenCalled();
@@ -134,12 +156,15 @@ describe('List storage files/folder for the selected project', () => {
   });
 
   it('should show message that no storage exist', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.storage().list as Mock).mockResolvedValueOnce([]);
 
-    await expect(listStorageAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      listStorageAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.storage().list).toHaveBeenCalledWith();
     expect(fakeSdk.privateGateways().list).not.toHaveBeenCalled();

@@ -18,7 +18,8 @@ export const requestDeploymentWorkflowInstallCommand = async () => {
     return;
   }
 
-  const wantsToSpecifyCommand = await confirmUserWantsToSpecifyInstallCommandPrompt();
+  const wantsToSpecifyCommand =
+    await confirmUserWantsToSpecifyInstallCommandPrompt();
 
   if (wantsToSpecifyCommand) {
     return enterInstallCommandPrompt();
@@ -26,7 +27,10 @@ export const requestDeploymentWorkflowInstallCommand = async () => {
 
   const installCommand = await deriveInstallCommandFromLockfile();
 
-  if (!installCommand || !(await confirmInstallCommandPrompt({ installCommand }))) {
+  if (
+    !installCommand ||
+    !(await confirmInstallCommandPrompt({ installCommand }))
+  ) {
     return enterInstallCommandPrompt();
   }
 

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { usePressAnyKey } from '../../utils/pressAnyKey';
 import { t } from '../../utils/translation';
@@ -16,12 +16,21 @@ export type CreateEnsActionArgs = {
   ipns?: string;
 };
 
-export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({ sdk, args }) => {
+export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
+  sdk,
+  args,
+}) => {
   const site = await getSiteOrPrompt({
     id: args.siteId,
     slug: args.siteSlug,
     sdk,
   });
+
+  if (!site) {
+    output.error(t('expectedNotFoundGeneric', { name: 'site' }));
+
+    return;
+  }
 
   const ipnsRecord = await getIpnsRecordOrPrompt({
     name: args.ipns,
@@ -29,11 +38,19 @@ export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
     siteId: site.id,
   });
 
+  if (!ipnsRecord) {
+    output.error(t('noDomainsFoundUnexpectedly'));
+
+    return;
+  }
+
   const ensName = await getEnsNameOrPrompt({ name: args.name });
 
   output.spinner(t('ensCreatingForSelectSite'));
 
-  const ensRecord = await sdk.ens().create({ name: ensName, siteId: site.id, ipnsRecordId: ipnsRecord.id });
+  const ensRecord = await sdk
+    .ens()
+    .create({ name: ensName, siteId: site.id, ipnsRecordId: ipnsRecord.id });
 
   const ensCreationStatus = await waitForEnsRecordCreationResult({
     sdk,
@@ -41,11 +58,17 @@ export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
   });
 
   if (ensCreationStatus === null) {
-    output.warn(t('warnSubjectProcessIsLong', { subject: t('processOfObtainHashForENS') }));
+    output.warn(
+      t('warnSubjectProcessIsLong', {
+        subject: t('processOfObtainHashForENS'),
+      }),
+    );
 
     output.printNewLine();
 
-    output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('ensConf') })}`);
+    output.log(
+      `${t('commonWaitAndCheckStatusViaCmd', { subject: t('ensConf') })}`,
+    );
     output.log(output.textColor(`fleek ens detail ${ensName}`, 'cyan'));
 
     return;
@@ -73,10 +96,16 @@ export const createEnsAction: SdkGuardedFunction<CreateEnsActionArgs> = async ({
     });
 
     if (!verificationResultStatus) {
-      output.warn(t('warnSubjectProcessIsLong', { subject: t('processOfENSVerification') }));
+      output.warn(
+        t('warnSubjectProcessIsLong', {
+          subject: t('processOfENSVerification'),
+        }),
+      );
       output.printNewLine();
 
-      output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('ensConf') })}`);
+      output.log(
+        `${t('commonWaitAndCheckStatusViaCmd', { subject: t('ensConf') })}`,
+      );
       output.log(output.textColor(`fleek ens detail ${ensName}`, 'cyan'));
 
       return;

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { enterApplicationNameOrPrompt } from './prompts/enterApplicationNameOrPrompt';
@@ -20,7 +20,8 @@ export const whitelistArgParser = (listArg: string[] | undefined) => {
     }
 
     return listArg[0].split(',').reduce((acc: string[], curr: string) => {
-      return [...acc, curr.trim()];
+      acc.push(curr.trim());
+      return acc;
     }, [] as Whitelist);
   } catch (err) {
     if (err instanceof Error) {
@@ -34,10 +35,14 @@ export const whitelistArgParser = (listArg: string[] | undefined) => {
   }
 };
 
-export const createApplicationAction: SdkGuardedFunction<CreateApplicationActionArgs> = async ({ sdk, args }) => {
+export const createApplicationAction: SdkGuardedFunction<
+  CreateApplicationActionArgs
+> = async ({ sdk, args }) => {
   const isNonInteractive = !!Object.keys(args).length;
 
-  const name = isNonInteractive ? args.name : await enterApplicationNameOrPrompt({ name: args.name });
+  const name = isNonInteractive
+    ? args.name
+    : await enterApplicationNameOrPrompt({ name: args.name });
 
   const whitelistDomains = isNonInteractive
     ? whitelistArgParser(args.whitelistDomains)
@@ -55,13 +60,18 @@ export const createApplicationAction: SdkGuardedFunction<CreateApplicationAction
   // retroactive support requirements, the SDK applications create
   // copies the data over from the new field to old. So, its not
   // required to pass whiteLabelDomains here.
-  const { clientId } = await sdk.applications().create({ name, whitelistDomains });
+  const { clientId } = await sdk
+    .applications()
+    .create({ name, whitelistDomains });
 
   output.printNewLine();
   output.success(t('appCreateSuccessClientId', { clientId }));
   output.printNewLine();
 };
 
-export const createApplicationActionHandler = withGuards(createApplicationAction, {
-  scopes: { authenticated: true, project: true, site: false },
-});
+export const createApplicationActionHandler = withGuards(
+  createApplicationAction,
+  {
+    scopes: { authenticated: true, project: true, site: false },
+  },
+);

@@ -1,5 +1,5 @@
 import { MissingExpectedDataError } from '@fleek-platform/errors';
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { getDefined } from '../../defined';
 import { t } from '../../utils/translation';

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getEnsRecordOrPrompt } from './prompts/getEnsRecordOrPrompt';
@@ -10,12 +10,20 @@ export type DeleteEnsRecordActionArgs = {
   name?: string;
 };
 
-export const deleteEnsAction: SdkGuardedFunction<DeleteEnsRecordActionArgs> = async ({ sdk, args }) => {
+export const deleteEnsAction: SdkGuardedFunction<
+  DeleteEnsRecordActionArgs
+> = async ({ sdk, args }) => {
   const ensRecord = await getEnsRecordOrPrompt({
     id: args.id,
     name: args.name,
     sdk,
   });
+
+  if (!ensRecord) {
+    output.error(t('expectedNotFoundGeneric', { name: 'ENS record' }));
+
+    return;
+  }
 
   output.spinner(t('ensDeleting'));
 
@@ -30,7 +38,12 @@ export const deleteEnsAction: SdkGuardedFunction<DeleteEnsRecordActionArgs> = as
   }
 
   output.printNewLine();
-  output.success(t('commonItemActionSuccess', { subject: `${t('ens')} "${ensRecord.name}"`, action: t('deleted') }));
+  output.success(
+    t('commonItemActionSuccess', {
+      subject: `${t('ens')} "${ensRecord.name}"`,
+      action: t('deleted'),
+    }),
+  );
 };
 
 export const deleteEnsActionHandler = withGuards(deleteEnsAction, {

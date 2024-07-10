@@ -1,5 +1,5 @@
 import { IpnsRecordsNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk, IpnsRecord } from '@fleek-platform/sdk';
+import type { FleekSdk, IpnsRecord } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -12,7 +12,9 @@ type GetRecordOrPromptArgs = {
 export const getRecordOrPrompt = async ({
   sdk,
   name,
-}: GetRecordOrPromptArgs): Promise<Omit<IpnsRecord, '__typename' | 'createdAt' | 'updatedAt'>> => {
+}: GetRecordOrPromptArgs): Promise<
+  Omit<IpnsRecord, '__typename' | 'createdAt' | 'updatedAt'> | undefined
+> => {
   if (name) {
     return await sdk.ipns().getRecord({ name });
   }
@@ -25,8 +27,15 @@ export const getRecordOrPrompt = async ({
 
   const ipnsRecordId = await selectPrompt({
     message: `${t('ipnsSelectRecord')}:`,
-    choices: records.map((record) => ({ title: record.name, value: record.id })),
+    choices: records.map((record) => ({
+      title: record.name,
+      value: record.id,
+    })),
   });
 
-  return records.find((record) => record.id === ipnsRecordId)!;
+  const ipnsRecordMatch = records.find((record) => record.id === ipnsRecordId);
+
+  if (!ipnsRecordMatch) return;
+
+  return ipnsRecordMatch;
 };

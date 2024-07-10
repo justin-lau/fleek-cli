@@ -1,5 +1,5 @@
 import { PrivateGatewaysNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -10,7 +10,11 @@ type GetPrivateGatewayOrPromptArgs = {
   sdk: FleekSdk;
 };
 
-export const getPrivateGatewayOrPrompt = async ({ id, slug, sdk }: GetPrivateGatewayOrPromptArgs) => {
+export const getPrivateGatewayOrPrompt = async ({
+  id,
+  slug,
+  sdk,
+}: GetPrivateGatewayOrPromptArgs) => {
   if (id) {
     return sdk.privateGateways().get({ id });
   }
@@ -33,5 +37,11 @@ export const getPrivateGatewayOrPrompt = async ({ id, slug, sdk }: GetPrivateGat
     })),
   });
 
-  return privateGateways.find((privateGateway) => privateGateway.id === selectedPrivateGatewayId)!;
+  const matchPrivateGw = privateGateways.find(
+    (privateGateway) => privateGateway.id === selectedPrivateGatewayId,
+  );
+
+  if (!matchPrivateGw) return;
+
+  return matchPrivateGw;
 };

@@ -1,5 +1,5 @@
 import { eraseLines } from '../output/utils/eraseLines';
-import { prompt, PromptArgs } from './prompt';
+import { type PromptArgs, prompt } from './prompt';
 
 type Choice<T> = {
   title: string;
@@ -14,7 +14,12 @@ type SelectPromptArgs<T> = Omit<PromptArgs, 'type'> & {
   initial?: number;
 };
 
-export const selectPrompt = async <T>({ message, choices = [], initial, onCancel }: SelectPromptArgs<T>): Promise<T> => {
+export const selectPrompt = async <T>({
+  message,
+  choices = [],
+  initial,
+  onCancel,
+}: SelectPromptArgs<T>): Promise<T> => {
   while (true) {
     const selectedValue = await prompt({
       type: 'autocomplete',

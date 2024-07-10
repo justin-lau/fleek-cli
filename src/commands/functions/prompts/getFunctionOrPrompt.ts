@@ -1,5 +1,5 @@
 import { FleekFunctionsNotFoundError } from '@fleek-platform/errors';
-import { FleekFunction, FleekSdk } from '@fleek-platform/sdk';
+import type { FleekFunction, FleekSdk } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -9,7 +9,10 @@ type GetFunctionOrPromptArgs = {
   sdk: FleekSdk;
 };
 
-export const getFunctionOrPrompt = async ({ name, sdk }: GetFunctionOrPromptArgs): Promise<FleekFunction> => {
+export const getFunctionOrPrompt = async ({
+  name,
+  sdk,
+}: GetFunctionOrPromptArgs): Promise<FleekFunction | undefined> => {
   if (name) {
     return sdk.functions().get({ name });
   }
@@ -25,5 +28,9 @@ export const getFunctionOrPrompt = async ({ name, sdk }: GetFunctionOrPromptArgs
     choices: functions.map((f) => ({ title: f.name, value: f.id })),
   });
 
-  return functions.find((f) => f.id === selectedFunctionId)!;
+  const fnMatch = functions.find((f) => f.id === selectedFunctionId);
+
+  if (!fnMatch) return;
+
+  return fnMatch;
 };

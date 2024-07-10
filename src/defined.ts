@@ -24,4 +24,5 @@ export const defined: Defined = {
 // e.g. FLEEK__UI_APP_URL
 const override_env_var_prefix = '';
 
-export const getDefined = (key: keyof typeof defined) => process.env[`${override_env_var_prefix}${key}`] || defined[key];
+export const getDefined = (key: keyof typeof defined) =>
+  process.env[`${override_env_var_prefix}${key}`] || defined[key];

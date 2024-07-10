@@ -1,5 +1,5 @@
 import { SitesNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk, Site } from '@fleek-platform/sdk';
+import type { FleekSdk, Site } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -10,7 +10,11 @@ type GetSiteOrPromptArgs = {
   sdk: FleekSdk;
 };
 
-export const getSiteOrPrompt = async ({ id, slug, sdk }: GetSiteOrPromptArgs): Promise<Site> => {
+export const getSiteOrPrompt = async ({
+  id,
+  slug,
+  sdk,
+}: GetSiteOrPromptArgs): Promise<Site | undefined> => {
   if (id) {
     return sdk.sites().get({ id });
   }
@@ -30,5 +34,9 @@ export const getSiteOrPrompt = async ({ id, slug, sdk }: GetSiteOrPromptArgs): P
     choices: sites.map((site) => ({ title: site.name, value: site.id })),
   });
 
-  return sites.find((site) => site.id === selectedSiteId)!;
+  const matchSite = sites.find((site) => site.id === selectedSiteId);
+
+  if (!matchSite) return;
+
+  return matchSite;
 };

@@ -19,6 +19,7 @@ export const getEnsNameOrPrompt = async ({ name }: GetEnsNameOrPromptArgs) => {
 
   return textPrompt({
     message: `${t('ensEnterName')}:`,
-    validate: (partialEns) => isEnsValid({ name: partialEns }) || t('ensIncorrectForm'),
+    validate: (partialEns) =>
+      isEnsValid({ name: partialEns }) || t('ensIncorrectForm'),
   });
 };

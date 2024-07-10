@@ -1,4 +1,4 @@
-import { join as joinPath } from 'path';
+import { join as joinPath } from 'node:path';
 
 import { output } from '../../../cli';
 import { textPrompt } from '../../../prompts/textPrompt';
@@ -7,7 +7,9 @@ import { directoryExists } from '../utils/directoryExists';
 
 type EnterDirectoryPathPromptArgs = { message: string };
 
-export const enterDirectoryPathPrompt = async ({ message }: EnterDirectoryPathPromptArgs): Promise<string> => {
+export const enterDirectoryPathPrompt = async ({
+  message,
+}: EnterDirectoryPathPromptArgs): Promise<string> => {
   const path = await textPrompt({
     message,
     validate: async (path) => {

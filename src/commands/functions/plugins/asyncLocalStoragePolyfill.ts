@@ -1,6 +1,6 @@
-import { OnLoadArgs, OnResolveArgs, Plugin, PluginBuild } from 'esbuild';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import type { OnLoadArgs, OnResolveArgs, Plugin, PluginBuild } from 'esbuild';
 
 export const asyncLocalStoragePolyfill: () => Plugin = () => {
   return {
@@ -15,14 +15,17 @@ export const asyncLocalStoragePolyfill: () => Plugin = () => {
         }
       });
 
-      build.onLoad({ filter: /.*/, namespace: 'replace-als' }, async (args: OnLoadArgs) => {
-        const contents = await fs.readFile(args.path, 'utf8');
+      build.onLoad(
+        { filter: /.*/, namespace: 'replace-als' },
+        async (args: OnLoadArgs) => {
+          const contents = await fs.readFile(args.path, 'utf8');
 
-        return {
-          contents,
-          loader: 'js',
-        };
-      });
+          return {
+            contents,
+            loader: 'js',
+          };
+        },
+      );
     },
   };
 };

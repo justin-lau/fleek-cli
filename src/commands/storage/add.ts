@@ -1,11 +1,14 @@
-import { getCfIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
+import { promises as fs, existsSync } from 'node:fs';
+import { basename } from 'node:path';
+import {
+  getCfIpfsGatewayUrl,
+  getPrivateIpfsGatewayUrl,
+} from '@fleek-platform/utils-ipfs';
 import cliProgress from 'cli-progress';
 import { filesFromPaths } from 'files-from-path';
-import { existsSync, promises as fs } from 'fs';
-import { basename } from 'path';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
@@ -15,7 +18,9 @@ type AddStorageActionArgs = {
   path: string;
 };
 
-export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async ({ sdk, args }) => {
+export const addStorageAction: SdkGuardedFunction<
+  AddStorageActionArgs
+> = async ({ sdk, args }) => {
   if (!existsSync(args.path)) {
     output.error(t('filePathNotFound', { path: args.path }));
 
@@ -24,17 +29,25 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
 
   const progressBar = new cliProgress.SingleBar(
     {
-      format: 'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
+      format:
+        'Upload Progress [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
     },
-    cliProgress.Presets.shades_grey
+    cliProgress.Presets.shades_grey,
   );
   const stat = await fs.stat(args.path);
 
   const directoryName = basename(args.path);
   const files = await filesFromPaths([args.path]);
   const storage = stat.isDirectory()
-    ? await sdk.storage().uploadVirtualDirectory({ files, directoryName, onUploadProgress: uploadOnProgress(progressBar) })
-    : await sdk.storage().uploadFile({ file: files[0], onUploadProgress: uploadOnProgress(progressBar) });
+    ? await sdk.storage().uploadVirtualDirectory({
+        files,
+        directoryName,
+        onUploadProgress: uploadOnProgress(progressBar),
+      })
+    : await sdk.storage().uploadFile({
+        file: files[0],
+        onUploadProgress: uploadOnProgress(progressBar),
+      });
 
   if (!storage) {
     output.error(t('somethingWrongDurUpload'));
@@ -53,7 +66,9 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
     output.printNewLine();
   }
 
-  const privateGatewayDomains = await getAllActivePrivateGatewayDomains({ sdk });
+  const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
+    sdk,
+  });
 
   if (privateGatewayDomains.length === 0) {
     output.log(t('visitViaGateway'));
@@ -65,7 +80,12 @@ export const addStorageAction: SdkGuardedFunction<AddStorageActionArgs> = async 
   output.log(t('visitViaPvtGw'));
 
   for (const privateGatewayDomain of privateGatewayDomains) {
-    output.link(getPrivateIpfsGatewayUrl({ hostname: privateGatewayDomain.hostname, hash }));
+    output.link(
+      getPrivateIpfsGatewayUrl({
+        hostname: privateGatewayDomain.hostname,
+        hash,
+      }),
+    );
   }
 
   output.printNewLine();

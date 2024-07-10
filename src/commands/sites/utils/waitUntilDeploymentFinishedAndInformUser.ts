@@ -1,7 +1,7 @@
-import { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk';
 import { getFleekDefaultGatewayBySlug } from '@fleek-platform/utils-gateways';
 
-import { Output } from '../../../output/Output';
+import type { Output } from '../../../output/Output';
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 import { t } from '../../../utils/translation';
 import { returnDeploymentWhenFinished } from './returnDeploymentWhenFinished';
@@ -32,11 +32,17 @@ export const waitUntilDeploymentFinishedAndInformUser = async ({
   });
 
   if (!deploymentStatus) {
-    output.warn(t('warnSubjectProcessIsLong', { subject: t('processOfDeployment') }));
+    output.warn(
+      t('warnSubjectProcessIsLong', { subject: t('processOfDeployment') }),
+    );
     output.printNewLine();
 
-    output.log(`${t('commonWaitAndCheckStatusViaCmd', { subject: t('deploymentStatus') })}`);
-    output.log(output.textColor(`fleek sites deployments --id ${siteId}`, 'cyan'));
+    output.log(
+      `${t('commonWaitAndCheckStatusViaCmd', { subject: t('deploymentStatus') })}`,
+    );
+    output.log(
+      output.textColor(`fleek sites deployments --id ${siteId}`, 'cyan'),
+    );
 
     return;
   }
@@ -53,5 +59,7 @@ export const waitUntilDeploymentFinishedAndInformUser = async ({
   output.log(t('siteIPFSCid', { hash }));
 
   output.hint(`${t('visitViaGateway')}:`);
-  output.link(hostname ? `https://${hostname}` : getFleekDefaultGatewayBySlug({ slug }));
+  output.link(
+    hostname ? `https://${hostname}` : getFleekDefaultGatewayBySlug({ slug }),
+  );
 };

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 
@@ -21,7 +21,7 @@ const listAction: SdkGuardedFunction = async ({ sdk }) => {
       Slug: f.slug,
       InvokeUrl: f.invokeUrl,
       Status: f.status,
-    }))
+    })),
   );
 };
 

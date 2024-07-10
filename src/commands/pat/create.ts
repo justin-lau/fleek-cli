@@ -26,11 +26,12 @@ export const createPersonalAccessTokenActionHandler = async ({
   output.printNewLine();
   showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
 
-  const personalAccessToken = await waitForPersonalAccessTokenFromVerificationSession({
-    verificationSessionId,
-    client: createClient({ url: authApiUrl }),
-    name,
-  });
+  const personalAccessToken =
+    await waitForPersonalAccessTokenFromVerificationSession({
+      verificationSessionId,
+      client: createClient({ url: authApiUrl }),
+      name,
+    });
 
   if (!personalAccessToken) {
     output.error(t('patFetchTimeout'));
@@ -38,5 +39,7 @@ export const createPersonalAccessTokenActionHandler = async ({
     return;
   }
 
-  output.success(t('newPatIs', { pat: output.textColor(personalAccessToken, 'redBright') }));
+  output.success(
+    t('newPatIs', { pat: output.textColor(personalAccessToken, 'redBright') }),
+  );
 };

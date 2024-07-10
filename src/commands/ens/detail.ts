@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getEnsRecordOrPrompt } from './prompts/getEnsRecordOrPrompt';
@@ -9,8 +9,20 @@ export type DetailEnsRecordsActionArgs = {
   name?: string;
 };
 
-export const detailEnsRecordsAction: SdkGuardedFunction<DetailEnsRecordsActionArgs> = async ({ sdk, args }) => {
-  const ensRecord = await getEnsRecordOrPrompt({ id: args.id, name: args.name, sdk });
+export const detailEnsRecordsAction: SdkGuardedFunction<
+  DetailEnsRecordsActionArgs
+> = async ({ sdk, args }) => {
+  const ensRecord = await getEnsRecordOrPrompt({
+    id: args.id,
+    name: args.name,
+    sdk,
+  });
+
+  if (!ensRecord) {
+    output.error(t('expectedNotFoundGeneric', { name: 'ENS Record' }));
+
+    return;
+  }
 
   output.table([
     {
@@ -30,10 +42,13 @@ export const detailEnsRecordsAction: SdkGuardedFunction<DetailEnsRecordsActionAr
   ]);
 };
 
-export const detailEnsRecordsActionHandler = withGuards(detailEnsRecordsAction, {
-  scopes: {
-    authenticated: true,
-    project: true,
-    site: false,
+export const detailEnsRecordsActionHandler = withGuards(
+  detailEnsRecordsAction,
+  {
+    scopes: {
+      authenticated: true,
+      project: true,
+      site: false,
+    },
   },
-});
+);

@@ -15,7 +15,9 @@ describe('Parse list of domains', () => {
       { id: '2', hostname: 'bar.foo' },
     ];
 
-    expect(parseWhitelistDomains({ whitelistDomains, whiteLabelDomains })).toEqual([
+    expect(
+      parseWhitelistDomains({ whitelistDomains, whiteLabelDomains }),
+    ).toEqual([
       { hostname: 'foo.bar' },
       { hostname: 'bar.foo' },
       { hostname: 'not.duplicated' },

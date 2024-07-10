@@ -1,4 +1,4 @@
-import { Choice } from 'prompts';
+import type { Choice } from 'prompts';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -17,7 +17,9 @@ type GetCIProviderOrPromptArgs = {
   provider?: CIProvider | undefined;
 };
 
-export const getCIProviderOrPrompt = async (args?: GetCIProviderOrPromptArgs): Promise<CIProvider> => {
+export const getCIProviderOrPrompt = async (
+  args?: GetCIProviderOrPromptArgs,
+): Promise<CIProvider> => {
   if (args?.provider) {
     return args.provider;
   }

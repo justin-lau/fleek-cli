@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
@@ -8,9 +8,20 @@ type ListDeploymentActionArgs = {
   name?: string;
 };
 
-const listDeploymentsAction: SdkGuardedFunction<ListDeploymentActionArgs> = async ({ sdk, args }) => {
+const listDeploymentsAction: SdkGuardedFunction<
+  ListDeploymentActionArgs
+> = async ({ sdk, args }) => {
   const functionToList = await getFunctionOrPrompt({ sdk, name: args.name });
-  const deployments = await sdk.functions().listDeployments({ functionId: functionToList.id });
+
+  if (!functionToList) {
+    output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+
+    return;
+  }
+
+  const deployments = await sdk
+    .functions()
+    .listDeployments({ functionId: functionToList.id });
 
   if (!deployments?.length) {
     output.warn(t('noYYet', { name: 'deployments' }));
@@ -25,7 +36,7 @@ const listDeploymentsAction: SdkGuardedFunction<ListDeploymentActionArgs> = asyn
       ID: d.id,
       CID: d.cid,
       'Created At': d.createdAt,
-    }))
+    })),
   );
 };
 

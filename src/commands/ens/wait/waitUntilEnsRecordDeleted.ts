@@ -1,4 +1,4 @@
-import { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
+import type { EnsRecord, FleekSdk } from '@fleek-platform/sdk';
 
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 
@@ -7,7 +7,10 @@ type WaitUntilEnsRecordDeletedArgs = {
   sdk: FleekSdk;
 };
 
-export const waitUntilEnsRecordDeleted = async ({ ensRecord, sdk }: WaitUntilEnsRecordDeletedArgs): Promise<boolean> => {
+export const waitUntilEnsRecordDeleted = async ({
+  ensRecord,
+  sdk,
+}: WaitUntilEnsRecordDeletedArgs): Promise<boolean> => {
   return checkPeriodicallyUntil({
     conditionFn: async () =>
       sdk

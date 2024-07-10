@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 
@@ -12,7 +12,7 @@ const listAction: SdkGuardedFunction = async ({ sdk }) => {
         Name: record.name,
         CID: record.hash,
         ID: record.id,
-      }))
+      })),
     );
   }
 

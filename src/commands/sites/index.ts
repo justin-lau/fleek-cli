@@ -1,4 +1,4 @@
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { t } from '../../utils/translation';
 import { ciActionHandler } from './ci';
@@ -8,7 +8,10 @@ import { listActionHandler } from './list';
 import { listDeploymentsActionHandler } from './listDeployments';
 
 export default (program: Command) => {
-  const cmd = program.command('sites').option('-h, --help', t('printHelp')).description(t('sitesDescription'));
+  const cmd = program
+    .command('sites')
+    .option('-h, --help', t('printHelp'))
+    .description(t('sitesDescription'));
 
   cmd
     .command('init')
@@ -24,14 +27,16 @@ export default (program: Command) => {
       ciActionHandler({
         predefinedConfigPath: options.config,
         provider: options.provider,
-      })
+      }),
     );
 
   cmd
     .command('deploy')
     .description(t('deploySite'))
     .option('-c, --config <fleekConfigPath>', t('deploySpecifyPathJson'))
-    .action((options: { config?: string }) => deployActionHandler({ predefinedConfigPath: options.config }));
+    .action((options: { config?: string }) =>
+      deployActionHandler({ predefinedConfigPath: options.config }),
+    );
 
   cmd
     .command('list')
@@ -40,10 +45,18 @@ export default (program: Command) => {
 
   cmd
     .command('deployments')
-    .option('--slug <string>', t('nameOfWichDeploymentsBelong', { name: t('humanReadableSlugDesc') }))
-    .option('--id <string>', t('nameOfWichDeploymentsBelong', { name: t('uniqueIdentifier') }))
+    .option(
+      '--slug <string>',
+      t('nameOfWichDeploymentsBelong', { name: t('humanReadableSlugDesc') }),
+    )
+    .option(
+      '--id <string>',
+      t('nameOfWichDeploymentsBelong', { name: t('uniqueIdentifier') }),
+    )
     .description(t('deploymentsListForSelectedSite'))
-    .action((options: { id?: string; slug?: string }) => listDeploymentsActionHandler(options));
+    .action((options: { id?: string; slug?: string }) =>
+      listDeploymentsActionHandler(options),
+    );
 
   cmd
     .command('help')

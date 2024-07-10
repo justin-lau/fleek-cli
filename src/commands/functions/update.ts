@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getFunctionNameOrPrompt } from './prompts/getFunctionNameOrPrompt';
@@ -14,23 +14,52 @@ type UpdateFunctionArgs = {
   status?: string;
 };
 
-const updateAction: SdkGuardedFunction<UpdateFunctionArgs> = async ({ args, sdk }) => {
+const updateAction: SdkGuardedFunction<UpdateFunctionArgs> = async ({
+  args,
+  sdk,
+}) => {
   if (!args.name && !args.slug && !args.status) {
-    output.error(t('functionUpdateArgsNotValid', { param1: 'name', param2: 'slug', param3: 'status' }));
+    output.error(
+      t('functionUpdateArgsNotValid', {
+        param1: 'name',
+        param2: 'slug',
+        param3: 'status',
+      }),
+    );
 
     return;
   }
 
-  const name = args.name ? await getFunctionNameOrPrompt({ name: args.name }) : undefined;
-  const slug = args.slug ? await getFunctionSlugOrPrompt({ slug: args.slug }) : undefined;
-  const status = args.status ? await getFunctionStatusOrPrompt({ status: args.status }) : undefined;
+  const name = args.name
+    ? await getFunctionNameOrPrompt({ name: args.name })
+    : undefined;
+  const slug = args.slug
+    ? await getFunctionSlugOrPrompt({ slug: args.slug })
+    : undefined;
+  const status = args.status
+    ? await getFunctionStatusOrPrompt({ status: args.status })
+    : undefined;
 
-  const fleekFunction = await getFunctionOrPrompt({ name: args.functionName, sdk });
+  const fleekFunction = await getFunctionOrPrompt({
+    name: args.functionName,
+    sdk,
+  });
+
+  if (!fleekFunction) {
+    output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+
+    return;
+  }
 
   await sdk.functions().update({ id: fleekFunction.id, slug, status, name });
 
   output.printNewLine();
-  output.success(t('commonItemActionSuccess', { subject: t('function'), action: t('updated') }));
+  output.success(
+    t('commonItemActionSuccess', {
+      subject: t('function'),
+      action: t('updated'),
+    }),
+  );
   output.printNewLine();
 };
 

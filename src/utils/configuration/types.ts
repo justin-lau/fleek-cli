@@ -12,4 +12,8 @@ export type FleekRootConfig = {
   sites: FleekSiteConfig[];
 };
 
-export type FleekConfig = FleekRootConfig | (() => FleekRootConfig) | (() => Promise<FleekRootConfig>) | Promise<FleekRootConfig>;
+export type FleekConfig =
+  | FleekRootConfig
+  | (() => FleekRootConfig)
+  | (() => Promise<FleekRootConfig>)
+  | Promise<FleekRootConfig>;

@@ -3,7 +3,9 @@ import { t } from '../../../utils/translation';
 
 type ConfirmInstallCommandPromptArgs = { installCommand: string };
 
-export const confirmInstallCommandPrompt = async ({ installCommand }: ConfirmInstallCommandPromptArgs) =>
+export const confirmInstallCommandPrompt = async ({
+  installCommand,
+}: ConfirmInstallCommandPromptArgs) =>
   confirmPrompt({
     message: t('isGenInstallCmdCorrect', { installCommand }),
     initial: true,

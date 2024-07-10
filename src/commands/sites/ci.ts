@@ -1,9 +1,12 @@
 import { output } from '../../cli';
 import { config } from '../../config';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
-import { CIProvider, getCIProviderOrPrompt } from './prompts/getCIProviderOrPrompt';
+import {
+  type CIProvider,
+  getCIProviderOrPrompt,
+} from './prompts/getCIProviderOrPrompt';
 import { prepareGitHubActionsIntegration } from './utils/prepareGitHubActionsIntegration';
 
 type CiActionArgs = {
@@ -12,10 +15,24 @@ type CiActionArgs = {
 };
 
 const ciAction: SdkGuardedFunction<CiActionArgs> = async ({ args }) => {
-  const provider = await getCIProviderOrPrompt({ provider: args?.provider as CIProvider });
+  const provider = await getCIProviderOrPrompt({
+    provider: args?.provider as CIProvider,
+  });
 
-  const personalAccessToken = config.personalAccessToken.get()!;
-  const projectId = config.projectId.get()!;
+  const personalAccessToken = config.personalAccessToken.get();
+  const projectId = config.projectId.get();
+
+  if (!personalAccessToken) {
+    output.error(t('noPatFoundUnexpectedly'));
+
+    return;
+  }
+
+  if (!projectId) {
+    output.error(t('noProjectIdFoundUnexpectedly'));
+
+    return;
+  }
 
   switch (provider) {
     case 'github':

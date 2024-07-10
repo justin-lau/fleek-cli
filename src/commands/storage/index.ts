@@ -1,4 +1,4 @@
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { output } from '../../cli';
 import { t } from '../../utils/translation';
@@ -8,7 +8,9 @@ import { getStorageActionHandler } from './get';
 import { listStorageActionHandler } from './list';
 
 export default (program: Command) => {
-  const cmd = program.command('storage').description(t('storageCmdDescription'));
+  const cmd = program
+    .command('storage')
+    .description(t('storageCmdDescription'));
 
   cmd
     .command('list')
@@ -19,11 +21,17 @@ export default (program: Command) => {
     .command('get')
     .description(t('storageDescription', { action: t('get') }))
     .option('-c, --cid <cid>', t('storageCidOption', { action: t('get') }))
-    .option('-n, --name <filenameWithExtension>', t('storageNameOption', { action: t('get') }));
+    .option(
+      '-n, --name <filenameWithExtension>',
+      t('storageNameOption', { action: t('get') }),
+    );
 
   getStorage.action((options: { cid?: string; name?: string }) => {
     if ((!options.name && !options.cid) || (options.name && options.cid)) {
-      if (!getStorage.args.includes('help') && !getStorage.optsWithGlobals().help) {
+      if (
+        !getStorage.args.includes('help') &&
+        !getStorage.optsWithGlobals().help
+      ) {
         output.error(t('storageMissingOptCidOrName'));
       }
 
@@ -40,11 +48,17 @@ export default (program: Command) => {
     .command('delete')
     .description(t('storageDescription', { action: t('delete') }))
     .option('-c, --cid <cid>', t('storageCidOption', { action: t('delete') }))
-    .option('-n, --name <filenameWithExtension>', t('storageNameOption', { action: t('delete') }));
+    .option(
+      '-n, --name <filenameWithExtension>',
+      t('storageNameOption', { action: t('delete') }),
+    );
 
   deleteStorage.action((options: { cid?: string; name?: string }) => {
     if ((!options.name && !options.cid) || (options.name && options.cid)) {
-      if (!getStorage.args.includes('help') && !getStorage.optsWithGlobals().help) {
+      if (
+        !getStorage.args.includes('help') &&
+        !getStorage.optsWithGlobals().help
+      ) {
         output.error(t('storageMissingOptCidOrName'));
       }
 

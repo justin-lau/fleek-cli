@@ -1,4 +1,4 @@
-import { Output } from '../../output/Output';
+import type { Output } from '../../output/Output';
 
 import { t } from '../../utils/translation';
 
@@ -8,10 +8,17 @@ type ShowVerificationSessionLinkArgs = {
   verificationSessionId: string;
 };
 
-export const getVerificationSessionLink = ({ verificationSessionId, uiAppUrl }: { verificationSessionId: string; uiAppUrl: string }) =>
+export const getVerificationSessionLink = ({
+  verificationSessionId,
+  uiAppUrl,
+}: { verificationSessionId: string; uiAppUrl: string }) =>
   `${uiAppUrl}/login/${verificationSessionId}`;
 
-export const showVerificationSessionLink = ({ output, uiAppUrl, verificationSessionId }: ShowVerificationSessionLinkArgs) => {
+export const showVerificationSessionLink = ({
+  output,
+  uiAppUrl,
+  verificationSessionId,
+}: ShowVerificationSessionLinkArgs) => {
   const url = getVerificationSessionLink({
     uiAppUrl,
     verificationSessionId,

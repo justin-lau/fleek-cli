@@ -1,7 +1,7 @@
-import { DomainStatus } from '@fleek-platform/sdk';
+import type { DomainStatus } from '@fleek-platform/sdk';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getDomainOrPrompt } from './prompts/getDomainOrPrompt';
@@ -13,14 +13,25 @@ type DetailDomainActionOptions = {
 
 const domainCreationPending: DomainStatus[] = ['CREATING', 'VERIFYING'];
 
-const domainCreationFailed: DomainStatus[] = ['CREATING_FAILED', 'VERIFYING_FAILED'];
+const domainCreationFailed: DomainStatus[] = [
+  'CREATING_FAILED',
+  'VERIFYING_FAILED',
+];
 
-export const detailDomainAction: SdkGuardedFunction<DetailDomainActionOptions> = async ({ sdk, args }) => {
+export const detailDomainAction: SdkGuardedFunction<
+  DetailDomainActionOptions
+> = async ({ sdk, args }) => {
   const domain = await getDomainOrPrompt({
     id: args.id,
     hostname: args.hostname,
     sdk,
   });
+
+  if (!domain) {
+    output.error(t('expectedNotFoundGeneric', { name: 'domain' }));
+
+    return;
+  }
 
   if (domainCreationPending.includes(domain.status)) {
     output.printNewLine();
@@ -47,15 +58,17 @@ export const detailDomainAction: SdkGuardedFunction<DetailDomainActionOptions> =
   output.log(`${t('configDomainAsTable')}:`);
 
   output.table(
-    domain.dnsConfigs.map((domain: {
-      type: string;
-      name: string;
-      value: string;
-    }) => ({
-      Type: domain.type,
-      Name: domain.name,
-      Value: domain.value,
-    }))
+    domain.dnsConfigs.map(
+      (domain: {
+        type: string;
+        name: string;
+        value: string;
+      }) => ({
+        Type: domain.type,
+        Name: domain.name,
+        Value: domain.value,
+      }),
+    ),
   );
 };
 

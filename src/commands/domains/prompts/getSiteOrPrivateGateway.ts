@@ -1,4 +1,4 @@
-import { FleekSdk, PrivateGateway, Site } from '@fleek-platform/sdk';
+import type { FleekSdk, PrivateGateway, Site } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -19,7 +19,9 @@ export const getSiteOrPrivateGateway = async ({
   privateGatewaySlug,
   siteId,
   siteSlug,
-}: GetSiteOrPrivateGatewayArgs): Promise<Partial<Record<'site' | 'privateGateway', Site | PrivateGateway>>> => {
+}: GetSiteOrPrivateGatewayArgs): Promise<
+  Partial<Record<'site' | 'privateGateway', Site | PrivateGateway>>
+> => {
   const { upperFirst } = await import('lodash-es');
 
   const zoneType =
@@ -33,7 +35,11 @@ export const getSiteOrPrivateGateway = async ({
         })
       : null;
 
-  if (privateGatewayId || privateGatewaySlug || zoneType == 'PRIVATE_GATEWAY') {
+  if (
+    privateGatewayId ||
+    privateGatewaySlug ||
+    zoneType === 'PRIVATE_GATEWAY'
+  ) {
     const privateGateway = await getPrivateGatewayOrPrompt({
       id: privateGatewayId,
       slug: privateGatewaySlug,

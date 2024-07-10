@@ -4,7 +4,11 @@ export type CheckPeriodicallyUntilArgs<T> = {
   tries: number;
 };
 
-export const checkPeriodicallyUntil = async <T>({ conditionFn, period, tries }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
+export const checkPeriodicallyUntil = async <T>({
+  conditionFn,
+  period,
+  tries,
+}: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
   const result = await conditionFn();
 
   if (result || tries < 1) {
@@ -12,6 +16,6 @@ export const checkPeriodicallyUntil = async <T>({ conditionFn, period, tries }: 
   }
 
   return new Promise((resolve) => setTimeout(resolve, period)).then(() =>
-    checkPeriodicallyUntil({ conditionFn, period, tries: tries - 1 })
+    checkPeriodicallyUntil({ conditionFn, period, tries: tries - 1 }),
   );
 };

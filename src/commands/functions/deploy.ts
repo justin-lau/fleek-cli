@@ -1,16 +1,18 @@
+import fs from 'node:fs';
 import cliProgress from 'cli-progress';
-import fs from 'fs';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { uploadOnProgress } from '../../output/utils/uploadOnProgress';
 import { t } from '../../utils/translation';
 import { getFunctionOrPrompt } from './prompts/getFunctionOrPrompt';
 import { getFunctionPathOrPrompt } from './prompts/getFunctionPathOrPrompt';
 import { getCodeFromPath, getFileLikeObject } from './utils/getCodeFromPath';
-import { getEnvironmentVariables as getEnvironmentVariables } from './utils/parseEnvironmentVariables';
+import { getEnvironmentVariables } from './utils/parseEnvironmentVariables';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
+
+import type { UploadPinResponse } from '@fleek-platform/sdk';
 
 type DeployActionArgs = {
   filePath?: string;
@@ -21,11 +23,23 @@ type DeployActionArgs = {
   envFile?: string;
 };
 
-const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args }) => {
+const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
+  sdk,
+  args,
+}) => {
   const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
-  const bundledFilePath = await getCodeFromPath({ filePath, bundle: !!!args.noBundle, env });
+  const bundledFilePath = await getCodeFromPath({
+    filePath,
+    bundle: args.noBundle,
+    env,
+  });
+
+  if (!functionToDeploy) {
+    output.error(t('expectedNotFoundGeneric', { name: 'function' }));
+    return;
+  }
 
   output.printNewLine();
 
@@ -33,13 +47,16 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     {
       format: t('uploadProgress', { action: t('uploadCodeToIpfs') }),
     },
-    cliProgress.Presets.shades_grey
+    cliProgress.Presets.shades_grey,
   );
 
-  let uploadResult;
+  let uploadResult: UploadPinResponse;
 
   if (args.private) {
-    uploadResult = await sdk.storage().uploadPrivateFile({ filePath: bundledFilePath, onUploadProgress: uploadOnProgress(progressBar) });
+    uploadResult = await sdk.storage().uploadPrivateFile({
+      filePath: bundledFilePath,
+      onUploadProgress: uploadOnProgress(progressBar),
+    });
   } else {
     const fileLikeObject = await getFileLikeObject(bundledFilePath);
     uploadResult = await sdk.storage().uploadFile({
@@ -54,7 +71,13 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
   }
 
   if (!uploadResult.pin.cid) {
-    output.error(t('commonFunctionActionFailure', { action: 'deploy', tryAgain: t('tryAgain'), message: t('uploadToIpfsFailed') }));
+    output.error(
+      t('commonFunctionActionFailure', {
+        action: 'deploy',
+        tryAgain: t('tryAgain'),
+        message: t('uploadToIpfsFailed'),
+      }),
+    );
 
     return;
   }
@@ -74,7 +97,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     output.printNewLine();
     output.spinner(t('runningAvailabilityCheck'));
 
-    const isAvailable = await waitUntilFileAvailable({ cid: uploadResult.pin.cid });
+    const isAvailable = await waitUntilFileAvailable({
+      cid: uploadResult.pin.cid,
+    });
 
     if (!isAvailable) {
       output.error(t('availabilityCheckFailed'));
@@ -83,7 +108,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
     }
   }
 
-  await sdk.functions().deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid });
+  await sdk
+    .functions()
+    .deploy({ functionId: functionToDeploy.id, cid: uploadResult.pin.cid });
 
   output.success(t('commonNameCreateSuccess', { name: 'deployment' }));
   output.printNewLine();
@@ -93,7 +120,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args })
   if (!args.private) {
     output.log(t('callFleekFunctionByNetworkUrlReq'));
     // TODO: Add a secret
-    output.link(`https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`);
+    output.link(
+      `https://fleek-test.network/services/1/ipfs/${uploadResult.pin.cid}`,
+    );
   }
 };
 

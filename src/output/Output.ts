@@ -1,7 +1,7 @@
 import type { Writable } from 'node:stream';
 
 import asTable from 'as-table';
-import boxen, { Options } from 'boxen';
+import boxen, { type Options } from 'boxen';
 import type { ForegroundColor } from 'chalk';
 import chalk from 'chalk';
 
@@ -14,7 +14,7 @@ export type OutputOptions = {
 };
 
 // eslint-disable-next-line no-restricted-syntax
-export const enum Icons {
+export enum Icons {
   Checkmark = '✅',
   ChequeredFlag = '🏁',
   Cross = '❌',
@@ -34,7 +34,7 @@ export class Output {
   constructor(
     { stream, debug: debugEnabled = false }: OutputOptions = {
       stream: process.stdout,
-    }
+    },
   ) {
     this.stream = stream;
     this.debugEnabled = debugEnabled;
@@ -48,7 +48,7 @@ export class Output {
         color?: typeof ForegroundColor;
         bold?: boolean;
       };
-    } = {}
+    } = {},
   ) => {
     this.stopSpinner();
 
@@ -67,7 +67,7 @@ export class Output {
   };
 
   public printNewLine = (count = 1) => {
-    this.print(`\n`.repeat(count));
+    this.print('\n'.repeat(count));
   };
 
   public log = (message: string) => {
@@ -89,7 +89,9 @@ export class Output {
   };
 
   public warn = (message: string) => {
-    this.print(message, { prefix: { message: `${Icons.Warning} ${t('warning')}!` } });
+    this.print(message, {
+      prefix: { message: `${Icons.Warning} ${t('warning')}!` },
+    });
     this.printNewLine();
   };
 
@@ -101,7 +103,9 @@ export class Output {
   };
 
   public error = (message: string) => {
-    this.print(message, { prefix: { message: `${Icons.Cross} ${t('error')}:` } });
+    this.print(message, {
+      prefix: { message: `${Icons.Cross} ${t('error')}:` },
+    });
     this.printNewLine();
   };
 
@@ -113,7 +117,9 @@ export class Output {
   };
 
   public success = (message: string) => {
-    this.print(message, { prefix: { message: `${Icons.Checkmark} ${t('success')}!` } });
+    this.print(message, {
+      prefix: { message: `${Icons.Checkmark} ${t('success')}!` },
+    });
     this.printNewLine();
   };
 
@@ -127,12 +133,16 @@ export class Output {
       // TODO: Given that console backgrounds can be of any colour
       // certain colours such as grey might not be the most accessible e.g. white background
       // should be verified against brighter consoles and possibly disable colour
-      this.print(message, { prefix: { color: 'gray', message: `${t('debug')}:` } });
+      this.print(message, {
+        prefix: { color: 'gray', message: `${t('debug')}:` },
+      });
       this.printNewLine();
     }
   };
 
-  public table = (data: { [key: string]: string | number | undefined | null | Date }[]) => {
+  public table = (
+    data: { [key: string]: string | number | undefined | null | Date }[],
+  ) => {
     this.printNewLine();
     this.print(asTable(data));
     this.printNewLine(2);
@@ -152,13 +162,16 @@ export class Output {
     this.printNewLine();
   };
 
-  public textColor = (message: string, color: typeof ForegroundColor) => chalk[color](message);
+  public textColor = (message: string, color: typeof ForegroundColor) =>
+    chalk[color](message);
 
   public quoted = (message: string) => `"${message}"`;
 
-  public spinner = (message: string, delay: number = 300): void => {
+  public spinner = (message: string, delay = 300): void => {
     if (this.debugEnabled) {
-      this.debug(t('spinnerInvokedDelay', { message, delay: delay.toString() }));
+      this.debug(
+        t('spinnerInvokedDelay', { message, delay: delay.toString() }),
+      );
 
       return;
     }

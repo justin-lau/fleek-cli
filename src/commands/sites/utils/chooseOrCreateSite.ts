@@ -1,4 +1,4 @@
-import { FleekSdk, Site } from '@fleek-platform/sdk';
+import type { FleekSdk, Site } from '@fleek-platform/sdk';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
@@ -8,7 +8,9 @@ import { createSite } from './createSite';
 
 type ChooseOrCreateSiteArgs = { sdk: FleekSdk };
 
-export const chooseOrCreateSite = async ({ sdk }: ChooseOrCreateSiteArgs): Promise<Site> => {
+export const chooseOrCreateSite = async ({
+  sdk,
+}: ChooseOrCreateSiteArgs): Promise<Site | undefined> => {
   const sites = await sdk.sites().list();
 
   if (!sites.length) {
@@ -20,7 +22,15 @@ export const chooseOrCreateSite = async ({ sdk }: ChooseOrCreateSiteArgs): Promi
   const useExistingSite = await confirmUseExistingSitePrompt();
 
   if (useExistingSite) {
-    return getSiteOrPrompt({ sdk });
+    const site = getSiteOrPrompt({ sdk });
+
+    if (!site) {
+      output.error(t('expectedNotFoundGeneric', { name: 'site' }));
+
+      return;
+    }
+
+    return site;
   }
 
   return createSite({ sdk });

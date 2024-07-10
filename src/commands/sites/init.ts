@@ -1,7 +1,11 @@
-import { FleekConfigInvalidContentError, FleekConfigMissingFileError, FleekError } from '@fleek-platform/errors';
+import {
+  FleekConfigInvalidContentError,
+  FleekConfigMissingFileError,
+  type FleekError,
+} from '@fleek-platform/errors';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { loadConfiguration } from '../../utils/configuration/loadConfiguration';
 import { t } from '../../utils/translation';
@@ -37,7 +41,10 @@ const initAction: SdkGuardedFunction = async ({ sdk }) => {
     return;
   }
 
-  if (!configLoadingResult.isContentValid && configLoadingResult.isFilePresent) {
+  if (
+    !configLoadingResult.isContentValid &&
+    configLoadingResult.isFilePresent
+  ) {
     const overrideInvalidConfig = await confirmFileOverridePrompt({
       path: configLoadingResult.configPath,
     });

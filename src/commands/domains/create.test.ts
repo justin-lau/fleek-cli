@@ -1,8 +1,8 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { output as fakeOutput } from '../../cli';
-import { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
+import type { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
 import { usePressAnyKey as fakeUsePressAnyKey } from '../../utils/pressAnyKey';
 import { createDomainAction } from './create';
 import { getHostnameOrPrompt as fakeGetHostnameOrPrompt } from './prompts/getHostnameOrPrompt';
@@ -23,7 +23,9 @@ vi.mock('./prompts/getHostnameOrPrompt', () => ({
 }));
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => {
-  const checkPeriodicallyUntil = async <T>({ conditionFn }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
+  const checkPeriodicallyUntil = async <T>({
+    conditionFn,
+  }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
     return conditionFn();
   };
 
@@ -60,8 +62,12 @@ vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const domains = {
-    createZoneForSite: vi.fn().mockResolvedValue({ id: 'firstZoneId', status: 'CREATING' }),
-    getZone: vi.fn().mockResolvedValue({ id: 'firstZoneId', status: 'CREATED' }),
+    createZoneForSite: vi
+      .fn()
+      .mockResolvedValue({ id: 'firstZoneId', status: 'CREATING' }),
+    getZone: vi
+      .fn()
+      .mockResolvedValue({ id: 'firstZoneId', status: 'CREATED' }),
     createDomain: vi.fn(),
     verifyDomain: vi.fn(),
     get: vi.fn().mockResolvedValue({ id: 'firstDomainId', status: 'ACTIVE' }),
@@ -118,7 +124,7 @@ describe('Create domain for site', () => {
       createDomainAction({
         sdk: context.fakeSdk,
         args: { privateGatewaySlug: 'first-blue-fish', hostname: 'gold.xyz' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(fakeGetSiteOrPrivateGateway).toHaveBeenCalledWith({
@@ -143,16 +149,24 @@ describe('Create domain for site', () => {
       domainId: 'goldDomainId',
     });
 
-    expect(fakeOutput.spinner).toHaveBeenCalledWith('Creating new domain for chosen private gateway...');
+    expect(fakeOutput.spinner).toHaveBeenCalledWith(
+      'Creating new domain for chosen private gateway...',
+    );
 
     const { waitForAnyKey } = fakeUsePressAnyKey();
     expect(waitForAnyKey).toHaveBeenCalledOnce();
 
-    expect(fakeOutput.success).toHaveBeenCalledWith(`The domain "gold.xyz" has been successfully created.`);
-    expect(fakeOutput.success).toHaveBeenCalledWith(`Domain "gold.xyz" was verified.`);
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `The domain "gold.xyz" has been successfully created.`,
+    );
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `Domain "gold.xyz" was verified.`,
+    );
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).not.toHaveBeenCalled();
-    expect(fakeOutput.log).toHaveBeenCalledWith('CNAME @ gold-fleek.bunnycdn.net');
+    expect(fakeOutput.log).toHaveBeenCalledWith(
+      'CNAME @ gold-fleek.bunnycdn.net',
+    );
   });
 
   it<TestContext>('Zone was created for site, domain was created and successfully verified', async (context) => {
@@ -160,7 +174,7 @@ describe('Create domain for site', () => {
       createDomainAction({
         sdk: context.fakeSdk,
         args: { siteId: 'firstSiteId', hostname: 'first.xyz' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(fakeGetSiteOrPrivateGateway).toHaveBeenCalledWith({
@@ -187,13 +201,19 @@ describe('Create domain for site', () => {
       domainId: 'firstDomainId',
     });
 
-    expect(fakeOutput.spinner).toHaveBeenCalledWith('Creating new domain for chosen site');
+    expect(fakeOutput.spinner).toHaveBeenCalledWith(
+      'Creating new domain for chosen site',
+    );
 
     const { waitForAnyKey } = fakeUsePressAnyKey();
     expect(waitForAnyKey).toHaveBeenCalledOnce();
 
-    expect(fakeOutput.success).toHaveBeenCalledWith(`The domain "first.xyz" has been successfully created.`);
-    expect(fakeOutput.success).toHaveBeenCalledWith(`Domain "first.xyz" was verified.`);
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `The domain "first.xyz" has been successfully created.`,
+    );
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `Domain "first.xyz" was verified.`,
+    );
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
@@ -211,12 +231,14 @@ describe('Create domain for site', () => {
       createDomainAction({
         sdk: context.fakeSdk,
         args: { siteId: 'firstSiteId', hostname: 'first.xyz' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(context.fakeSdk.domains().createZoneForSite).not.toHaveBeenCalled();
 
-    expect(fakeOutput.success).toHaveBeenCalledWith(`Domain "first.xyz" was verified.`);
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `Domain "first.xyz" was verified.`,
+    );
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
@@ -231,11 +253,13 @@ describe('Create domain for site', () => {
       createDomainAction({
         sdk: context.fakeSdk,
         args: { siteId: 'firstSiteId', hostname: 'first.xyz' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(fakeOutput.success).not.toHaveBeenCalled();
-    expect(fakeOutput.error).toHaveBeenCalledWith(`Your domain couldn't be created. Try it again.`);
+    expect(fakeOutput.error).toHaveBeenCalledWith(
+      `Your domain couldn't be created. Try it again.`,
+    );
   });
 
   it<TestContext>('Creating of domain takes too long', async (context) => {
@@ -244,10 +268,14 @@ describe('Create domain for site', () => {
       status: 'CREATING',
     });
 
-    await expect(createDomainAction({ sdk: context.fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      createDomainAction({ sdk: context.fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.success).not.toHaveBeenCalled();
-    expect(fakeOutput.warn).toHaveBeenCalledWith(`The DNS configuration is taking longer than anticipated.`);
+    expect(fakeOutput.warn).toHaveBeenCalledWith(
+      'The DNS configuration is taking longer than anticipated.',
+    );
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
 
@@ -257,11 +285,15 @@ describe('Create domain for site', () => {
       status: 'CREATING_FAILED',
     });
 
-    await expect(createDomainAction({ sdk: context.fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      createDomainAction({ sdk: context.fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.success).not.toHaveBeenCalled();
     expect(fakeOutput.warn).not.toHaveBeenCalled();
-    expect(fakeOutput.error).toHaveBeenCalledWith(`Your domain couldn't be created. Try it again.`);
+    expect(fakeOutput.error).toHaveBeenCalledWith(
+      `Your domain couldn't be created. Try it again.`,
+    );
   });
 
   it<TestContext>('Verifying of domain takes too long', async (context) => {
@@ -270,10 +302,14 @@ describe('Create domain for site', () => {
       status: 'VERIFYING',
     });
 
-    await expect(createDomainAction({ sdk: context.fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      createDomainAction({ sdk: context.fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.success).toHaveBeenCalledOnce();
-    expect(fakeOutput.warn).toHaveBeenCalledWith(`The DNS configuration is taking longer than anticipated.`);
+    expect(fakeOutput.warn).toHaveBeenCalledWith(
+      'The DNS configuration is taking longer than anticipated.',
+    );
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
 
@@ -287,14 +323,16 @@ describe('Create domain for site', () => {
     (waitForAnyKey as Mock).mockResolvedValueOnce(undefined);
     (waitForAnyKey as Mock).mockRejectedValue('Ctrl+C');
 
-    await expect(createDomainAction({ sdk: context.fakeSdk, args: {} })).rejects.toThrowError('Ctrl+C');
+    await expect(
+      createDomainAction({ sdk: context.fakeSdk, args: {} }),
+    ).rejects.toThrowError('Ctrl+C');
 
     expect(waitForAnyKey).toHaveBeenCalledTimes(2);
 
     expect(fakeOutput.success).toHaveBeenCalledOnce();
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).toHaveBeenCalledWith(
-      `The verification of domain "first.xyz" failed. Please ensure your provider has the correct DNS configuration.`
+      `The verification of domain "first.xyz" failed. Please ensure your provider has the correct DNS configuration.`,
     );
   });
 });

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { loadConfiguration } from '../../utils/configuration/loadConfiguration';
 import { t } from '../../utils/translation';
@@ -10,7 +10,10 @@ type DeployActionArgs = {
   predefinedConfigPath?: string;
 };
 
-const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args: { predefinedConfigPath } }) => {
+const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
+  sdk,
+  args: { predefinedConfigPath },
+}) => {
   const config = await loadConfiguration({ predefinedConfigPath });
 
   const siteConfig = config.sites[0];
@@ -48,7 +51,9 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({ sdk, args: {
 
   const hash = root.cid.toString();
 
-  const deployment = await sdk.sites().createCustomIpfsDeployment({ cid: hash, siteId: site.id });
+  const deployment = await sdk
+    .sites()
+    .createCustomIpfsDeployment({ cid: hash, siteId: site.id });
 
   await waitUntilDeploymentFinishedAndInformUser({
     sdk,

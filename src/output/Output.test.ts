@@ -7,7 +7,8 @@ import { Icons, Output } from './Output';
 type ParseStreamArgs = PassThrough;
 
 const mockStream = new PassThrough();
-const parseStream = (stream: ParseStreamArgs) => Buffer.from(stream.read()).toString('utf-8');
+const parseStream = (stream: ParseStreamArgs) =>
+  Buffer.from(stream.read()).toString('utf-8');
 
 test('real life use case #1', () => {
   const output = new Output({ stream: mockStream, debug: true });
@@ -44,15 +45,21 @@ test('print without prefix', () => {
 
   output.print('This is my test without prefix');
 
-  expect(parseStream(mockStream)).toMatchInlineSnapshot('"This is my test without prefix"');
+  expect(parseStream(mockStream)).toMatchInlineSnapshot(
+    '"This is my test without prefix"',
+  );
 });
 
 test('print with prefix', () => {
   const output = new Output({ stream: mockStream, debug: true });
 
-  output.print('This is my test with prefix', { prefix: { message: 'YOLO', color: 'red' } });
+  output.print('This is my test with prefix', {
+    prefix: { message: 'YOLO', color: 'red' },
+  });
 
-  expect(parseStream(mockStream)).toMatchInlineSnapshot('"YOLO This is my test with prefix"');
+  expect(parseStream(mockStream)).toMatchInlineSnapshot(
+    '"YOLO This is my test with prefix"',
+  );
 });
 
 test('print 1 new line between logs', () => {

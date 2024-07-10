@@ -1,8 +1,11 @@
-import { getIpfsGatewayUrl, getPrivateIpfsGatewayUrl } from '@fleek-platform/utils-ipfs';
-import fs from 'fs';
+import fs from 'node:fs';
+import {
+  getIpfsGatewayUrl,
+  getPrivateIpfsGatewayUrl,
+} from '@fleek-platform/utils-ipfs';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getAllActivePrivateGatewayDomains } from '../gateways/utils/getAllPrivateGatewayDomains';
@@ -31,7 +34,9 @@ const addAction: SdkGuardedFunction<AddActionArgs> = async ({ sdk, args }) => {
     return;
   }
 
-  const privateGatewayDomains = await getAllActivePrivateGatewayDomains({ sdk });
+  const privateGatewayDomains = await getAllActivePrivateGatewayDomains({
+    sdk,
+  });
 
   const hash = root.cid.toString();
   const successMsg = t('uploadPathSuccessWithCID', { path: args.path, hash });
@@ -53,7 +58,7 @@ const addAction: SdkGuardedFunction<AddActionArgs> = async ({ sdk, args }) => {
       getPrivateIpfsGatewayUrl({
         hostname: privateGatewayDomain.hostname,
         hash,
-      })
+      }),
     );
   }
 };

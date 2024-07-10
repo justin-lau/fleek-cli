@@ -2,19 +2,24 @@ import { InvalidCidError } from '@fleek-platform/errors';
 import { CID } from 'multiformats';
 
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { createOutputTable } from './utils/CreateOutputTable';
+
+import type { StoragePin } from '@fleek-platform/sdk';
 
 type GetActionArgs = {
   cid?: string;
   name?: string;
 };
 
-export const getStorageAction: SdkGuardedFunction<GetActionArgs> = async ({ sdk, args }) => {
+export const getStorageAction: SdkGuardedFunction<GetActionArgs> = async ({
+  sdk,
+  args,
+}) => {
   const { cid, name } = args;
-  let storage;
+  let storage: StoragePin[] | undefined;
 
   if (typeof name === 'string') {
     const splitFilename = name.split('.');
@@ -36,7 +41,12 @@ export const getStorageAction: SdkGuardedFunction<GetActionArgs> = async ({ sdk,
   }
 
   if (!storage || storage?.length === 0) {
-    output.warn(t('storageGetNotFound', { type: `${cid ? 'cid' : 'name'}`, value: cid || name || '' }));
+    output.warn(
+      t('storageGetNotFound', {
+        type: `${cid ? 'cid' : 'name'}`,
+        value: cid || name || '',
+      }),
+    );
     output.log(t('storageAddSuggestion'));
     output.log('fleek storage add <file_path>');
 

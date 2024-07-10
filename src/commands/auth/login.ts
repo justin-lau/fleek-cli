@@ -12,16 +12,20 @@ type LoginActionHandlerArgs = {
   authApiUrl: string;
 };
 
-export const loginActionHandler = async ({ uiAppUrl, authApiUrl }: LoginActionHandlerArgs) => {
+export const loginActionHandler = async ({
+  uiAppUrl,
+  authApiUrl,
+}: LoginActionHandlerArgs) => {
   const verificationSessionId = generateVerificationSessionId();
 
   showVerificationSessionLink({ output, uiAppUrl, verificationSessionId });
 
   const client = createClient({ url: authApiUrl });
-  const personalAccessToken = await waitForPersonalAccessTokenFromVerificationSession({
-    verificationSessionId,
-    client,
-  });
+  const personalAccessToken =
+    await waitForPersonalAccessTokenFromVerificationSession({
+      verificationSessionId,
+      client,
+    });
 
   if (!personalAccessToken) {
     output.error(t('timeoutPATfetch'));

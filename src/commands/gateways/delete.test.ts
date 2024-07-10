@@ -2,12 +2,14 @@ import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
-import { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
+import type { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
 import { deletePrivateGatewayAction } from './delete';
 import { getPrivateGatewayOrPrompt } from './prompts/getPrivateGatewayOrPrompt';
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => {
-  const checkPeriodicallyUntil = async <T>({ conditionFn }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
+  const checkPeriodicallyUntil = async <T>({
+    conditionFn,
+  }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
     return conditionFn();
   };
 
@@ -66,7 +68,7 @@ describe('Delete private gateway', () => {
       deletePrivateGatewayAction({
         sdk: context.fakeSdk,
         args: { id: 'firstPrivateGatewayId' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(getPrivateGatewayOrPrompt).toHaveBeenCalledWith({
@@ -78,7 +80,9 @@ describe('Delete private gateway', () => {
     });
 
     expect(output.spinner).toHaveBeenCalledWith('Deleting private gateway');
-    expect(output.success).toHaveBeenCalledWith('The Private Gateway "first gateway" has been successfully deleted.');
+    expect(output.success).toHaveBeenCalledWith(
+      'The Private Gateway "first gateway" has been successfully deleted.',
+    );
     expect(output.error).not.toHaveBeenCalled();
   });
 
@@ -87,7 +91,7 @@ describe('Delete private gateway', () => {
       deletePrivateGatewayAction({
         sdk: context.fakeSdk,
         args: { slug: 'first-blue-fish' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(getPrivateGatewayOrPrompt).toHaveBeenCalledWith({
@@ -99,7 +103,9 @@ describe('Delete private gateway', () => {
     });
 
     expect(output.spinner).toHaveBeenCalledWith('Deleting private gateway');
-    expect(output.success).toHaveBeenCalledWith('The Private Gateway "first gateway" has been successfully deleted.');
+    expect(output.success).toHaveBeenCalledWith(
+      'The Private Gateway "first gateway" has been successfully deleted.',
+    );
     expect(output.error).not.toHaveBeenCalled();
   });
 });

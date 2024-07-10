@@ -8,7 +8,7 @@ export const selectConfigurationFormatPrompt = async () => {
     { title: 'JSON (fleek.config.json)', value: 'json' } as const,
   ];
 
-  return selectPrompt<typeof choices[number]['value']>({
+  return selectPrompt<(typeof choices)[number]['value']>({
     message: `${t('selectFormatForSiteConf')}:`,
     choices,
   });

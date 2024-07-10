@@ -1,4 +1,4 @@
-import { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
@@ -12,7 +12,9 @@ export const createSite = async ({ sdk }: CreateSiteArgs) => {
   output.spinner(`${t('creatingSite')}...`);
   const site = await sdk.sites().create({ name });
   output.printNewLine();
-  output.success(t('commonNameCreateSuccess', { name: `${t('site')} "${name}"` }));
+  output.success(
+    t('commonNameCreateSuccess', { name: `${t('site')} "${name}"` }),
+  );
   output.printNewLine();
 
   return site;

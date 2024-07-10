@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import ora, { Options, Ora } from 'ora';
+import ora, { type Options, type Ora } from 'ora';
 
 import { eraseLines } from './eraseLines';
 

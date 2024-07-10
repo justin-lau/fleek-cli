@@ -4,4 +4,5 @@ type IsNameValidArgs = {
   name: string;
 };
 
-export const isNameValid = ({ name }: IsNameValidArgs) => nameValidation.safeParse(name).success;
+export const isNameValid = ({ name }: IsNameValidArgs) =>
+  nameValidation.safeParse(name).success;

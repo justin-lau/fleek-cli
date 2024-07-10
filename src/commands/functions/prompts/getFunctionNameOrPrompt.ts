@@ -7,7 +7,9 @@ type GetFunctionNameOrPromptArgs = {
   name?: string;
 };
 
-export const getFunctionNameOrPrompt = async ({ name }: GetFunctionNameOrPromptArgs): Promise<string> => {
+export const getFunctionNameOrPrompt = async ({
+  name,
+}: GetFunctionNameOrPromptArgs): Promise<string> => {
   if (name && isFunctionNameValid({ name })) {
     return name;
   }

@@ -1,5 +1,5 @@
 import { ProjectsNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk, Project } from '@fleek-platform/sdk';
+import type { FleekSdk, Project } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -9,7 +9,10 @@ type GetProjectOrPromptArgs = {
   id?: string;
 };
 
-export const getProjectOrPrompt = async ({ sdk, id }: GetProjectOrPromptArgs): Promise<Project> => {
+export const getProjectOrPrompt = async ({
+  sdk,
+  id,
+}: GetProjectOrPromptArgs): Promise<Project | undefined> => {
   if (id) {
     return await sdk.projects().get({ id });
   }
@@ -22,8 +25,15 @@ export const getProjectOrPrompt = async ({ sdk, id }: GetProjectOrPromptArgs): P
 
   const projectId = await selectPrompt({
     message: `${t('commonSelectXFromList', { subject: t('aProject') })}:`,
-    choices: projects.map((project) => ({ title: project.name, value: project.id })),
+    choices: projects.map((project) => ({
+      title: project.name,
+      value: project.id,
+    })),
   });
 
-  return projects.find((project) => project.id === projectId)!;
+  const matchProject = projects.find((project) => project.id === projectId);
+
+  if (!matchProject) return;
+
+  return matchProject;
 };

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getSiteEnsRecords } from './utils/getSiteEnsRecords';
@@ -8,8 +8,12 @@ export type ListEnsRecordsActionArgs = {
   siteId?: string;
 };
 
-export const listEnsRecordsAction: SdkGuardedFunction<ListEnsRecordsActionArgs> = async ({ sdk, args }) => {
-  const ensRecords = args.siteId ? await getSiteEnsRecords({ site: { id: args.siteId }, sdk }) : await sdk.ens().list();
+export const listEnsRecordsAction: SdkGuardedFunction<
+  ListEnsRecordsActionArgs
+> = async ({ sdk, args }) => {
+  const ensRecords = args.siteId
+    ? await getSiteEnsRecords({ site: { id: args.siteId }, sdk })
+    : await sdk.ens().list();
 
   if (ensRecords.length === 0) {
     output.log(t('noENSNames'));
@@ -22,7 +26,7 @@ export const listEnsRecordsAction: SdkGuardedFunction<ListEnsRecordsActionArgs> 
       ENS: name,
       Status: status,
       'Created At': createdAt,
-    }))
+    })),
   );
 };
 

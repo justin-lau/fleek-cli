@@ -1,4 +1,4 @@
-import { MockSTDIN, stdin } from 'mock-stdin';
+import { type MockSTDIN, stdin } from 'mock-stdin';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { mockProcessExit } from 'vitest-mock-process';
 

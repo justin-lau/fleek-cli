@@ -1,4 +1,4 @@
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { t } from '../../utils/translation';
 import { createDomainActionHandler } from './create';
@@ -8,20 +8,27 @@ import { listDomainsActionHandler } from './list';
 import { verifyDomainActionHandler } from './verify';
 
 export default (program: Command) => {
-  const cmd = program.command('domains').option('-h, --help', t('printHelp')).description(t('domainsDesc'));
+  const cmd = program
+    .command('domains')
+    .option('-h, --help', t('printHelp'))
+    .description(t('domainsDesc'));
 
   cmd
     .command('list')
     .option('--siteId <string>', t('siteIDDomainAssignTo'))
     .description(t('listAllDomainsSelectProject'))
-    .action((options: { siteId?: string }) => listDomainsActionHandler(options));
+    .action((options: { siteId?: string }) =>
+      listDomainsActionHandler(options),
+    );
 
   cmd
     .command('detail')
     .option('--id <string>', t('idOfDomainForDetails'))
     .option('--hostname <string>', t('hostnameOfDomainForDetails'))
     .description(t('showDomainDetails'))
-    .action((options: { id?: string; hostname?: string }) => detailDomainActionHandler(options));
+    .action((options: { id?: string; hostname?: string }) =>
+      detailDomainActionHandler(options),
+    );
 
   cmd
     .command('create')
@@ -31,23 +38,46 @@ export default (program: Command) => {
     .option('--siteSlug <string>', t('slugCreateDomainFor'))
     .option('--hostname <string>', t('hostnameCreateDomainFor'))
     .description(t('createDomainForSiteOrGw'))
-    .action((options: { privateGatewayName?: string; siteId?: string; siteSlug?: string; hostname?: string }) =>
-      createDomainActionHandler(options)
+    .action(
+      (options: {
+        privateGatewayName?: string;
+        siteId?: string;
+        siteSlug?: string;
+        hostname?: string;
+      }) => createDomainActionHandler(options),
     );
 
   cmd
     .command('delete')
-    .option('--id <string>', t('commonNameOfSubjectToAction', { name: t('id'), subject: t('domain'), action: t('delete') }))
-    .option('--hostname <string>', t('commonNameOfSubjectToAction', { name: t('hostname'), subject: t('ens'), action: t('delete') }))
+    .option(
+      '--id <string>',
+      t('commonNameOfSubjectToAction', {
+        name: t('id'),
+        subject: t('domain'),
+        action: t('delete'),
+      }),
+    )
+    .option(
+      '--hostname <string>',
+      t('commonNameOfSubjectToAction', {
+        name: t('hostname'),
+        subject: t('ens'),
+        action: t('delete'),
+      }),
+    )
     .description(t('deleteDomain'))
-    .action((options: { hostname?: string }) => deleteDomainActionHandler(options));
+    .action((options: { hostname?: string }) =>
+      deleteDomainActionHandler(options),
+    );
 
   cmd
     .command('verify')
     .option('--id <string>', t('verifyDomainById'))
     .option('--hostname <string>', t('verifyDomainByHostname'))
     .description(t('verifyDomainConfig'))
-    .action((options: { hostname?: string }) => verifyDomainActionHandler(options));
+    .action((options: { hostname?: string }) =>
+      verifyDomainActionHandler(options),
+    );
 
   cmd.command('help').description(t('printHelp'));
 };

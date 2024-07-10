@@ -1,5 +1,5 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output as fakeOutput } from '../../cli';
 import { listDomainsAction } from './list';
@@ -53,7 +53,9 @@ vi.mock('@fleek-platform/sdk', () => {
   FleekSdkMock.prototype.domains = () => domains;
 
   const sites = {
-    get: vi.fn().mockResolvedValue({ id: 'testSiteId', zones: [{ id: 'testZoneId' }] }),
+    get: vi
+      .fn()
+      .mockResolvedValue({ id: 'testSiteId', zones: [{ id: 'testZoneId' }] }),
   };
 
   FleekSdkMock.prototype.sites = () => sites;
@@ -68,7 +70,9 @@ describe('List all domains', () => {
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(listDomainsAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      listDomainsAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.table).toHaveBeenCalledWith([
       {
@@ -89,7 +93,6 @@ describe('List all domains', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.domains().listByZoneId as Mock).mockResolvedValueOnce([
       {
         id: 'firstDomainId',
@@ -99,7 +102,9 @@ describe('List all domains', () => {
       },
     ]);
 
-    await expect(listDomainsAction({ sdk: fakeSdk, args: { siteId: 'testSiteId' } })).resolves.toBeUndefined();
+    await expect(
+      listDomainsAction({ sdk: fakeSdk, args: { siteId: 'testSiteId' } }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.sites().get as Mock).toHaveBeenNthCalledWith(1, {
       id: 'testSiteId',

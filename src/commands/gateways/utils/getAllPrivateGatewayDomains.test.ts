@@ -1,7 +1,10 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
-import { getAllActivePrivateGatewayDomains, getAllPrivateGatewayDomains } from './getAllPrivateGatewayDomains';
+import {
+  getAllActivePrivateGatewayDomains,
+  getAllPrivateGatewayDomains,
+} from './getAllPrivateGatewayDomains';
 
 vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
@@ -38,11 +41,15 @@ vi.mock('@fleek-platform/sdk', () => {
 
 describe('Get domains assigned to all private gateways under current project', () => {
   it('should return 4 domains for 2 gateways', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
 
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(getAllPrivateGatewayDomains({ sdk: fakeSdk })).resolves.toEqual([
+    await expect(
+      getAllPrivateGatewayDomains({ sdk: fakeSdk }),
+    ).resolves.toEqual([
       { id: 'firstDomainId', hostname: 'first.xyz', status: 'ACTIVE' },
       { id: 'secondDomainId', hostname: 'second.xyz' },
       { id: 'thirdDomainId', hostname: 'third.xyz', status: 'ACTIVE' },
@@ -50,33 +57,48 @@ describe('Get domains assigned to all private gateways under current project', (
     ]);
 
     expect(fakeSdk.privateGateways().list).toHaveBeenCalledOnce();
-    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({ zoneId: 'firstZoneId' });
-    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({ zoneId: 'secondZoneId' });
+    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({
+      zoneId: 'firstZoneId',
+    });
+    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({
+      zoneId: 'secondZoneId',
+    });
   });
 
   it('should return 1 active domain for both gateways', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
 
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(getAllActivePrivateGatewayDomains({ sdk: fakeSdk })).resolves.toEqual([
+    await expect(
+      getAllActivePrivateGatewayDomains({ sdk: fakeSdk }),
+    ).resolves.toEqual([
       { id: 'firstDomainId', hostname: 'first.xyz', status: 'ACTIVE' },
       { id: 'thirdDomainId', hostname: 'third.xyz', status: 'ACTIVE' },
     ]);
 
     expect(fakeSdk.privateGateways().list).toHaveBeenCalledOnce();
-    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({ zoneId: 'firstZoneId' });
-    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({ zoneId: 'secondZoneId' });
+    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({
+      zoneId: 'firstZoneId',
+    });
+    expect(fakeSdk.domains().listByZoneId).toHaveBeenCalledWith({
+      zoneId: 'secondZoneId',
+    });
   });
 
   it('should return no domains because no gateway exists for current project', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
 
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.privateGateways().list as Mock).mockResolvedValueOnce([]);
 
-    await expect(getAllPrivateGatewayDomains({ sdk: fakeSdk })).resolves.toEqual([]);
+    await expect(
+      getAllPrivateGatewayDomains({ sdk: fakeSdk }),
+    ).resolves.toEqual([]);
 
     expect(fakeSdk.privateGateways().list).toHaveBeenCalledOnce();
     expect(fakeSdk.domains().listByZoneId).not.toHaveBeenCalled();

@@ -1,5 +1,5 @@
+import fs from 'node:fs';
 import dotenv from 'dotenv';
-import fs from 'fs';
 
 import { output } from '../../../cli';
 import { t } from '../../../utils/translation';
@@ -10,7 +10,9 @@ export type ParseEnvironmentVariablesArgs = { env: string[] };
 export type ParseEnvironmentVariablesFileArgs = { envFile: string };
 export type GetEnvironmentVariablesArgs = { env: string[]; envFile?: string };
 
-export const parseEnvironmentVariablesFile = (args: ParseEnvironmentVariablesFileArgs): EnvironmentVariables => {
+export const parseEnvironmentVariablesFile = (
+  args: ParseEnvironmentVariablesFileArgs,
+): EnvironmentVariables => {
   const { envFile } = args;
 
   if (!fs.statSync(envFile).isFile()) {
@@ -31,7 +33,9 @@ export const parseEnvironmentVariablesFile = (args: ParseEnvironmentVariablesFil
   }
 };
 
-export const parseEnvironmentVariables = (args: ParseEnvironmentVariablesArgs): EnvironmentVariables => {
+export const parseEnvironmentVariables = (
+  args: ParseEnvironmentVariablesArgs,
+): EnvironmentVariables => {
   const { env } = args;
 
   return env.reduce<{ [key: string]: string }>((acc, curr) => {
@@ -58,7 +62,9 @@ export const parseEnvironmentVariables = (args: ParseEnvironmentVariablesArgs): 
   }, {});
 };
 
-export const getEnvironmentVariables = (args: GetEnvironmentVariablesArgs): EnvironmentVariables => {
+export const getEnvironmentVariables = (
+  args: GetEnvironmentVariablesArgs,
+): EnvironmentVariables => {
   const { env, envFile } = args;
 
   const environmentVariables = parseEnvironmentVariables({ env });

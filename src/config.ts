@@ -12,7 +12,11 @@ const schema = {
   projectId: { type: 'string' },
 } as const;
 
-const conf = new Conf<ConfSchema>({ schema, projectName: 'fleek', configName: 'global' });
+const conf = new Conf<ConfSchema>({
+  schema,
+  projectName: 'fleek',
+  configName: 'global',
+});
 
 export const config = {
   personalAccessToken: {

@@ -1,4 +1,4 @@
-import { Domain, DomainStatus, FleekSdk } from '@fleek-platform/sdk';
+import type { Domain, DomainStatus, FleekSdk } from '@fleek-platform/sdk';
 
 type DomainFilter = {
   status?: DomainStatus;
@@ -9,16 +9,28 @@ type GetAllPrivateGatewayDomainsArgs = {
   filter?: DomainFilter;
 };
 
-type GetAllActivePrivateGatewayDomainsArgs = Pick<GetAllPrivateGatewayDomainsArgs, 'sdk'>;
+type GetAllActivePrivateGatewayDomainsArgs = Pick<
+  GetAllPrivateGatewayDomainsArgs,
+  'sdk'
+>;
 
-export const getAllPrivateGatewayDomains = async ({ sdk, filter }: GetAllPrivateGatewayDomainsArgs): Promise<Domain[]> => {
+export const getAllPrivateGatewayDomains = async ({
+  sdk,
+  filter,
+}: GetAllPrivateGatewayDomainsArgs): Promise<Domain[]> => {
   const privateGateways = await sdk.privateGateways().list();
 
   if (privateGateways.length === 0) {
     return [];
   }
 
-  const domainPromises = privateGateways.map(async (privateGateway) => sdk.domains().listByZoneId({ zoneId: privateGateway.zone!.id }));
+  const domainPromises = privateGateways.map(async (privateGateway) => {
+    const zoneId = privateGateway.zone?.id;
+
+    if (!zoneId) return [];
+
+    return sdk.domains().listByZoneId({ zoneId });
+  });
 
   const domains = (await Promise.all(domainPromises)).flat();
 
@@ -26,11 +38,16 @@ export const getAllPrivateGatewayDomains = async ({ sdk, filter }: GetAllPrivate
     ? domains.filter((domain: Domain) =>
         Object.entries(filter).every(([key, value]) => {
           return domain[key as keyof Domain] === value;
-        })
+        }),
       )
     : domains;
 };
 
-export const getAllActivePrivateGatewayDomains = async ({ sdk }: GetAllActivePrivateGatewayDomainsArgs): Promise<Domain[]> => {
-  return await getAllPrivateGatewayDomains({ sdk, filter: { status: 'ACTIVE' } });
+export const getAllActivePrivateGatewayDomains = async ({
+  sdk,
+}: GetAllActivePrivateGatewayDomainsArgs): Promise<Domain[]> => {
+  return await getAllPrivateGatewayDomains({
+    sdk,
+    filter: { status: 'ACTIVE' },
+  });
 };

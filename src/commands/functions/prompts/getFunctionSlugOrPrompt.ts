@@ -5,10 +5,14 @@ type GetFunctionSlugOrPromptArgs = {
   slug?: string;
 };
 
-export const getFunctionSlugOrPrompt = async ({ slug }: GetFunctionSlugOrPromptArgs): Promise<string> => {
+export const getFunctionSlugOrPrompt = async ({
+  slug,
+}: GetFunctionSlugOrPromptArgs): Promise<string | undefined> => {
   if (slug && isFunctionSlugValid({ slug })) {
     return slug;
   }
 
-  throw new FleekFunctionSlugNotValidError({ slug: slug! });
+  if (!slug) return;
+
+  throw new FleekFunctionSlugNotValidError({ slug });
 };

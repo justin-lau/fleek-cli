@@ -1,4 +1,4 @@
-import { FleekError } from '@fleek-platform/errors';
+import type { FleekError } from '@fleek-platform/errors';
 
 import { output } from '../cli';
 import { initConfiguration } from '../commands/sites/utils/initCongifuration';
@@ -6,7 +6,9 @@ import { loadConfiguration } from '../utils/configuration/loadConfiguration';
 import { t } from '../utils/translation';
 import { getSdkClient } from './sdkGuard';
 
-export const sitesGuard = async ({ predefinedConfigPath }: { predefinedConfigPath?: string }) => {
+export const sitesGuard = async ({
+  predefinedConfigPath,
+}: { predefinedConfigPath?: string }) => {
   const isConfigValid = await loadConfiguration({ predefinedConfigPath })
     .then(() => true)
     .catch((e: FleekError<unknown>) => {
@@ -20,6 +22,13 @@ export const sitesGuard = async ({ predefinedConfigPath }: { predefinedConfigPat
     output.printNewLine();
 
     const sdk = getSdkClient();
-    await initConfiguration({ sdk: sdk! });
+
+    if (!sdk) {
+      output.error(t('unexpectedError'));
+
+      return false;
+    }
+
+    await initConfiguration({ sdk });
   }
 };

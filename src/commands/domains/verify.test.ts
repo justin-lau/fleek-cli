@@ -1,5 +1,5 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
 import { checkPeriodicallyUntil as fakeCheckPeriodicallyUntil } from '../../utils/checkPeriodicallyUntil';
@@ -16,9 +16,15 @@ vi.mock('./prompts/getDomainOrPrompt', () => ({
 }));
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => ({
-  checkPeriodicallyUntil: vi.fn().mockImplementation(async <T>({ conditionFn }: { conditionFn: () => Promise<T> }): Promise<T> => {
-    return await conditionFn();
-  }),
+  checkPeriodicallyUntil: vi
+    .fn()
+    .mockImplementation(
+      async <T>({
+        conditionFn,
+      }: { conditionFn: () => Promise<T> }): Promise<T> => {
+        return await conditionFn();
+      },
+    ),
 }));
 
 vi.mock('../../cli', () => {
@@ -51,24 +57,39 @@ vi.mock('@fleek-platform/sdk', () => {
 
 describe('Verify domain', () => {
   it('Domain was successfully verified', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(verifyDomainAction({ sdk: fakeSdk, args: { id: 'firstDomainId' } })).resolves.toBeUndefined();
+    await expect(
+      verifyDomainAction({ sdk: fakeSdk, args: { id: 'firstDomainId' } }),
+    ).resolves.toBeUndefined();
 
-    expect(getDomainOrPrompt).toHaveBeenCalledWith({ sdk: fakeSdk, id: 'firstDomainId', choicesFilter: expect.any(Function) });
+    expect(getDomainOrPrompt).toHaveBeenCalledWith({
+      sdk: fakeSdk,
+      id: 'firstDomainId',
+      choicesFilter: expect.any(Function),
+    });
     expect(fakeCheckPeriodicallyUntil).toHaveBeenCalledOnce();
-    expect(fakeSdk.domains().verifyDomain).toHaveBeenCalledWith({ domainId: 'firstDomainId' });
-    expect(fakeSdk.domains().get).toHaveBeenCalledWith({ domainId: 'firstDomainId' });
+    expect(fakeSdk.domains().verifyDomain).toHaveBeenCalledWith({
+      domainId: 'firstDomainId',
+    });
+    expect(fakeSdk.domains().get).toHaveBeenCalledWith({
+      domainId: 'firstDomainId',
+    });
 
-    expect(output.success).toHaveBeenCalledWith(`The domain "first.xyz" has been successfully verified.`);
+    expect(output.success).toHaveBeenCalledWith(
+      `The domain "first.xyz" has been successfully verified.`,
+    );
     expect(output.error).not.toHaveBeenCalled();
   });
 
   it('Domain is already verified', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (getDomainOrPrompt as Mock).mockResolvedValueOnce({
       id: 'firstDomainId',
       hostname: 'first.xyz',
@@ -76,39 +97,64 @@ describe('Verify domain', () => {
       createdAt: '2023-02-01T00:00:00.000Z',
     });
 
-    await expect(verifyDomainAction({ sdk: fakeSdk, args: { id: 'firstDomainId' } })).resolves.toBeUndefined();
+    await expect(
+      verifyDomainAction({ sdk: fakeSdk, args: { id: 'firstDomainId' } }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.domains().verifyDomain).not.toHaveBeenCalled();
 
-    expect(output.success).toHaveBeenCalledWith(`The domain "first.xyz" has already been verified.`);
+    expect(output.success).toHaveBeenCalledWith(
+      `The domain "first.xyz" has already been verified.`,
+    );
     expect(output.error).not.toHaveBeenCalled();
   });
 
   it(`Domain wasn't verified`, async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
+    (fakeSdk.domains().get as Mock).mockResolvedValue({
+      id: 'firstDomainId',
+      status: 'VERIFYING_FAILED',
+    });
 
-    (fakeSdk.domains().get as Mock).mockResolvedValue({ id: 'firstDomainId', status: 'VERIFYING_FAILED' });
+    await expect(
+      verifyDomainAction({ sdk: fakeSdk, args: { hostname: 'first.xyz' } }),
+    ).resolves.toBeUndefined();
 
-    await expect(verifyDomainAction({ sdk: fakeSdk, args: { hostname: 'first.xyz' } })).resolves.toBeUndefined();
-
-    expect(getDomainOrPrompt).toHaveBeenCalledWith({ sdk: fakeSdk, hostname: 'first.xyz', choicesFilter: expect.any(Function) });
+    expect(getDomainOrPrompt).toHaveBeenCalledWith({
+      sdk: fakeSdk,
+      hostname: 'first.xyz',
+      choicesFilter: expect.any(Function),
+    });
     expect(output.success).not.toHaveBeenCalled();
     expect(output.error).toHaveBeenCalledWith(
-      `The verification of domain "first.xyz" failed. Please ensure your provider has the correct DNS configuration.`
+      `The verification of domain "first.xyz" failed. Please ensure your provider has the correct DNS configuration.`,
     );
   });
 
   it('Domain verification takes too long and user must manually obtain result', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
+    (fakeSdk.domains().get as Mock).mockResolvedValue({
+      id: 'firstDomainId',
+      status: 'VERIFYING',
+    });
 
-    (fakeSdk.domains().get as Mock).mockResolvedValue({ id: 'firstDomainId', status: 'VERIFYING' });
+    await expect(
+      verifyDomainAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
-    await expect(verifyDomainAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
-
-    expect(getDomainOrPrompt).toHaveBeenCalledWith({ sdk: fakeSdk, choicesFilter: expect.any(Function) });
+    expect(getDomainOrPrompt).toHaveBeenCalledWith({
+      sdk: fakeSdk,
+      choicesFilter: expect.any(Function),
+    });
     expect(output.success).not.toHaveBeenCalled();
-    expect(output.warn).toHaveBeenCalledWith(`The process of verifying your domain is taking longer than anticipated.`);
+    expect(output.warn).toHaveBeenCalledWith(
+      'The process of verifying your domain is taking longer than anticipated.',
+    );
   });
 });

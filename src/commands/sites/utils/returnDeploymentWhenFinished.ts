@@ -1,4 +1,4 @@
-import { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk';
 
 type ReturnDeploymentWhenFinishedArgs = {
   sdk: FleekSdk;
@@ -10,7 +10,10 @@ export const returnDeploymentWhenFinished =
   async () => {
     const deployment = await sdk.sites().getDeployment({ id: deploymentId });
 
-    if (deployment.status === 'RELEASE_COMPLETED' || deployment.status === 'RELEASE_FAILED') {
+    if (
+      deployment.status === 'RELEASE_COMPLETED' ||
+      deployment.status === 'RELEASE_FAILED'
+    ) {
       return deployment.status;
     }
 

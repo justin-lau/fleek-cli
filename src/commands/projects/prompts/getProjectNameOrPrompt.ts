@@ -8,7 +8,9 @@ type GetProjectNameOrPromptArgs = {
   name?: string;
 };
 
-export const getProjectNameOrPrompt = async ({ name }: GetProjectNameOrPromptArgs) => {
+export const getProjectNameOrPrompt = async ({
+  name,
+}: GetProjectNameOrPromptArgs) => {
   if (name && isProjectNameValid({ name })) {
     return name;
   }
@@ -19,6 +21,8 @@ export const getProjectNameOrPrompt = async ({ name }: GetProjectNameOrPromptArg
 
   return textPrompt({
     message: `${t('enterProjectName')}:`,
-    validate: (partialName) => isProjectNameValid({ name: partialName }) || t('mustHaveXandYValidChars', { min: '3', max: '30' }),
+    validate: (partialName) =>
+      isProjectNameValid({ name: partialName }) ||
+      t('mustHaveXandYValidChars', { min: '3', max: '30' }),
   });
 };

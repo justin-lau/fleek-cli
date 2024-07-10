@@ -1,13 +1,16 @@
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
 
-import { FleekRootConfig } from './types';
+import type { FleekRootConfig } from './types';
 
 export type SaveConfigurationArgs = {
   config: FleekRootConfig;
   format: 'ts' | 'js' | 'json';
 };
 
-export const saveConfiguration = async ({ config, format }: SaveConfigurationArgs): Promise<void> => {
+export const saveConfiguration = async ({
+  config,
+  format,
+}: SaveConfigurationArgs): Promise<void> => {
   const prettyStringifiedConfig = JSON.stringify(config, undefined, 2);
 
   if (format === 'ts') {

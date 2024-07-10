@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { createDomainAction } from '../domains/create';
@@ -10,7 +10,9 @@ export type CreatePrivateGatewayActionArgs = {
   name?: string;
 };
 
-export const createPrivateGatewayAction: SdkGuardedFunction<CreatePrivateGatewayActionArgs> = async ({ sdk, args }) => {
+export const createPrivateGatewayAction: SdkGuardedFunction<
+  CreatePrivateGatewayActionArgs
+> = async ({ sdk, args }) => {
   const name = await getPrivateGatewayNameOrPrompt({ name: args.name });
 
   output.spinner(`${t('creatingNewGateway')}...`);
@@ -26,10 +28,14 @@ export const createPrivateGatewayAction: SdkGuardedFunction<CreatePrivateGateway
     return;
   }
 
-  const privateGateway = await sdk.privateGateways().create({ name, zoneId: zone.id });
+  const privateGateway = await sdk
+    .privateGateways()
+    .create({ name, zoneId: zone.id });
 
   output.printNewLine();
-  output.success(t('commonNameCreateSuccess', { name: `${t('privateGateway')} "${name}"` }));
+  output.success(
+    t('commonNameCreateSuccess', { name: `${t('privateGateway')} "${name}"` }),
+  );
   output.printNewLine();
 
   await createDomainAction({
@@ -38,6 +44,9 @@ export const createPrivateGatewayAction: SdkGuardedFunction<CreatePrivateGateway
   });
 };
 
-export const createPrivateGatewayActionHandler = withGuards(createPrivateGatewayAction, {
-  scopes: { authenticated: true, project: true, site: false },
-});
+export const createPrivateGatewayActionHandler = withGuards(
+  createPrivateGatewayAction,
+  {
+    scopes: { authenticated: true, project: true, site: false },
+  },
+);

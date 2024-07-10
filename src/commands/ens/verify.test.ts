@@ -1,5 +1,5 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
 import { checkPeriodicallyUntil as fakeCheckPeriodicallyUntil } from '../../utils/checkPeriodicallyUntil';
@@ -16,9 +16,15 @@ vi.mock('./prompts/getEnsRecordOrPrompt', () => ({
 }));
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => ({
-  checkPeriodicallyUntil: vi.fn().mockImplementation(async <T>({ conditionFn }: { conditionFn: () => Promise<T> }): Promise<T> => {
-    return await conditionFn();
-  }),
+  checkPeriodicallyUntil: vi
+    .fn()
+    .mockImplementation(
+      async <T>({
+        conditionFn,
+      }: { conditionFn: () => Promise<T> }): Promise<T> => {
+        return await conditionFn();
+      },
+    ),
 }));
 
 vi.mock('../../cli', () => {
@@ -57,7 +63,9 @@ describe('Verify ENS record', () => {
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(verifyEnsRecordAction({ sdk: fakeSdk, args: { id: 'firstEnsId' } })).resolves.toBeUndefined();
+    await expect(
+      verifyEnsRecordAction({ sdk: fakeSdk, args: { id: 'firstEnsId' } }),
+    ).resolves.toBeUndefined();
 
     expect(getEnsRecordOrPrompt).toHaveBeenCalledWith({
       sdk: fakeSdk,
@@ -68,7 +76,9 @@ describe('Verify ENS record', () => {
     expect(fakeSdk.ens().verify).toHaveBeenCalledWith({ id: 'firstEnsId' });
     expect(fakeSdk.ens().get).toHaveBeenCalledWith({ id: 'firstEnsId' });
 
-    expect(output.success).toHaveBeenCalledWith(`The ENS "first.eth" was verified.`);
+    expect(output.success).toHaveBeenCalledWith(
+      `The ENS "first.eth" was verified.`,
+    );
     expect(output.error).not.toHaveBeenCalled();
   });
 
@@ -77,7 +87,6 @@ describe('Verify ENS record', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (getEnsRecordOrPrompt as Mock).mockResolvedValueOnce({
       id: 'firstEnsId',
       name: 'first.eth',
@@ -85,11 +94,15 @@ describe('Verify ENS record', () => {
       createdAt: '2023-02-01T00:00:00.000Z',
     });
 
-    await expect(verifyEnsRecordAction({ sdk: fakeSdk, args: { id: 'firstEnsId' } })).resolves.toBeUndefined();
+    await expect(
+      verifyEnsRecordAction({ sdk: fakeSdk, args: { id: 'firstEnsId' } }),
+    ).resolves.toBeUndefined();
 
     expect(fakeSdk.ens().verify).not.toHaveBeenCalled();
 
-    expect(output.success).toHaveBeenCalledWith(`The ENS "first.eth" is already verified.`);
+    expect(output.success).toHaveBeenCalledWith(
+      `The ENS "first.eth" is already verified.`,
+    );
     expect(output.error).not.toHaveBeenCalled();
   });
 
@@ -98,13 +111,14 @@ describe('Verify ENS record', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock).mockResolvedValue({
       id: 'firstEnsId',
       status: 'VERIFYING_FAILED',
     });
 
-    await expect(verifyEnsRecordAction({ sdk: fakeSdk, args: { name: 'first.eth' } })).resolves.toBeUndefined();
+    await expect(
+      verifyEnsRecordAction({ sdk: fakeSdk, args: { name: 'first.eth' } }),
+    ).resolves.toBeUndefined();
 
     expect(getEnsRecordOrPrompt).toHaveBeenCalledWith({
       sdk: fakeSdk,
@@ -113,7 +127,7 @@ describe('Verify ENS record', () => {
     });
     expect(output.success).not.toHaveBeenCalled();
     expect(output.error).toHaveBeenCalledWith(
-      `ENS "first.eth" couldn't be verified! Check https://app.ens.domains/first.eth?tab=records "Content Hash" field.`
+      `ENS "first.eth" couldn't be verified! Check https://app.ens.domains/first.eth?tab=records "Content Hash" field.`,
     );
   });
 
@@ -122,19 +136,22 @@ describe('Verify ENS record', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock).mockResolvedValue({
       id: 'firstEnsId',
       status: 'VERIFYING',
     });
 
-    await expect(verifyEnsRecordAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      verifyEnsRecordAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(getEnsRecordOrPrompt).toHaveBeenCalledWith({
       sdk: fakeSdk,
       choicesFilter: expect.any(Function),
     });
     expect(output.success).not.toHaveBeenCalled();
-    expect(output.warn).toHaveBeenCalledWith(`The process of verifying your ENS is taking longer than anticipated.`);
+    expect(output.warn).toHaveBeenCalledWith(
+      'The process of verifying your ENS is taking longer than anticipated.',
+    );
   });
 });

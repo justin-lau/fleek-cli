@@ -4,7 +4,9 @@ type WaitUntilFileAvailableArgs = {
   cid: string;
 };
 
-export const waitUntilFileAvailable = async ({ cid }: WaitUntilFileAvailableArgs) => {
+export const waitUntilFileAvailable = async ({
+  cid,
+}: WaitUntilFileAvailableArgs) => {
   const timeout = 10000;
   const gatewayPatterns = [
     'https://{cid}.ipfs.dweb.link',
@@ -26,7 +28,10 @@ export const waitUntilFileAvailable = async ({ cid }: WaitUntilFileAvailableArgs
       });
 
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error(`timeout fetching content from ${url}`)), timeout)
+        setTimeout(
+          () => reject(new Error(`timeout fetching content from ${url}`)),
+          timeout,
+        ),
       );
 
       return Promise.race([fetchPromise, timeoutPromise]);

@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { getDomainOrPrompt } from './prompts/getDomainOrPrompt';
@@ -10,12 +10,20 @@ export type DeleteDomainActionArgs = {
   hostname?: string;
 };
 
-export const deleteDomainAction: SdkGuardedFunction<DeleteDomainActionArgs> = async ({ sdk, args }) => {
+export const deleteDomainAction: SdkGuardedFunction<
+  DeleteDomainActionArgs
+> = async ({ sdk, args }) => {
   const domain = await getDomainOrPrompt({
     id: args.id,
     hostname: args.hostname,
     sdk,
   });
+
+  if (!domain) {
+    output.error(t('expectedNotFoundGeneric', { name: 'domain' }));
+
+    return;
+  }
 
   output.spinner(t('deletingDomain'));
 
@@ -31,7 +39,12 @@ export const deleteDomainAction: SdkGuardedFunction<DeleteDomainActionArgs> = as
   }
 
   output.printNewLine();
-  output.success(t('commonItemActionSuccess', { subject: `${t('domain')} "${domain.hostname}"`, action: 'deleted' }));
+  output.success(
+    t('commonItemActionSuccess', {
+      subject: `${t('domain')} "${domain.hostname}"`,
+      action: 'deleted',
+    }),
+  );
   output.printNewLine();
 };
 

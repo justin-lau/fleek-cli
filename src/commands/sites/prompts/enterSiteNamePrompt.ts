@@ -6,5 +6,6 @@ import { t } from '../../../utils/translation';
 export const enterSiteNamePrompt = async (): Promise<string> =>
   textPrompt({
     message: `${t('typeNewSiteName')}:`,
-    validate: (partialName: string) => isSiteNameValid({ name: partialName }) || t('invalidNameUseAlphDashes'),
+    validate: (partialName: string) =>
+      isSiteNameValid({ name: partialName }) || t('invalidNameUseAlphDashes'),
   });

@@ -1,10 +1,12 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { createOutputTable } from './utils/CreateOutputTable';
 
-export const listStorageAction: SdkGuardedFunction<Record<string, never>> = async ({ sdk }) => {
+export const listStorageAction: SdkGuardedFunction<
+  Record<string, never>
+> = async ({ sdk }) => {
   const storage = await sdk.storage().list();
 
   if (!storage?.length) {

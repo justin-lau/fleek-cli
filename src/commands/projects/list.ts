@@ -1,11 +1,13 @@
 import { output } from '../../cli';
 import { config } from '../../config';
 import { sdkGuard } from '../../guards/sdkGuard';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { Icons } from '../../output/Output';
 import { t } from '../../utils/translation';
 
-export const listProjectsAction: SdkGuardedFunction<Record<string, never>> = async ({ sdk }) => {
+export const listProjectsAction: SdkGuardedFunction<
+  Record<string, never>
+> = async ({ sdk }) => {
   const projects = await sdk.projects().list();
 
   if (projects.length === 0) {
@@ -22,7 +24,7 @@ export const listProjectsAction: SdkGuardedFunction<Record<string, never>> = asy
       Name: name,
       'Created At': createdAt,
       Current: currentProjectId === id ? Icons.Checkmark : '',
-    }))
+    })),
   );
 };
 

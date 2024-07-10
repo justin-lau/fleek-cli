@@ -1,5 +1,5 @@
 import { DomainsNotFoundError } from '@fleek-platform/errors';
-import { Domain, FleekSdk } from '@fleek-platform/sdk';
+import type { Domain, FleekSdk } from '@fleek-platform/sdk';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { t } from '../../../utils/translation';
@@ -11,7 +11,12 @@ type GetDomainOrPromptArgs = {
   choicesFilter?: (domain: Domain) => boolean;
 };
 
-export const getDomainOrPrompt = async ({ id, hostname, sdk, choicesFilter }: GetDomainOrPromptArgs): Promise<Domain> => {
+export const getDomainOrPrompt = async ({
+  id,
+  hostname,
+  sdk,
+  choicesFilter,
+}: GetDomainOrPromptArgs): Promise<Domain | undefined> => {
   if (id) {
     return sdk.domains().get({ domainId: id });
   }
@@ -30,8 +35,15 @@ export const getDomainOrPrompt = async ({ id, hostname, sdk, choicesFilter }: Ge
 
   const selectedDomainId = await selectPrompt({
     message: `${t('selectDomain')}:`,
-    choices: domains.map((domain) => ({ title: domain.hostname, value: domain.id })),
+    choices: domains.map((domain) => ({
+      title: domain.hostname,
+      value: domain.id,
+    })),
   });
 
-  return domains.find((domain) => domain.id === selectedDomainId)!;
+  const domain = domains.find((domain) => domain.id === selectedDomainId);
+
+  if (!domain) return;
+
+  return domain;
 };

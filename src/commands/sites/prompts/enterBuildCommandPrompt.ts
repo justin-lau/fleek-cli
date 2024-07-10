@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import { promises as fs } from 'node:fs';
 
 import { textPrompt } from '../../../prompts/textPrompt';
 
@@ -17,7 +17,10 @@ const tryToGetBuildCommand = async () => {
   }
 
   // PNPM
-  if (filesInRootDir.includes('pnpm-lock.yaml') || filesInRootDir.includes('pnpm-workspace.yaml')) {
+  if (
+    filesInRootDir.includes('pnpm-lock.yaml') ||
+    filesInRootDir.includes('pnpm-workspace.yaml')
+  ) {
     return 'pnpm run build';
   }
 

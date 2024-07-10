@@ -1,6 +1,6 @@
 import { ProjectsNotFoundError } from '@fleek-platform/errors';
-import { FleekSdk } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import type { FleekSdk } from '@fleek-platform/sdk';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
 import { config } from '../../config';
@@ -25,7 +25,9 @@ vi.mock('../../config', () => {
 });
 
 vi.mock('./prompts/getProjectOrPrompt', () => ({
-  getProjectOrPrompt: vi.fn().mockResolvedValue({ id: 'firstProjectId', name: 'first project' }),
+  getProjectOrPrompt: vi
+    .fn()
+    .mockResolvedValue({ id: 'firstProjectId', name: 'first project' }),
 }));
 
 vi.mock('./create', () => ({
@@ -40,7 +42,7 @@ describe('Switch between projects', () => {
       switchProjectAction({
         sdk: {} as FleekSdk,
         args: { id: 'firstProjectId' },
-      })
+      }),
     ).resolves.toBeUndefined();
 
     expect(getProjectOrPrompt).toHaveBeenCalledWith({
@@ -48,7 +50,9 @@ describe('Switch between projects', () => {
       id: 'firstProjectId',
     });
     expect(config.projectId.set).toHaveBeenCalledWith('firstProjectId');
-    expect(output.success).toHaveBeenCalledWith('You have switched to project "first project".');
+    expect(output.success).toHaveBeenCalledWith(
+      'You have switched to project "first project".',
+    );
   });
 
   it('should let the user choose project and switch to that project', async () => {
@@ -57,17 +61,25 @@ describe('Switch between projects', () => {
       name: 'second project',
     });
 
-    await expect(switchProjectAction({ sdk: {} as FleekSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      switchProjectAction({ sdk: {} as FleekSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(getProjectOrPrompt).toHaveBeenCalledWith({ sdk: {} as FleekSdk });
     expect(config.projectId.set).toHaveBeenCalledWith('secondProjetId');
-    expect(output.success).toHaveBeenCalledWith('You have switched to project "second project".');
+    expect(output.success).toHaveBeenCalledWith(
+      'You have switched to project "second project".',
+    );
   });
 
   it('should run creating new project flow because of no project exist', async () => {
-    (getProjectOrPrompt as Mock).mockRejectedValueOnce(new ProjectsNotFoundError());
+    (getProjectOrPrompt as Mock).mockRejectedValueOnce(
+      new ProjectsNotFoundError(),
+    );
 
-    await expect(switchProjectAction({ sdk: {} as FleekSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      switchProjectAction({ sdk: {} as FleekSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(output.log).toHaveBeenCalledWith(`Let's start by creating one.`);
     expect(createProjectActionHandler).toHaveBeenCalledOnce();

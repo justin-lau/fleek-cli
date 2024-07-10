@@ -1,8 +1,8 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output as fakeOutput } from '../../cli';
-import { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
+import type { CheckPeriodicallyUntilArgs } from '../../utils/checkPeriodicallyUntil';
 import { usePressAnyKey as fakeUsePressAnyKey } from '../../utils/pressAnyKey';
 import { getSiteOrPrompt as fakeGetSiteOrPrompt } from '../sites/prompts/getSiteOrPrompt';
 import { createEnsAction } from './create';
@@ -14,7 +14,9 @@ vi.mock('../sites/prompts/getSiteOrPrompt', () => ({
 }));
 
 vi.mock('./prompts/getIpnsRecordOrPrompt', () => ({
-  getIpnsRecordOrPrompt: vi.fn().mockResolvedValue({ name: 'ipnsName', id: 'ipnsRecordId' }),
+  getIpnsRecordOrPrompt: vi
+    .fn()
+    .mockResolvedValue({ name: 'ipnsName', id: 'ipnsRecordId' }),
 }));
 
 vi.mock('./prompts/getEnsNameOrPrompt', () => ({
@@ -22,7 +24,9 @@ vi.mock('./prompts/getEnsNameOrPrompt', () => ({
 }));
 
 vi.mock('../../utils/checkPeriodicallyUntil', () => {
-  const checkPeriodicallyUntil = async <T>({ conditionFn }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
+  const checkPeriodicallyUntil = async <T>({
+    conditionFn,
+  }: CheckPeriodicallyUntilArgs<T>): Promise<T> => {
     return conditionFn();
   };
 
@@ -60,8 +64,12 @@ vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const ipns = {
-    createRecordForSite: vi.fn().mockResolvedValue({ id: 'ipnsRecordId', name: 'ipnsName' }),
-    getRecord: vi.fn().mockResolvedValue({ id: 'ipnsRecordId', name: 'ipnsName' }),
+    createRecordForSite: vi
+      .fn()
+      .mockResolvedValue({ id: 'ipnsRecordId', name: 'ipnsName' }),
+    getRecord: vi
+      .fn()
+      .mockResolvedValue({ id: 'ipnsRecordId', name: 'ipnsName' }),
     listRecords: vi.fn().mockResolvedValue([]),
   };
 
@@ -88,7 +96,6 @@ describe('Create ENS record for site', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock).mockResolvedValueOnce({
       id: 'ensRecordId',
       status: 'CREATED',
@@ -98,7 +105,7 @@ describe('Create ENS record for site', () => {
       createEnsAction({
         sdk: fakeSdk,
         args: { siteId: 'firstSiteId', name: 'first.eth' },
-      })
+      }),
     ).resolves.toBeUndefined();
     expect(fakeGetSiteOrPrompt).toHaveBeenCalledWith({
       sdk: fakeSdk,
@@ -124,7 +131,9 @@ describe('Create ENS record for site', () => {
 
     expect(waitForAnyKey).toHaveBeenCalledOnce();
 
-    expect(fakeOutput.success).toHaveBeenCalledWith(`The ENS "first.eth" has been successfully created.`);
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `The ENS "first.eth" has been successfully created.`,
+    );
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
@@ -133,7 +142,6 @@ describe('Create ENS record for site', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock).mockResolvedValueOnce({
       id: 'ensRecordId',
       status: 'CREATED',
@@ -143,7 +151,7 @@ describe('Create ENS record for site', () => {
       createEnsAction({
         sdk: fakeSdk,
         args: { siteId: 'firstSiteId', name: 'first.eth', ipns: 'ipnsName' },
-      })
+      }),
     ).resolves.toBeUndefined();
     expect(fakeGetSiteOrPrompt).toHaveBeenCalledWith({
       sdk: fakeSdk,
@@ -167,7 +175,9 @@ describe('Create ENS record for site', () => {
     const { waitForAnyKey } = fakeUsePressAnyKey();
     expect(waitForAnyKey).toHaveBeenCalledOnce();
 
-    expect(fakeOutput.success).toHaveBeenCalledWith(`The ENS "first.eth" has been successfully created.`);
+    expect(fakeOutput.success).toHaveBeenCalledWith(
+      `The ENS "first.eth" has been successfully created.`,
+    );
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
@@ -176,17 +186,18 @@ describe('Create ENS record for site', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock).mockResolvedValueOnce({
       id: 'ensRecordId',
       status: 'CREATING',
     });
 
-    await expect(createEnsAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      createEnsAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.success).not.toHaveBeenCalled();
     expect(fakeOutput.warn).toHaveBeenCalledWith(
-      `The process of obtaining the content hash for your ENS is taking longer than anticipated.`
+      'The process of obtaining the content hash for your ENS is taking longer than anticipated.',
     );
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
@@ -195,15 +206,18 @@ describe('Create ENS record for site', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock)
       .mockResolvedValueOnce({ id: 'ensRecordId', status: 'CREATED' })
       .mockResolvedValueOnce({ id: 'ensRecordId', status: 'VERIFYING' });
 
-    await expect(createEnsAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      createEnsAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(fakeOutput.success).toHaveBeenCalledOnce();
-    expect(fakeOutput.warn).toHaveBeenCalledWith(`The process of verifying your ENS is taking longer than anticipated.`);
+    expect(fakeOutput.warn).toHaveBeenCalledWith(
+      'The process of verifying your ENS is taking longer than anticipated.',
+    );
     expect(fakeOutput.error).not.toHaveBeenCalled();
   });
   it(`ENS record wasn't verified for some reason`, async () => {
@@ -211,7 +225,6 @@ describe('Create ENS record for site', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ens().get as Mock)
       .mockResolvedValueOnce({ id: 'ensRecordId', status: 'CREATED' })
       .mockResolvedValueOnce({ id: 'firstEnsId', status: 'VERIFYING_FAILED' });
@@ -220,14 +233,16 @@ describe('Create ENS record for site', () => {
     (waitForAnyKey as Mock).mockResolvedValueOnce(undefined);
     (waitForAnyKey as Mock).mockRejectedValue('Ctrl+C');
 
-    await expect(createEnsAction({ sdk: fakeSdk, args: {} })).rejects.toThrowError('Ctrl+C');
+    await expect(
+      createEnsAction({ sdk: fakeSdk, args: {} }),
+    ).rejects.toThrowError('Ctrl+C');
 
     expect(waitForAnyKey).toHaveBeenCalledTimes(2);
 
     expect(fakeOutput.success).toHaveBeenCalledOnce();
     expect(fakeOutput.warn).not.toHaveBeenCalled();
     expect(fakeOutput.error).toHaveBeenCalledWith(
-      `ENS "first.eth" couldn't be verified! Check https://app.ens.domains/first.eth?tab=records "Content Hash" field.`
+      `ENS "first.eth" couldn't be verified! Check https://app.ens.domains/first.eth?tab=records "Content Hash" field.`,
     );
   });
 });

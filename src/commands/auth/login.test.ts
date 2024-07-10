@@ -77,15 +77,19 @@ describe('Login', async () => {
       authApiUrl: '',
     });
 
-    expect(output.chore).toHaveBeenCalledWith('Please follow the link to log in to Fleek Platform.');
+    expect(output.chore).toHaveBeenCalledWith(
+      'Please follow the link to log in to Fleek Platform.',
+    );
 
     expect(output.spinner).toHaveBeenCalledWith(
       getVerificationSessionLink({
         uiAppUrl: '',
         verificationSessionId: 'mockVerificationSession',
-      })
+      }),
     );
-    expect(output.success).toHaveBeenCalledWith('You are now logged in to the Fleek Platform.');
+    expect(output.success).toHaveBeenCalledWith(
+      'You are now logged in to the Fleek Platform.',
+    );
   });
 
   it('should update config correctly', async () => {

@@ -17,8 +17,8 @@ describe('Parse environment variables', () => {
       });
 
       expect(parsed).toMatchObject({
-        'process.env.UI__APP_URL': "\"https://mock.fleek.xyz\"",
-        'process.env.SDK__GRAPHQL_API_URL': "\"https://mock.fleek.xyz/graphql\"",
+        'process.env.UI__APP_URL': '"https://mock.fleek.xyz"',
+        'process.env.SDK__GRAPHQL_API_URL': '"https://mock.fleek.xyz/graphql"',
       });
     });
 
@@ -35,7 +35,9 @@ describe('Parse environment variables', () => {
         defined: definedMock,
       });
 
-      const matches = Object.keys(parsed).filter((k) => k.startsWith(DEFAULT_PREFIX));
+      const matches = Object.keys(parsed).filter((k) =>
+        k.startsWith(DEFAULT_PREFIX),
+      );
 
       expect(matches.length).toEqual(2);
     });
@@ -45,7 +47,9 @@ describe('Parse environment variables', () => {
         defined: definedMock,
       });
 
-      const matches = Object.keys(parsed).filter((k) => k.startsWith(DEFAULT_PREFIX));
+      const matches = Object.keys(parsed).filter((k) =>
+        k.startsWith(DEFAULT_PREFIX),
+      );
 
       expect(matches).toBeDefined();
       expect(matches.length).toEqual(2);
@@ -57,7 +61,9 @@ describe('Parse environment variables', () => {
         UI__APP_URL: '',
       };
 
-      expect(() => parseEnvVarsAsKeyVal({ defined: overrideDefinedMock })).toThrowError();
+      expect(() =>
+        parseEnvVarsAsKeyVal({ defined: overrideDefinedMock }),
+      ).toThrowError();
     });
 
     it('Should throw when a defined key value is undefined (any)', () => {
@@ -66,7 +72,9 @@ describe('Parse environment variables', () => {
         SDK__GRAPHQL_API_URL: undefined,
       };
 
-      expect(() => parseEnvVarsAsKeyVal({ defined: overrideDefinedMock })).toThrowError();
+      expect(() =>
+        parseEnvVarsAsKeyVal({ defined: overrideDefinedMock }),
+      ).toThrowError();
     });
 
     it('Should throw when a defined key value is undefined (any)', () => {
@@ -75,8 +83,9 @@ describe('Parse environment variables', () => {
         UI__APP_URL: null,
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect(() => parseEnvVarsAsKeyVal({ defined: overrideDefinedMock as any })).toThrowError();
+      expect(() =>
+        parseEnvVarsAsKeyVal({ defined: overrideDefinedMock }),
+      ).toThrowError();
     });
 
     it('Should throw when passed data argument is empty object', () => {

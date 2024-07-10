@@ -1,7 +1,16 @@
-import { ApplicationWhiteLabelDomain, ApplicationWhitelistDomain } from '@fleek-platform/sdk';
+import type {
+  ApplicationWhiteLabelDomain,
+  ApplicationWhitelistDomain,
+} from '@fleek-platform/sdk';
 
-type WhitelistDomain = Omit<ApplicationWhitelistDomain, 'createdAt' | 'updatedAt' | '__typename'>;
-type WhiteLabelDomain = Omit<ApplicationWhiteLabelDomain, 'createdAt' | 'updatedAt' | '__typename'>;
+type WhitelistDomain = Omit<
+  ApplicationWhitelistDomain,
+  'createdAt' | 'updatedAt' | '__typename'
+>;
+type WhiteLabelDomain = Omit<
+  ApplicationWhiteLabelDomain,
+  'createdAt' | 'updatedAt' | '__typename'
+>;
 
 export const parseWhitelistDomains = ({
   whitelistDomains,
@@ -14,7 +23,9 @@ export const parseWhitelistDomains = ({
     ...whitelistDomains.map((whitelistDomain) => whitelistDomain.hostname),
     ...whiteLabelDomains.map((whiteLabelDomain) => whiteLabelDomain.hostname),
   ];
-  const uniqueWhitelistDomains = Array.from(new Set(combinedWhitelistDomains)).map((uniqueWhitelistDomain) => ({
+  const uniqueWhitelistDomains = Array.from(
+    new Set(combinedWhitelistDomains),
+  ).map((uniqueWhitelistDomain) => ({
     hostname: uniqueWhitelistDomain,
   }));
 

@@ -1,5 +1,5 @@
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { output } from '../../cli';
 import { config } from '../../config';
@@ -32,7 +32,9 @@ vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const projects = {
-    create: vi.fn().mockResolvedValue({ id: 'firstProjectId', name: 'first project' }),
+    create: vi
+      .fn()
+      .mockResolvedValue({ id: 'firstProjectId', name: 'first project' }),
   };
 
   FleekSdkMock.prototype.projects = () => projects;
@@ -47,7 +49,9 @@ describe('Create new project', () => {
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(createProjectAction({ sdk: fakeSdk, args: { name: 'first project' } })).resolves.toBeUndefined();
+    await expect(
+      createProjectAction({ sdk: fakeSdk, args: { name: 'first project' } }),
+    ).resolves.toBeUndefined();
 
     expect(getProjectNameOrPrompt).toHaveBeenCalledWith({
       name: 'first project',
@@ -59,7 +63,7 @@ describe('Create new project', () => {
 
     expect(output.spinner).toHaveBeenCalledWith('Creating a new project...');
     expect(output.success).toHaveBeenCalledWith(
-      'The project "first project" has been successfully created with the project ID "firstProjectId", and you\'ve automatically been switched to it.'
+      'The project "first project" has been successfully created with the project ID "firstProjectId", and you\'ve automatically been switched to it.',
     );
   });
 
@@ -68,14 +72,15 @@ describe('Create new project', () => {
       personalAccessToken: '',
     });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (getProjectNameOrPrompt as Mock).mockResolvedValueOnce('second project');
     (fakeSdk.projects().create as Mock).mockResolvedValueOnce({
       id: 'secondProjectId',
       name: 'second project',
     });
 
-    await expect(createProjectAction({ sdk: fakeSdk, args: {} })).resolves.toBeUndefined();
+    await expect(
+      createProjectAction({ sdk: fakeSdk, args: {} }),
+    ).resolves.toBeUndefined();
 
     expect(getProjectNameOrPrompt).toHaveBeenCalledWith({});
     expect(fakeSdk.projects().create).toHaveBeenCalledWith({
@@ -85,7 +90,7 @@ describe('Create new project', () => {
 
     expect(output.spinner).toHaveBeenCalledWith('Creating a new project...');
     expect(output.success).toHaveBeenCalledWith(
-      'The project "second project" has been successfully created with the project ID "secondProjectId", and you\'ve automatically been switched to it.'
+      'The project "second project" has been successfully created with the project ID "secondProjectId", and you\'ve automatically been switched to it.',
     );
   });
 });

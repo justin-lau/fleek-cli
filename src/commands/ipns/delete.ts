@@ -1,5 +1,5 @@
 import { output } from '../../cli';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { withGuards } from '../../guards/withGuards';
 import { t } from '../../utils/translation';
 import { confirmDeleteRecordPrompt } from './prompts/confirmDeleteRecordPrompt';
@@ -9,8 +9,17 @@ type DeleteActionArgs = {
   name?: string;
 };
 
-const deleteAction: SdkGuardedFunction<DeleteActionArgs> = async ({ sdk, args }) => {
+const deleteAction: SdkGuardedFunction<DeleteActionArgs> = async ({
+  sdk,
+  args,
+}) => {
   const foundRecord = await getRecordOrPrompt({ sdk, name: args.name });
+
+  if (!foundRecord) {
+    output.error(t('expectedNotFoundGeneric', { name: 'record' }));
+
+    return;
+  }
 
   const shouldDeleteRecord = await confirmDeleteRecordPrompt();
 
@@ -21,7 +30,12 @@ const deleteAction: SdkGuardedFunction<DeleteActionArgs> = async ({ sdk, args })
   await sdk.ipns().deleteRecord({ id: foundRecord.id });
 
   output.printNewLine();
-  output.success(t('commonItemActionSuccess', { subject: t('ipnsRecord'), action: t('deleted') }));
+  output.success(
+    t('commonItemActionSuccess', {
+      subject: t('ipnsRecord'),
+      action: t('deleted'),
+    }),
+  );
 };
 
 export const deleteActionHandler = withGuards(deleteAction, {

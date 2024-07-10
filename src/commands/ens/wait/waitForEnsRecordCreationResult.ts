@@ -1,4 +1,4 @@
-import { FleekSdk } from '@fleek-platform/sdk';
+import type { FleekSdk } from '@fleek-platform/sdk';
 
 import { checkPeriodicallyUntil } from '../../../utils/checkPeriodicallyUntil';
 
@@ -7,7 +7,10 @@ type WaitForEnsRecordCreationResultArgs = {
   sdk: FleekSdk;
 };
 
-export const waitForEnsRecordCreationResult = async ({ id, sdk }: WaitForEnsRecordCreationResultArgs) => {
+export const waitForEnsRecordCreationResult = async ({
+  id,
+  sdk,
+}: WaitForEnsRecordCreationResultArgs) => {
   return checkPeriodicallyUntil({
     conditionFn: async () => {
       const ens = await sdk.ens().get({ id });

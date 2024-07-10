@@ -1,7 +1,7 @@
+import { join as joinPath } from 'node:path';
 import { generateDeploymentWorkflowYaml } from '@fleek-platform/utils-github';
-import { join as joinPath } from 'path';
 
-import { Output } from '../../../output/Output';
+import type { Output } from '../../../output/Output';
 import { confirmFileOverridePrompt } from '../prompts/confirmFileOverridePrompt';
 import { fileExists } from './fileExists';
 import { getDeploymentWorkflowYamlLocation } from './getDeploymentWorkflowYamlLocation';
@@ -10,8 +10,14 @@ import { requestDeploymentWorkflowInstallCommand } from './requestDeploymentWork
 import { saveDeploymentWorkflowYaml } from './saveDeploymentWorkflowYaml';
 
 export const ghWorkflowFilename = 'fleek-deploy.yaml';
-export const ghActionsWorflowsDirectory = joinPath(process.cwd(), '.github/workflows');
-export const ghActionsDeploySitesYamlPath = joinPath(ghActionsWorflowsDirectory, ghWorkflowFilename);
+export const ghActionsWorflowsDirectory = joinPath(
+  process.cwd(),
+  '.github/workflows',
+);
+export const ghActionsDeploySitesYamlPath = joinPath(
+  ghActionsWorflowsDirectory,
+  ghWorkflowFilename,
+);
 
 type PrepareGitHubActionsIntegrationArgs = {
   personalAccessToken: string;

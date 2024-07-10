@@ -1,17 +1,21 @@
 import { IpnsRecordsNotFoundError } from '@fleek-platform/errors';
 import { FleekSdk, PersonalAccessTokenService } from '@fleek-platform/sdk';
-import { describe, expect, it, Mock, vi } from 'vitest';
+import { type Mock, describe, expect, it, vi } from 'vitest';
 
 import { selectPrompt } from '../../../prompts/selectPrompt';
 import { getRecordOrPrompt } from './getRecordOrPrompt';
 
-vi.mock('../../../prompts/selectPrompt', () => ({ selectPrompt: vi.fn().mockResolvedValue('secondRecordId') }));
+vi.mock('../../../prompts/selectPrompt', () => ({
+  selectPrompt: vi.fn().mockResolvedValue('secondRecordId'),
+}));
 
 vi.mock('@fleek-platform/sdk', () => {
   const FleekSdkMock = vi.fn();
 
   const ipns = {
-    getRecord: vi.fn().mockResolvedValue({ id: 'firstRecordId', name: 'first', hash: 'hash1' }),
+    getRecord: vi
+      .fn()
+      .mockResolvedValue({ id: 'firstRecordId', name: 'first', hash: 'hash1' }),
     listRecords: vi.fn().mockResolvedValue([
       { id: 'firstRecordId', name: 'first', hash: 'hash1' },
       { id: 'secondRecordId', name: 'second', hash: 'hash2' },
@@ -25,10 +29,14 @@ vi.mock('@fleek-platform/sdk', () => {
 
 describe('Get record by name or let the user choose from list', () => {
   it('Return record by its name', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
-    await expect(getRecordOrPrompt({ sdk: fakeSdk, name: 'first' })).resolves.toEqual({
+    await expect(
+      getRecordOrPrompt({ sdk: fakeSdk, name: 'first' }),
+    ).resolves.toEqual({
       id: 'firstRecordId',
       name: 'first',
       hash: 'hash1',
@@ -38,7 +46,9 @@ describe('Get record by name or let the user choose from list', () => {
   });
 
   it('Let the user choose from list and return chosen record', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
 
     await expect(getRecordOrPrompt({ sdk: fakeSdk })).resolves.toEqual({
@@ -52,11 +62,14 @@ describe('Get record by name or let the user choose from list', () => {
   });
 
   it('should throw if no records are present', async () => {
-    const accessTokenService = new PersonalAccessTokenService({ personalAccessToken: '' });
+    const accessTokenService = new PersonalAccessTokenService({
+      personalAccessToken: '',
+    });
     const fakeSdk = new FleekSdk({ accessTokenService });
-
     (fakeSdk.ipns().listRecords as Mock).mockResolvedValue([]);
-    await expect(getRecordOrPrompt({ sdk: fakeSdk })).rejects.toThrowError(new IpnsRecordsNotFoundError());
+    await expect(getRecordOrPrompt({ sdk: fakeSdk })).rejects.toThrowError(
+      new IpnsRecordsNotFoundError(),
+    );
 
     expect(fakeSdk.ipns().listRecords).toHaveBeenCalledOnce();
     expect(selectPrompt).not.toHaveBeenCalled();

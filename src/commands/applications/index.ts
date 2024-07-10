@@ -1,4 +1,4 @@
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { t } from '../../utils/translation';
 import { createApplicationActionHandler } from './create';
@@ -7,28 +7,54 @@ import { listApplicationsActionHandler } from './list';
 import { updateApplicationActionHandler } from './update';
 
 export default (program: Command) => {
-  const cmd = program.command('applications').description(t('appCmdDescription'));
+  const cmd = program
+    .command('applications')
+    .description(t('appCmdDescription'));
 
-  cmd.command('list').description(t('listAllAppForProject')).action(listApplicationsActionHandler);
+  cmd
+    .command('list')
+    .description(t('listAllAppForProject'))
+    .action(listApplicationsActionHandler);
 
   cmd
     .command('create')
     .option('--name <string>')
     .option('--whitelistDomains <string...>', t('whitelistDomainsSepBySp'))
     .description(t('createNewAppClient'))
-    .action((options: { name?: string; whitelistDomains?: string[] }) => createApplicationActionHandler(options));
+    .action((options: { name?: string; whitelistDomains?: string[] }) =>
+      createApplicationActionHandler(options),
+    );
 
   cmd
     .command('update')
-    .option('--id <string>', t('commonNameOfSubjectToAction', { name: t('clientId'), subject: t('sdkPoweredApp'), action: t('update') }))
+    .option(
+      '--id <string>',
+      t('commonNameOfSubjectToAction', {
+        name: t('clientId'),
+        subject: t('sdkPoweredApp'),
+        action: t('update'),
+      }),
+    )
     .option('--name <string>', t('newNameOfAppClient'))
     .option('--whitelistDomains <string...>', t('whitelistDomainsSepBySp'))
     .description(t('updateAppClient'))
-    .action((options: { id?: string; name?: string; whitelistDomains?: string[] }) => updateApplicationActionHandler(options));
+    .action(
+      (options: { id?: string; name?: string; whitelistDomains?: string[] }) =>
+        updateApplicationActionHandler(options),
+    );
 
   cmd
     .command('delete')
     .description(t('deleteAppClient'))
-    .option('--id <string>', t('commonNameOfSubjectToAction', { name: t('clientId'), subject: t('sdkPoweredApp'), action: t('delete') }))
-    .action((options: { id?: string }) => deleteApplicationActionHandler(options));
+    .option(
+      '--id <string>',
+      t('commonNameOfSubjectToAction', {
+        name: t('clientId'),
+        subject: t('sdkPoweredApp'),
+        action: t('delete'),
+      }),
+    )
+    .action((options: { id?: string }) =>
+      deleteApplicationActionHandler(options),
+    );
 };

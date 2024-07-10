@@ -1,7 +1,7 @@
 import { output } from '../../cli';
 import { config } from '../../config';
 import { sdkGuard } from '../../guards/sdkGuard';
-import { SdkGuardedFunction } from '../../guards/types';
+import type { SdkGuardedFunction } from '../../guards/types';
 import { t } from '../../utils/translation';
 import { createProjectActionHandler } from './create';
 import { getProjectOrPrompt } from './prompts/getProjectOrPrompt';
@@ -10,12 +10,22 @@ type SwitchProjectActionArgs = {
   id?: string;
 };
 
-export const switchProjectAction: SdkGuardedFunction<SwitchProjectActionArgs> = async ({ sdk, args }) => {
-  const project = await getProjectOrPrompt({ sdk, id: args.id }).catch(() => null);
+export const switchProjectAction: SdkGuardedFunction<
+  SwitchProjectActionArgs
+> = async ({ sdk, args }) => {
+  const project = await getProjectOrPrompt({ sdk, id: args.id }).catch(
+    () => null,
+  );
 
   if (project === null) {
     output.log(t('projectsSwitchNeedCreateFirst'));
     await createProjectActionHandler();
+
+    return;
+  }
+
+  if (!project) {
+    output.log(t('noProjectIdFoundUnexpectedly'));
 
     return;
   }

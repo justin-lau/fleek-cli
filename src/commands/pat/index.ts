@@ -1,5 +1,5 @@
 import { MissingExpectedDataError } from '@fleek-platform/errors';
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import { getDefined } from '../../defined';
 import { t } from '../../utils/translation';
@@ -8,7 +8,10 @@ import { deletePersonalAccessTokenActionHandler } from './delete';
 import { listPersonalAccessTokensActionHandler } from './list';
 
 export default (program: Command) => {
-  const cmd = program.command('pat').option('-h, --help', t('printHelp')).description(t('patDescription'));
+  const cmd = program
+    .command('pat')
+    .option('-h, --help', t('printHelp'))
+    .description(t('patDescription'));
 
   cmd
     .command('list') //
@@ -39,9 +42,15 @@ export default (program: Command) => {
     .description(t('patDelete'))
     .argument(
       '<personalAccessTokenId>',
-      t('commonNameOfSubjectToAction', { name: t('id'), subject: t('personalAccessToken'), action: t('delete') })
+      t('commonNameOfSubjectToAction', {
+        name: t('id'),
+        subject: t('personalAccessToken'),
+        action: t('delete'),
+      }),
     )
-    .action((personalAccessTokenId: string) => deletePersonalAccessTokenActionHandler({ personalAccessTokenId }));
+    .action((personalAccessTokenId: string) =>
+      deletePersonalAccessTokenActionHandler({ personalAccessTokenId }),
+    );
 
   cmd.command('help').description(t('printHelp'));
 };

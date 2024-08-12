@@ -69,7 +69,7 @@ jobs:
           # Changeset artifacts
           changesetArtifactsPath=".changeset"
 
-          if ! npx changeset status &>/dev/null; then          
+          if ! pnpm exec changeset status &>/dev/null; then          
             echo "⚠️ Warning: No changesets found, should skip!"
             skip="true"
           fi

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.8.9
+
+### Patch Changes
+
+- fa97a4e: Remove duplicate dependency for esbuild
+- 5606955: Remove duplicate dotenv dependency
+- d50dcec: Fix environment variables, amongst other tweaks related to duplicate dependencies
+
 ## 2.8.8
 
 ### Patch Changes

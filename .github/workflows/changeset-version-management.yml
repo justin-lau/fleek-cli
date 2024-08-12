@@ -37,6 +37,27 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
+      - name: Get pnpm store directory
+        if: ${{ steps.changeset-status.outputs.skip != 'true' }}
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        if: ${{ steps.changeset-status.outputs.skip != 'true' }}
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        if: ${{ steps.changeset-status.outputs.skip != 'true' }}
+        run: |
+          pnpm install \
+            --strict-peer-dependencies
+
       - name: Changeset status
         id: changeset-status
         shell: bash
@@ -60,27 +81,6 @@ jobs:
           fi
 
           echo "skip=$skip" >> "$GITHUB_OUTPUT"
-
-      - name: Get pnpm store directory
-        if: ${{ steps.changeset-status.outputs.skip != 'true' }}
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - uses: actions/cache@v4
-        if: ${{ steps.changeset-status.outputs.skip != 'true' }}
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        if: ${{ steps.changeset-status.outputs.skip != 'true' }}
-        run: |
-          pnpm install \
-            --strict-peer-dependencies
 
       - name: Set version
         if: ${{ steps.changeset-status.outputs.skip != 'true' }}

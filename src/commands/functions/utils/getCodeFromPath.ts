@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import * as os from 'node:os';
+
 // TODO: These error messages should be revised
 // e.g. FleekFunctionPathNotValidError happens regardless of bundling
 import {
@@ -45,7 +46,7 @@ const showUnsupportedModules = (args: ShowUnsupportedModulesArgs) => {
 };
 
 const buildEnvVars = (args: { env: EnvironmentVariables }) => {
-  Object.entries(args.env)
+  return Object.entries(args.env)
     .map(([key, value]) => `${key}: "${value}"`)
     .join(',');
 };

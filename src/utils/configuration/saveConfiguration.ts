@@ -1,10 +1,10 @@
 import { promises as fs } from 'node:fs';
-import path from 'path';
+import path from 'node:path';
 
 import {
+  FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
   getConfigFileByTypeName,
   getConfigTemplateByTypeName,
-  FLEEK_CONFIG_TMPL_JSON_PLACEHOLDER,
 } from '../configuration';
 
 import { type FleekRootConfig, FleekSiteConfigFormats } from './types';
@@ -57,7 +57,7 @@ export const saveConfiguration = async ({
   let configFile: ConfigFilePath;
 
   switch (format) {
-    case FleekSiteConfigFormats.Typescript:
+    case FleekSiteConfigFormats.Typescript: {
       const contentForTypescriptConfig = (
         await fs.readFile(filePathForTypescriptConfig)
       ).toString();
@@ -67,7 +67,8 @@ export const saveConfiguration = async ({
       );
       configFile = getConfigFileByTypeName('Typescript');
       break;
-    case FleekSiteConfigFormats.Javascript:
+    }
+    case FleekSiteConfigFormats.Javascript: {
       const contentForJavascriptConfig = (
         await fs.readFile(filePathForJavascriptConfig)
       ).toString();
@@ -77,10 +78,12 @@ export const saveConfiguration = async ({
       );
       configFile = getConfigFileByTypeName('Javascript');
       break;
-    case FleekSiteConfigFormats.JSON:
+    }
+    case FleekSiteConfigFormats.JSON: {
       content = formattedOutput;
       configFile = getConfigFileByTypeName('JSON');
       break;
+    }
   }
 
   try {

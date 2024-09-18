@@ -184,7 +184,7 @@ const checkUserSourceCodeSupport = async (filePath: string) => {
   return reRequireSyntax.test(contents);
 };
 
-export const getCodeFromPath = async (args: {
+export const getJsCodeFromPath = async (args: {
   filePath: string;
   bundle: boolean;
   env: EnvironmentVariables;

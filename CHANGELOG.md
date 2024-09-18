@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.0
+
+### Major Changes
+
+- f358f9a: Introduces Functions SGX support with SDK v3
+
 ## 2.9.0
 
 ### Minor Changes

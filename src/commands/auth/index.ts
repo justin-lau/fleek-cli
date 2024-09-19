@@ -6,10 +6,10 @@ import { t } from '../../utils/translation';
 import { loginActionHandler } from './login';
 import { logoutActionHandler } from './logout';
 
-export default (program: Command) => {
-  program
+export default (cmd: Command) => {
+  cmd
     .command('login')
-    .description(t('loginToFlkPlt', { status: t('loginTo') }))
+    .description(t('cmdAuthLoginDescription'))
     .action(() => {
       const uiAppUrl = getDefined('UI__APP_URL');
       const authApiUrl = getDefined('SDK__GRAPHQL_API_URL');
@@ -22,10 +22,12 @@ export default (program: Command) => {
         uiAppUrl,
         authApiUrl,
       });
-    });
+    })
+    .addHelpCommand();
 
-  program
+  cmd
     .command('logout')
-    .description(t('loginToFlkPlt', { status: t('logoutOf') }))
-    .action(logoutActionHandler);
+    .description(t('cmdAuthLogoutDescription'))
+    .action(logoutActionHandler)
+    .addHelpCommand();
 };

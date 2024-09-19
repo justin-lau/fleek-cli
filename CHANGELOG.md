@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+### Minor Changes
+
+- 2976cd6: Replace `noBundle` parameter by `bundle` to be more inline with remaining parameter settings and remove negation that can be counter-intuitive or confusing.
+
 ## 3.0.0
 
 ### Major Changes

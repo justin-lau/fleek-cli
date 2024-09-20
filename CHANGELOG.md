@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.1
+
+### Patch Changes
+
+- e6c8d3c: Fix the fleek config template file location, add help to missing subcommands
+
 ## 3.1.0
 
 ### Minor Changes

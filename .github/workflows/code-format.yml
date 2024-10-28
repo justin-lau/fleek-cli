@@ -40,7 +40,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pnpm install
+          pnpm i
 
       - name: Code format check
         id: fmt_check

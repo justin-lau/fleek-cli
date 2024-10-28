@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.3.0
+
+### Minor Changes
+
+- 810432e: Enhance hostname prompt error handling
+- 4c7e91d: Ensure consistent help flag behavior across commands
+
 ## 3.2.0
 
 ### Minor Changes

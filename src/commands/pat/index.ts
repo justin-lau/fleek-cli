@@ -8,16 +8,12 @@ import { deletePersonalAccessTokenActionHandler } from './delete';
 import { listPersonalAccessTokensActionHandler } from './list';
 
 export default (program: Command): Command => {
-  const cmd = program
-    .command('pat')
-    .option('-h, --help', t('printHelp'))
-    .description(t('patDescription'));
+  const cmd = program.command('pat').description(t('patDescription'));
 
   cmd
-    .command('list') //
+    .command('list')
     .description(t('patListDesc'))
-    .action(listPersonalAccessTokensActionHandler)
-    .addHelpCommand();
+    .action(listPersonalAccessTokensActionHandler);
 
   cmd
     .command('create')
@@ -36,8 +32,7 @@ export default (program: Command): Command => {
         authApiUrl,
         ...args,
       });
-    })
-    .addHelpCommand();
+    });
 
   cmd
     .command('delete')
@@ -52,8 +47,7 @@ export default (program: Command): Command => {
     )
     .action((personalAccessTokenId: string) =>
       deletePersonalAccessTokenActionHandler({ personalAccessTokenId }),
-    )
-    .addHelpCommand();
+    );
 
   return cmd;
 };

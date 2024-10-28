@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { isValidFolder } from '@fleek-platform/utils-validation';
 import cliProgress from 'cli-progress';
 
 import { output } from '../../cli';
@@ -14,6 +15,7 @@ import { getUploadResult } from './utils/upload';
 import { waitUntilFileAvailable } from './wait/waitUntilFileAvailable';
 
 import { getWasmCodeFromPath } from './utils/getWasmCodeFromPath';
+import { uploadFunctionAssets } from './utils/uploadFunctionAssets';
 
 type DeployActionArgs = {
   filePath?: string;
@@ -23,6 +25,7 @@ type DeployActionArgs = {
   env: string[];
   envFile?: string;
   sgx?: boolean;
+  assetsPath?: string;
 };
 
 const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
@@ -32,6 +35,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
   const env = getEnvironmentVariables({ env: args.env, envFile: args.envFile });
   const functionToDeploy = await getFunctionOrPrompt({ name: args.name, sdk });
   const filePath = await getFunctionPathOrPrompt({ path: args.filePath });
+  const assetsPath = args.assetsPath;
   const bundle = args.bundle !== 'false';
   const isSGX = !!args.sgx;
   const isTrustedPrivateEnvironment = isSGX && args.private;
@@ -47,12 +51,24 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
     return;
   }
 
+  if (assetsPath && isSGX) {
+    output.error(t('assetsNotSupportedInSgx'));
+    return;
+  }
+
+  const assetsCid = await uploadFunctionAssets({
+    sdk,
+    assetsPath,
+    functionName: functionToDeploy.name,
+  });
+
   const filePathToUpload = isSGX
     ? await getWasmCodeFromPath({ filePath })
     : await getJsCodeFromPath({
         filePath,
         bundle,
         env,
+        assetsCid,
       });
 
   output.printNewLine();
@@ -145,6 +161,7 @@ const deployAction: SdkGuardedFunction<DeployActionArgs> = async ({
       cid: uploadResult.pin.cid,
       sgx: isSGX,
       blake3Hash,
+      assetsCid,
     });
   } catch {
     output.error(t('failedDeployFleekFunction'));

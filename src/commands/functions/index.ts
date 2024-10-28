@@ -16,6 +16,7 @@ type DeployOptions = {
   env?: string[];
   envFile?: string;
   sgx?: boolean;
+  assets?: string;
 };
 
 export default (program: Command): Command => {
@@ -70,6 +71,7 @@ export default (program: Command): Command => {
     .option('--private', t('functionDeployToPrivateStorage'), false)
     .option('-e, --env <environmentVariables...>', t('environmentVariables'))
     .option('--sgx', t('functionsUseSgx'), false)
+    .option('-a --assets <assetsPath>', t('functionsUseAssets'), false)
     .option(
       '--envFile <environmentVariablesFilePath>',
       t('environmentVariablesFile'),
@@ -83,6 +85,7 @@ export default (program: Command): Command => {
         env: options.env ?? [],
         envFile: options.envFile,
         sgx: options.sgx,
+        assetsPath: options.assets,
       }),
     );
 

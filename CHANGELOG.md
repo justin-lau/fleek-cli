@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.2.0
+
+### Minor Changes
+
+- d4ed639: Replace deprecated CF-IPFS Gateway
+- 12e1cd1: Add common help command handler to prevent misses
+
+### Patch Changes
+
+- 8b3c501: Resolve compatibility issues with latest eciesjs version
+
 ## 3.1.1
 
 ### Patch Changes

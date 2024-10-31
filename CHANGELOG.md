@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.4.0
+
+### Minor Changes
+
+- 06037b3: Associate function to a site on creation
+- 9185d8d: Update @fleek-platform dependencies
+
 ## 3.3.0
 
 ### Minor Changes

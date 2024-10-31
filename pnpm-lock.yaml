@@ -12,7 +12,7 @@ importers:
         specifier: ^3.449.0
         version: 3.613.0
       '@fleek-platform/functions-esbuild-config':
-        specifier: 0.0.19
+        specifier: ^0.0.19
         version: 0.0.19(esbuild@0.21.5)
       '@web-std/file':
         specifier: ^3.0.2
@@ -103,17 +103,17 @@ importers:
         specifier: ^2.27.6
         version: 2.27.7
       '@fleek-platform/errors':
-        specifier: ^2.5.1
-        version: 2.5.1
+        specifier: ^2.7.0
+        version: 2.7.0
       '@fleek-platform/sdk':
         specifier: ^3.5.0
         version: 3.5.0
       '@fleek-platform/tester':
-        specifier: ^2.11.0
-        version: 2.11.0(graphql@15.9.0)
+        specifier: ^2.11.1
+        version: 2.11.1(graphql@15.9.0)
       '@fleek-platform/utils-gateways':
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.1.12
+        version: 0.1.12
       '@fleek-platform/utils-github':
         specifier: ^0.0.2
         version: 0.0.2
@@ -121,8 +121,8 @@ importers:
         specifier: ^0.4.2
         version: 0.4.2
       '@fleek-platform/utils-ipns':
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^0.1.12
+        version: 0.1.12
       '@fleek-platform/utils-validation':
         specifier: ^2.4.0
         version: 2.4.0(typescript@4.9.3)
@@ -600,11 +600,8 @@ packages:
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
 
-  '@fleek-platform/errors@2.1.1':
-    resolution: {integrity: sha512-e4qG9rSnNC04SW1QayjygCgieGpkwtvUPO/syR8SM+o2dd/G3PQY3bmM/ic0V1PUfprd5EsHXR1aNnWMoszMnQ==}
-
-  '@fleek-platform/errors@2.5.1':
-    resolution: {integrity: sha512-yjShUD0bLzSceq61FyWj7ygc2RG0xdr3dqr43mRfwLF92c3YkZ2abDAq2CxriPbB8OhGKLASjrLzQQx6jQ/lcQ==}
+  '@fleek-platform/errors@2.7.0':
+    resolution: {integrity: sha512-56moPR+V6bW6l+8KopmK4vfx0XU3i2s9UHNgAXXgGn/tBvgFN5bjHe4uT/K6i9Q/S3f5kAOgul6KseV1sucDKQ==}
 
   '@fleek-platform/functions-esbuild-config@0.0.19':
     resolution: {integrity: sha512-831oGOU48wSm0PNgu+fB/KbkN6uFcetKgwHfYN7VpVP4RBPD+Dc8iD6jiy/9UGfImGdBNHOSqRB94yRhobvC9A==}
@@ -616,11 +613,11 @@ packages:
     resolution: {integrity: sha512-YkC8EvpZgz3v39nXSyGawH6uRtVTgnYwd2sfnGLkXMYYksqy1MsHQ7B6P3O8NUQ3cVBOYmZa8pH0fz0mo890Ew==}
     engines: {node: '>=18.18.2'}
 
-  '@fleek-platform/tester@2.11.0':
-    resolution: {integrity: sha512-qJO5PfyxrguQkwdvPGLDYRIAilPVxiRXeIf0NY4TvIp0rPYZJHaBmig+jJKB6R4iivhZjpBw/v0E9aXXhvIvOw==}
+  '@fleek-platform/tester@2.11.1':
+    resolution: {integrity: sha512-VepDPDuQ/oVaIZ6tni84uM2CT6QeIz20HeGcQluyV1uVHYMeT9v99jmOHnImDWxG2JqyUHbGx4Axvv7DLf9Gww==}
 
-  '@fleek-platform/utils-gateways@0.1.2':
-    resolution: {integrity: sha512-QnysgemNiKD5vgmbIpnMkMwQH/7IdbaUwseGdHAuXd4/CHCUt/TBYiIFVNAkLvbOMTXAadT9VtV62EcYFRB2lQ==}
+  '@fleek-platform/utils-gateways@0.1.12':
+    resolution: {integrity: sha512-ho/pKCJ3kOOAGUD1l6ncn0ZgO3BwXDvQPMv+mUGkRunarZ/1UwlGqhGedcJfbnANzB2zBfhyFf3h+3nDVcyDGA==}
 
   '@fleek-platform/utils-github@0.0.2':
     resolution: {integrity: sha512-Y1eNcGWG+fq6FbOmHcD9H76PRDXhsg8kasgAxArYEqG8tow0y2AP62FkaOkuCZSLg+NoPSCTaBo80/b5ARf8aQ==}
@@ -628,8 +625,8 @@ packages:
   '@fleek-platform/utils-ipfs@0.4.2':
     resolution: {integrity: sha512-V8TGDhnMH03cV/vL5SeM08nbgVdVdbOp0f0uuwSy85bx7+2V2PdageaRBCy457irYfXJn78I+W8JnENQ5UTvlg==}
 
-  '@fleek-platform/utils-ipns@0.1.2':
-    resolution: {integrity: sha512-bOPh3oUKongIP8gcgWUA3rMtMpOevyxGo8Iqy74onn8OqNW2Q+bAbl2ruRNGQAWmeuAhkKDEAFzR/2blYQBTWw==}
+  '@fleek-platform/utils-ipns@0.1.12':
+    resolution: {integrity: sha512-8txJtncK7Xs+vnxW+VFwuBRmlLhpQLXAmjUnKU2R4VhJwk53SDGLz5PVrAiMDiqxTWR355CQUdWYQdhvGdUghA==}
 
   '@fleek-platform/utils-validation@2.4.0':
     resolution: {integrity: sha512-BgvxxG4aQor266vhkHEkZKUzNSJ+TvxPoNxa6Tfzy5el2FMvHpioa7dzpfyyMEb/AQSAKL2dkEumIFqzGeVZCQ==}
@@ -4316,11 +4313,7 @@ snapshots:
 
   '@fastify/busboy@2.1.1': {}
 
-  '@fleek-platform/errors@2.1.1':
-    dependencies:
-      nanoid: 3.3.7
-
-  '@fleek-platform/errors@2.5.1':
+  '@fleek-platform/errors@2.7.0':
     dependencies:
       nanoid: 3.3.7
 
@@ -4343,7 +4336,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@fleek-platform/tester@2.11.0(graphql@15.9.0)':
+  '@fleek-platform/tester@2.11.1(graphql@15.9.0)':
     dependencies:
       graphql-yoga: 5.1.1(graphql@15.9.0)
       lodash: 4.17.21
@@ -4363,9 +4356,9 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@fleek-platform/utils-gateways@0.1.2':
+  '@fleek-platform/utils-gateways@0.1.12':
     dependencies:
-      '@fleek-platform/errors': 2.1.1
+      '@fleek-platform/errors': 2.7.0
 
   '@fleek-platform/utils-github@0.0.2':
     dependencies:
@@ -4376,9 +4369,9 @@ snapshots:
       aws4: 1.13.0
       cids: 1.1.9
 
-  '@fleek-platform/utils-ipns@0.1.2':
+  '@fleek-platform/utils-ipns@0.1.12':
     dependencies:
-      '@fleek-platform/errors': 2.1.1
+      '@fleek-platform/errors': 2.7.0
 
   '@fleek-platform/utils-validation@2.4.0(typescript@4.9.3)':
     dependencies:

@@ -21,7 +21,7 @@
     "format:check": "pnpm exec biome format ./src",
     "format:unsafe": "pnpm exec biome check --write --unsafe ./src",
     "increaseVersion": "pnpm version prerelease --preid dev",
-    "lint": "pnpm exec biome lint --write --changed ./src",
+    "lint": "pnpm exec biome lint --write --changed --no-errors-on-unmatched ./src",
     "lint:check": "pnpm exec biome lint ./src",
     "release": "pnpm publish --access=public --no-git-checks",
     "scripts:replace-env-vars": "node -r dotenv/config ./.scripts/replaceKeys.js",

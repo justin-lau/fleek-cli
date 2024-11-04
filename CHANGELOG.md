@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.0
+
+### Minor Changes
+
+- f903a59: Fix typescript configuration file loader
+
 ## 3.4.0
 
 ### Minor Changes

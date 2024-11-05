@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.1
+
+### Patch Changes
+
+- 2233121: Fix storage delete by SDK v3.5.3 update
+
 ## 3.5.0
 
 ### Minor Changes

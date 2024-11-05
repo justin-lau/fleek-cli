@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.6.0
+
+### Minor Changes
+
+- d88706e: Send Client App Type on session PAT success
+
 ## 3.5.2
 
 ### Patch Changes

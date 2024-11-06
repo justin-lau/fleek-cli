@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.7.0
+
+### Minor Changes
+
+- 12fa0be: Extend none zero exit for sites deploy failures
+
 ## 3.6.1
 
 ### Patch Changes

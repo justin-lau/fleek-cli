@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.7.1
+
+### Patch Changes
+
+- 0075be1: Enhance authentication failure on comman execution and initialization
+
 ## 3.7.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.6.1
+
+### Patch Changes
+
+- 9b4ef91: Upgrade SDK to v3.5.4
+
 ## 3.6.0
 
 ### Minor Changes

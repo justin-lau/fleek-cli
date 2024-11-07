@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.7.2
+
+### Patch Changes
+
+- e317910: update sgx public key
+
 ## 3.7.1
 
 ### Patch Changes

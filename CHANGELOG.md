@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.7.3
+
+### Patch Changes
+
+- dec18b5: Patch for SGX Pub key, disabling Graphql clientAppType field value as it requires testing
+
 ## 3.7.2
 
 ### Patch Changes

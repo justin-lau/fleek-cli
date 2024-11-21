@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.8.0
+
+### Minor Changes
+
+- f77d4b8: Upgrade node version
+
 ## 3.7.3
 
 ### Patch Changes

@@ -1,5 +1,7 @@
 import { join as joinPath } from 'node:path';
+
 import { generateDeploymentWorkflowYaml } from '@fleek-platform/utils-github';
+import { parse as parseSemver } from 'semver';
 
 import type { Output } from '../../../output/Output';
 import { fileExists } from '../../../utils/fs';
@@ -8,6 +10,7 @@ import { getDeploymentWorkflowYamlLocation } from './getDeploymentWorkflowYamlLo
 import { initializeDeploymentWorkflowDirectory } from './initializeDeploymentWorkflowDirectory';
 import { requestDeploymentWorkflowInstallCommand } from './requestDeploymentWorkflowInstallCommand';
 import { saveDeploymentWorkflowYaml } from './saveDeploymentWorkflowYaml';
+import { loadJSONFromPackageRoot } from '../../../utils/json';
 
 export const ghWorkflowFilename = 'fleek-deploy.yaml';
 export const ghActionsWorflowsDirectory = joinPath(
@@ -32,8 +35,21 @@ export const prepareGitHubActionsIntegration = async ({
   fleekConfigPath,
   output,
 }: PrepareGitHubActionsIntegrationArgs) => {
+  let nodeVersion;
+
+  try {
+    const nodeSemver = loadJSONFromPackageRoot(
+      'package.json',
+    ).engines.node.replace(/[^0-9\.]+/, '');
+
+    nodeVersion = parseSemver(nodeSemver)?.major ?? 18;
+  } catch {
+    nodeVersion = 18;
+  }
+
   const installCommand = await requestDeploymentWorkflowInstallCommand();
   const yamlContent = generateDeploymentWorkflowYaml({
+    nodeVersion,
     fleekConfigPath,
     installCommand,
   });

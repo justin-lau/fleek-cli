@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.8.2
+
+### Patch Changes
+
+- f4d59dc: fix: 🐛 Downgrade 'undici' to v6 to support Node.js v18
+
 ## 3.8.1
 
 ### Patch Changes

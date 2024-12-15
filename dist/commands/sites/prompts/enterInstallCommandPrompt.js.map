@@ -1,0 +1,1 @@
+{"version":3,"file":"enterInstallCommandPrompt.js","sourceRoot":"","sources":["../../../../src/commands/sites/prompts/enterInstallCommandPrompt.ts"],"names":[],"mappings":";;;AAAA,4DAAyD;AACzD,4DAA+C;AAE/C,sEAAsE;AAC/D,MAAM,yBAAyB,GAAG,KAAK,IAAI,EAAE,CAClD,IAAA,uBAAU,EAAC;IACT,OAAO,EAAE,GAAG,IAAA,eAAC,EAAC,mBAAmB,CAAC,GAAG;CACtC,CAAC,CAAC;AAHQ,QAAA,yBAAyB,6BAGjC"}

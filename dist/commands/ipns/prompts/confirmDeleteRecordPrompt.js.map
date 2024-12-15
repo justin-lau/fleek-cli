@@ -1,0 +1,1 @@
+{"version":3,"file":"confirmDeleteRecordPrompt.js","sourceRoot":"","sources":["../../../../src/commands/ipns/prompts/confirmDeleteRecordPrompt.ts"],"names":[],"mappings":";;;AAAA,kEAA+D;AAExD,MAAM,yBAAyB,GAAG,KAAK,IAAI,EAAE,CAClD,IAAA,6BAAa,EAAC;IACZ,OAAO,EAAE,6CAA6C;IACtD,OAAO,EAAE,KAAK;CACf,CAAC,CAAC;AAJQ,QAAA,yBAAyB,6BAIjC"}

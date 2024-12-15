@@ -17,7 +17,6 @@ tmp/
 free-port-lock
 
 #build
-dist
 dist-es
 dist-cjs
 dist-types

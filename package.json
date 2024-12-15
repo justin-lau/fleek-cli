@@ -35,6 +35,7 @@
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.449.0",
     "@fleek-platform/functions-esbuild-config": "^0.0.19",
+    "@fleek-platform/sdk": "^3.5.4",
     "@web-std/file": "^3.0.2",
     "ansi-escapes": "^3.0.1",
     "as-table": "^1.0.55",
@@ -69,7 +70,6 @@
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.6",
     "@fleek-platform/errors": "^2.7.0",
-    "@fleek-platform/sdk": "^3.5.4",
     "@fleek-platform/tester": "^2.12.1",
     "@fleek-platform/utils-gateways": "^0.1.12",
     "@fleek-platform/utils-github": "^0.1.0",
@@ -97,5 +97,6 @@
   },
   "engines": {
     "node": ">=18.18.2"
-  }
+  },
+  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
 }
